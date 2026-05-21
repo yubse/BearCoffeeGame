@@ -119,6 +119,9 @@
             { url: './static/images/wallpapers/01.png', weight: 10 },
             { url: './static/images/wallpapers/02.png', weight: 10 },
             { url: './static/images/wallpapers/03.png', weight: 10 },
+            { url: './static/images/wallpapers/04.png', weight: 10 },
+            { url: './static/images/wallpapers/05.png', weight: 10 },
+            { url: './static/images/wallpapers/06.png', weight: 10 }
         ];
 
         const storyData = {
@@ -128,7 +131,7 @@
             },
             "panny_croissant": { name: "panny", text: "Coco昨晚梦到了扁扁可颂！\n扁可颂就是要像这样压的扁扁的！| 你可以去大厅找个空座位坐下，\n稍后Coco会帮你送过去的～ \n[按B结束]", choices: null },
             "panny_pudding": { name: "panny", text: "好的！你可以去大厅先找个空座位坐下，稍后Coco会帮你送过去的～ \n[按B结束]", choices: null },
-            "popea_start": { name: "popea", text: "我是popea，今天想喝点什么呢？\n虽然我没有在咖啡节获得名次，但收到了伙伴们为我准备的奖杯，真的特别感动。\n[按A继续]|我们有许多优质的豆子，都是Cooky从森林中带来的\n[按A继续]|想喝什么口味的豆子？去右边告诉豆豆吧！\n[按B结束]", choices: null },
+            "popea_start": { name: "popea", text: "我是popea，今天想喝点什么呢？\n [按A继续] |虽然我没有在咖啡节获得名次，但收到了伙伴们为我准备的奖杯，真的特别感动。\n[按A继续]|我们有许多优质的豆子，都是Cooky从森林中带来的\n[按A继续]|想喝什么口味的豆子？去右边告诉豆豆吧！\n[按B结束]", choices: null },
             "cooky_start": { name: "cooky", text: "我是cooky，今天的咖啡豆怎么样？\n都是刚刚从森林里带回来的哦。\n[按B结束]", choices: null },
             "doudou_start": { name: "豆豆", text: "我是豆豆，这就帮你磨豆豆！\n你需要什么风味的？\n[按A继续]", choices: [{ text: "我想试试花果香味的浅烘", next: "doudou_light", action: () => orders.push("浅烘咖啡") }, { text: "来一份榛果风味的中烘", next: "doudou_medium", action: () => orders.push("中烘咖啡") }, { text: "就选浓郁巧克力的深烘", next: "doudou_dark", action: () => orders.push("深烘咖啡") }] },
             "doudou_light": { name: "豆豆", text: "浅烘豆子需要像细砂糖细腻哦。\n你可以先找个空座位坐一会～\n[按B结束]", choices: null },
@@ -214,7 +217,7 @@
             },
             "summon_god_dialogue_6": {
                 name: "咖神",
-                text: "是谁唤醒了我？\n[按B结束]",
+                text: "是谁唤醒了我？",
                 choices: null
             }
         };
@@ -230,7 +233,7 @@
             { id: 7, name: "珍妮花", x: 140, y: 230, hidden: true, emoji: "📸", node: "guest_start", scene: 2 },
             { id: 11, name: "奥利维亚", x: 220, y: 230, hidden: true, emoji: "📸", node: "oliver_start", scene: 2 },
             { id: 6, name: "乓乓", x: 35, y: 280, hidden: true, emoji: "🍮", node: "pangpang_start", scene: 1 },
-            { id: 10, name: "乒乒", x: 160, y: 240, img: "https://cdn.shopify.com/s/files/1/0651/5186/0943/files/c063ffe11fbded9f4e12b59983d5b045.png?v=1776071486", node: "pingping_start", scene: 1, dx: 1.5, dy: 1.2 },
+            { id: 10, name: "乒乒", x: 160, y: 240, img: "./static/images/player/run-pin.png", node: "pingping_start", scene: 1, dx: 1.5, dy: 1.2 },
             { id: 1, name: "panny", x: 80, y: 220, hidden: true, emoji: "🍰", node: "panny_start", scene: 3 },
             { id: 12, name: "主厨", x: 115, y: 270, hidden: true, emoji: "👨‍🍳", node: "chef_start", scene: 3 },
             { id: 13, name: "帮厨小李", x: 190, y: 290, hidden: true, emoji: "🧑", node: "helper_start", scene: 3 },
