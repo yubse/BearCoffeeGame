@@ -121,7 +121,7 @@
             { url: './static/images/wallpapers/03.png', weight: 10 },
             { url: './static/images/wallpapers/04.png', weight: 10 },
             { url: './static/images/wallpapers/05.png', weight: 10 },
-            { url: './static/images/wallpapers/06.png', weight: 10 }
+            { url: './static/images/wallpapers/06.png', weight: 10 },
         ];
 
         const storyData = {
@@ -233,7 +233,7 @@
             { id: 7, name: "珍妮花", x: 140, y: 230, hidden: true, emoji: "📸", node: "guest_start", scene: 2 },
             { id: 11, name: "奥利维亚", x: 220, y: 230, hidden: true, emoji: "📸", node: "oliver_start", scene: 2 },
             { id: 6, name: "乓乓", x: 35, y: 280, hidden: true, emoji: "🍮", node: "pangpang_start", scene: 1 },
-            { id: 10, name: "乒乒", x: 160, y: 240, img: "./static/images/player/run-pin.png", node: "pingping_start", scene: 1, dx: 1.5, dy: 1.2 },
+            { id: 10, name: "乒乒", x: 160, y: 240, img: "https://cdn.shopify.com/s/files/1/0651/5186/0943/files/c063ffe11fbded9f4e12b59983d5b045.png?v=1776071486", node: "pingping_start", scene: 1, dx: 1.5, dy: 1.2 },
             { id: 1, name: "panny", x: 80, y: 220, hidden: true, emoji: "🍰", node: "panny_start", scene: 3 },
             { id: 12, name: "主厨", x: 115, y: 270, hidden: true, emoji: "👨‍🍳", node: "chef_start", scene: 3 },
             { id: 13, name: "帮厨小李", x: 190, y: 290, hidden: true, emoji: "🧑", node: "helper_start", scene: 3 },
