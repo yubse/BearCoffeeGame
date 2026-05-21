@@ -61,7 +61,7 @@
             珍妮花: './static/images/dialogue/1.png',
             奥利维亚: './static/images/dialogue/7.png',
             乒乒: './static/images/dialogue/2.png',
-            乒乒: './static/images/dialogue/4.png',
+            乓乓: './static/images/dialogue/4.png',
             系统: './static/images/dialogue/white.png',
             主厨: './static/images/dialogue/10.png',
             帮厨小李: './static/images/dialogue/11.png'
@@ -125,13 +125,13 @@
         ];
 
         const storyData = {
-            "panpan_start": { name: "panpan", text: "Hi! 欢迎光临～我是店长panpan！\n想喝咖啡可以去吧台点餐\n [按A继续] | 二楼可以从右上角的楼梯上去。\n厨房在左上角，欢迎去参观哦！\n [按B结束]", choices: null },
+            "panpan_start": { name: "panpan", text: "欢迎光临～我是店长panpan!\n想喝咖啡可以去吧台点餐\n [按A继续] | 二楼可以从右上角的楼梯上去。\n厨房在左上角，欢迎去参观哦！\n [按B结束]", choices: null },
             "panny_start": {
                 name: "panny", text: "你好呀～我是panny，正在给蛋糕裱花。\n[按A继续]", choices: [{ text: "今天的可颂看着不错呢", next: "panny_croissant", action: () => orders.push("扁扁可颂") }, { text: "请给我一份布丁！", next: "panny_pudding", action: () => orders.push("焦糖布丁") }]
             },
             "panny_croissant": { name: "panny", text: "Coco昨晚梦到了扁扁可颂！\n扁可颂就是要像这样压的扁扁的！| 你可以去大厅找个空座位坐下，\n稍后Coco会帮你送过去的～ \n[按B结束]", choices: null },
             "panny_pudding": { name: "panny", text: "好的！你可以去大厅先找个空座位坐下，稍后Coco会帮你送过去的～ \n[按B结束]", choices: null },
-            "popea_start": { name: "popea", text: "我是popea，今天想喝点什么呢？\n [按A继续] |虽然我没有在咖啡节获得名次，但收到了伙伴们为我准备的奖杯，真的特别感动。\n[按A继续]|我们有许多优质的豆子，都是Cooky从森林中带来的\n[按A继续]|想喝什么口味的豆子？去右边告诉豆豆吧！\n[按B结束]", choices: null },
+            "popea_start": { name: "popea", text: "我是popea，今天想喝点什么呢？\n [按A继续] |虽然我没有在咖啡节获得名次，但收到了伙伴们为我准备的奖杯，真的特别感动。\n|我们有许多优质的豆子，都是Cooky从森林中带来的!\n|想喝什么口味的豆子？去右边告诉豆豆吧！\n[按B结束]", choices: null },
             "cooky_start": { name: "cooky", text: "我是cooky，今天的咖啡豆怎么样？\n都是刚刚从森林里带回来的哦。\n[按B结束]", choices: null },
             "doudou_start": { name: "豆豆", text: "我是豆豆，这就帮你磨豆豆！\n你需要什么风味的？\n[按A继续]", choices: [{ text: "我想试试花果香味的浅烘", next: "doudou_light", action: () => orders.push("浅烘咖啡") }, { text: "来一份榛果风味的中烘", next: "doudou_medium", action: () => orders.push("中烘咖啡") }, { text: "就选浓郁巧克力的深烘", next: "doudou_dark", action: () => orders.push("深烘咖啡") }] },
             "doudou_light": { name: "豆豆", text: "浅烘豆子需要像细砂糖细腻哦。\n你可以先找个空座位坐一会～\n[按B结束]", choices: null },
