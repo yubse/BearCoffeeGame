@@ -536,9 +536,9 @@ canvas {
 #message-text,
 .choice-list {
     position: absolute;
-    top: 67%;
+    top: 66%;
     left: 13.5%;
-    width: 240px;
+    width: 200px;
     font-family: 'PixelFont', sans-serif !important;
     max-width: 260px;
     color: #2d1b14;
@@ -548,7 +548,7 @@ canvas {
 #message-text {
     height: 95px;
     overflow: hidden;
-    font-size: clamp(14px, 2.35vw, 15px);
+    font-size: clamp(14px, 2vw, 15px);
     line-height: 1.55;
     white-space: pre-wrap;
     overflow-wrap: break-word;
@@ -813,4 +813,24 @@ canvas {
 @font-face {
     font-family: 'PixelFont';
     src: url('https://cdn.shopify.com/s/files/1/0651/5186/0943/files/fusion-pixel.woff2?v=1776237202') format('woff2');
+}
+
+.site-footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 99999;
+  width: 100%;
+  padding: 6px 0;
+  text-align: center;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.site-footer a {
+  color: #999;
+  text-decoration: none;
+}
+.site-footer a:hover {
+  color: #666;
 }
