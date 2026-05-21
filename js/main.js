@@ -90,9 +90,9 @@
 
         const PLAYER_BOUNDS = { 1: { minX: 30, maxX: 290, minY: 170, maxY: 350 }, 2: { minX: 20, maxX: 300, minY: 180, maxY: 300 }, 3: { minX: 20, maxX: 280, minY: 185, maxY: 350 } };
         const OBSTACLES = {
-            1: [{ x: 80, y: 100, w: 170, h: 70 }, { x: 60, y: 180, w: 20, h: 30 }, { x: 20, y: 250, w: 30, h: 30 }, { x: 40, y: 320, w: 30, h: 30 }, { x: 140, y: 280, w: 50, h: 50 }, { x: 220, y: 300, w: 60, h: 30 }, { x: 290, y: 230, w: 20, h: 50 }, { x: 200, y: 200, w: 40, h: 40 }],
+            1: [{ x: 80, y: 100, w: 170, h: 70 }, { x: 60, y: 180, w: 20, h: 30 }, { x: 20, y: 250, w: 30, h: 30 }, { x: 40, y: 320, w: 30, h: 30 }, { x: 140, y: 290, w: 50, h: 50 }, { x: 220, y: 320, w: 60, h: 30 }, { x: 290, y: 230, w: 20, h: 50 }, { x: 200, y: 215, w: 40, h: 40 }],
             2: [{ x: 130, y: 210, w: 100, h: 50 }],
-            3: [{ x: 155, y: 310, w: 120, h: 40 }/*横桌子*/, { x: 80, y: 270, w: 70, h: 100 }/*面包panpan桌子*/, { x: 260, y: 250, w: 20, h: 30 }/*路牌*/, { x: 90, y: 250, w: 35, h: 20 }/*面包潘潘*/, { x: 100, y: 185, w: 20, h: 30 }/*猫*/, { x: 180, y: 270, w: 40, h: 40 }/*可颂潘潘*/, { x: 40, y: 170, w: 60, h: 60 }/*panny桌子*/]
+            3: [{ x: 155, y: 310, w: 120, h: 40 }/*横桌子*/, { x: 80, y: 270, w: 70, h: 100 }/*面包panpan桌子*/, { x: 260, y: 250, w: 20, h: 30 }/*路牌*/, { x: 90, y: 250, w: 35, h: 20 }/*面包潘潘*/, { x: 100, y: 185, w: 20, h: 30 }/*猫*/, { x: 180, y: 270, w: 40, h: 40 }/*可颂潘潘*/, { x: 40, y: 170, w: 60, h: 55 }/*panny桌子*/]
         };
         const SHOW_OBSTACLES_DEBUG = false;
 
@@ -119,9 +119,9 @@
             { url: './static/images/wallpapers/01.png', weight: 10 },
             { url: './static/images/wallpapers/02.png', weight: 10 },
             { url: './static/images/wallpapers/03.png', weight: 10 },
-            { url: './static/images/wallpapers/04.png', weight: 10 },
-            { url: './static/images/wallpapers/05.png', weight: 10 },
-            { url: './static/images/wallpapers/06.png', weight: 10 },
+            { url: './static/images/wallpapers/04.jpg', weight: 10 },
+            { url: './static/images/wallpapers/05.jpg', weight: 10 },
+            { url: './static/images/wallpapers/06.jpg', weight: 10 },
         ];
 
         const storyData = {
