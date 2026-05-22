@@ -176,28 +176,28 @@
             "find_item_0": {
                 name: "系统", text: "你发现吧台上有撮深色的东西,\n散发着淡淡的香味，靠近看看？",
                 choices: [
-                    { text: "走！去问问Popea这是什么！", action: () => { state.inventory[0] = true; openInventory(); $('inv-text-0').innerText = '咖啡渣'; }, next: "none" },
+                    { text: "走！去问问Popea这是什么！", action: () => { inventoryGainMessage = '恭喜获得：咖啡渣'; state.inventory[0] = true; $('inv-text-0').innerText = '咖啡渣'; openInventory(); }, next: "none" },
                     { text: "不要了吧...", next: "leave_item" }
                 ]
             },
             "find_item_1": {
                 name: "系统", text: "诶？是什么味道？\n桌上飘来了一股温热的咖啡香。",
                 choices: [
-                    { text: "是焦糖和坚果的味道。", action: () => { state.inventory[1] = true; openInventory(); $('inv-text-1').innerText = '咖啡的香气'; }, next: "none" },
+                    { text: "是焦糖和坚果的味道。", action: () => { inventoryGainMessage = '恭喜获得：咖啡的香气'; state.inventory[1] = true; $('inv-text-1').innerText = '咖啡的香气'; openInventory(); }, next: "none" },
                     { text: "等PinPin收拾桌子吧！", next: "leave_item" }
                 ]
             },
             "find_item_2": {
                 name: "系统", text: "这是他们要用的咖啡豆吗？",
                 choices: [
-                    { text: "拿给DoDo吧！", action: () => { state.inventory[2] = true; openInventory(); $('inv-text-2').innerText = '咖啡豆'; }, next: "none" },
+                    { text: "拿给DoDo吧！", action: () => { inventoryGainMessage = '恭喜获得：咖啡豆'; state.inventory[2] = true; $('inv-text-2').innerText = '咖啡豆'; openInventory(); }, next: "none" },
                     { text: "还是再问问吧...", next: "leave_item" }
                 ]
             },
             "leave_item": { name: "系统", text: "你决定不去管它。\n[按B结束]", choices: null },
             "summon_god_dialogue_1": {
                 name: "系统",
-                text: "黑暗里，那些置于角落的咖啡渣，\n忽然泛起微弱的光。\n[按A继续]",
+                text: "黑暗中那些角落的咖啡渣，\n忽然泛起微弱的光。\n[按A继续]",
                 choices: null,
                 next: "summon_god_dialogue_2"
             },
@@ -612,15 +612,12 @@
                 fallbackName.classList.add('hide');
                 fallbackName.innerText = '';
             }
+            // 用时已经绘制到分享海报图片里，这里隐藏页面下方的重复用时文字。
             if (timeLabel) {
-                if (elapsedText) {
-                    timeLabel.innerText = elapsedText;
-                    timeLabel.classList.remove('hide');
-                } else {
-                    timeLabel.innerText = '';
-                    timeLabel.classList.add('hide');
-                }
-            }
+                timeLabel.innerText = '';
+                timeLabel.classList.add('hide');
+            } 
+            
             if (outputImg) {
                 outputImg.src = ASSETS.summonShareCard;
             }
