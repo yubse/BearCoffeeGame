@@ -48,7 +48,10 @@
             item2Collected: './static/images/inventory/item2-on.png',
 
             summonGif: './static/images/summon/kashen.gif',
-            summonShareCard: './static/images/summon/share-card.jpg'
+            summonShareCard: './static/images/summon/share-card.jpg',
+
+            popeaTrophy: './static/images/dialogue/popea-trophy.png',
+            cocoCupcake: './static/images/dialogue/coco-cupcake.png'
         };
 
         const DIALOGUE_BG = {
@@ -122,15 +125,25 @@
         // 随机壁纸池：weight 越大，被抽中的概率越高。
         // 概率计算方式：单张概率 = 当前 weight / 所有 weight 之和。
         const WALLPAPER_POOL = [
-            { url: './static/images/wallpapers/01.png', weight: 10 },
+            { url: './static/images/wallpapers/01.png', weight: 5 },
+            { url: './static/images/wallpapers/02.png', weight: 10 },
+            { url: './static/images/wallpapers/03.png', weight: 5 },
             { url: './static/images/wallpapers/04.jpg', weight: 10 },
             { url: './static/images/wallpapers/05.jpg', weight: 2 },
-            { url: './static/images/wallpapers/06.jpg', weight: 10 },
-            { url: './static/images/wallpapers/07.jpg', weight: 5 },
-            { url: './static/images/wallpapers/08.jpg', weight: 5 },
+            { url: './static/images/wallpapers/06.jpg', weight: 2 },
+            { url: './static/images/wallpapers/07.jpg', weight: 10 },
             { url: './static/images/wallpapers/09.jpg', weight: 5 },
             { url: './static/images/wallpapers/10.jpg', weight: 10 },
-            { url: './static/images/wallpapers/11.jpg', weight: 2 }
+            { url: './static/images/wallpapers/11.jpg', weight: 2 },
+            { url: './static/images/wallpapers/12.jpg', weight: 5 },
+            { url: './static/images/wallpapers/13.png', weight: 10 },
+            { url: './static/images/wallpapers/14.png', weight: 5 },
+            { url: './static/images/wallpapers/15.png', weight: 10 },
+            { url: './static/images/wallpapers/16.png', weight: 10 },
+            { url: './static/images/wallpapers/17.png', weight: 2 },
+            { url: './static/images/wallpapers/18.png', weight: 5 },
+            { url: './static/images/wallpapers/19.png', weight: 2 },
+            { url: './static/images/wallpapers/20.png', weight: 5 }
 
         ];
 
@@ -151,8 +164,8 @@
             "seat_empty": { name: "系统", text: "这是一张空桌子。\n你还没有点任何东西。\n[按B结束]", choices: null },
             "seat_sit": { name: "系统", text: "你拉开椅子坐了下来。", choices: [{ text: "耐心等待...", next: "coco_serve" }] },
             "coco_serve": { name: "coco", text: "（动态生成的文字，会被替换）", choices: [{ text: "不错不错", next: "coco_good" }, { text: "一般般吧", next: "coco_bad" }] },
-            "coco_good": { name: "coco", text: "对吧！我也觉得餐品超棒的！\n恭喜你成为了我们今天的幸运客人！\n[按A继续]|送你一个珍妮花纸杯蛋糕！希望你会喜欢！\n[按B结束]", choices: null },
-            "coco_bad": { name: "coco", text: "诶？一定是哪个环节出问题了... \n这样子好了，我偷偷的送给你一份小礼物（珍妮花纸杯蛋糕）吧，希望下次您再来的时候会有更好的体验！\n[按B结束]", choices: null },
+            "coco_good": { name: "coco", text: "对吧！我也觉得餐品超棒的！\n恭喜你成为今天的幸运客人！\n[按A继续]|送你一个珍妮花纸杯蛋糕！希望你会喜欢！\n[按B结束]", choices: null },
+            "coco_bad": { name: "coco", text: "诶？一定是哪个环节出问题了... \n|这样子好了，我偷偷的送给你一份小礼物（珍妮花纸杯蛋糕）吧！|希望下次您再来的时候会有更好的体验！\n[按B结束]", choices: null },
             "pangpang_start": { name: "乓乓", text: "啊！是乓乓！被困在果冻里了\n[按A继续]", choices: [{ text: "把他救出来！", next: "pangpang_save" }, { text: "还是不管了！", next: "pangpang_ignore" }] },
             "pangpang_save": { name: "乓乓", text: "唔，我其实是在...帮忙的!\n谢谢你，这份果冻送给你！\n[按B结束]", choices: null },
             "pangpang_ignore": { name: "系统", text: "你默默地走开了...\n乓乓继续在果冻里挣扎...\n[按B结束]", choices: null },
@@ -419,8 +432,34 @@
             openNode(target.node, target.name);
         }
 
-        function setDialogueTheme(name) { $('dialogue-bg').src = DIALOGUE_BG[name] || DIALOGUE_BG['系统']; }
+        function setDialogueTheme(name) {
+            $('dialogue-bg').src = DIALOGUE_BG[name] || DIALOGUE_BG['系统'];
+        }
+        function setDialogueExtraImage(nodeId) {
+            const img = $('dialogue-extra-img');
+            if (!img) return;
 
+            img.classList.add('hide');
+            img.removeAttribute('src');
+
+            if (nodeId === 'popea_start') {
+                img.src = ASSETS.popeaTrophy;
+                img.classList.remove('hide');
+                img.classList.add('extra-trophy');
+                img.classList.remove('extra-cupcake');
+                return;
+            }
+
+            if (nodeId === 'coco_good' || nodeId === 'coco_bad') {
+                img.src = ASSETS.cocoCupcake;
+                img.classList.remove('hide');
+                img.classList.add('extra-cupcake');
+                img.classList.remove('extra-trophy');
+                return;
+            }
+
+            img.classList.remove('extra-trophy', 'extra-cupcake');
+        }
         function splitText(text, limit = 55) {
             const raw = String(text || '').trim(); if (!raw) return ['']; const result = []; const manualChunks = raw.split('|');
             manualChunks.forEach(chunk => {
@@ -448,6 +487,7 @@
             $('dialogue-container').classList.remove('hide');
             $('name-tag').innerText = speaker;
             setDialogueTheme(speaker);
+            setDialogueExtraImage(nodeId);
             toggleDarkMask(true);
             pages = splitText(text);
             pageIndex = 0;
@@ -549,6 +589,12 @@
             $('dialogue-container').classList.remove('is-choice-page');
             $('choices-box').innerHTML = '';
             $('message-text').innerText = '';
+            const extraImg = $('dialogue-extra-img');
+            if (extraImg) {
+                extraImg.classList.add('hide');
+                extraImg.removeAttribute('src');
+                extraImg.classList.remove('extra-trophy', 'extra-cupcake');
+            }
             $('page-next-icon').classList.add('hide');
             state.keys = { up: false, down: false, left: false, right: false };
         }
@@ -616,8 +662,8 @@
             if (timeLabel) {
                 timeLabel.innerText = '';
                 timeLabel.classList.add('hide');
-            } 
-            
+            }
+
             if (outputImg) {
                 outputImg.src = ASSETS.summonShareCard;
             }

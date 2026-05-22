@@ -493,6 +493,18 @@ canvas {
     height: 7%;
 }
 
+#dialogue-extra-img {
+    position: absolute;
+    left: 78%;
+    top: 52%;
+    z-index: 3;
+    width: 30px;
+    height: auto;
+    object-fit: contain;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
 #dialogue-container {
     position: absolute;
     inset: 0;
