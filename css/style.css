@@ -290,10 +290,11 @@ canvas {
 .inv-items-container {
     position: absolute;
     top: 63%;
-    left: 14%;
-    right: 14%;
+    left: 7%;
     z-index: 2;
     display: flex;
+    transform: scale(0.82);
+    transform-origin: center center;
     justify-content: space-around;
 }
 
@@ -717,6 +718,16 @@ canvas {
     box-shadow: 0 3px 0 rgba(74, 46, 27, 0.35);
 }
 
+.summon-ending-choice.disabled,
+.summon-ending-choice:disabled {
+    opacity: 0.45;
+    filter: grayscale(0.6);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    pointer-events: none;
+}
+
 .summon-card-panel {
     position: relative;
     width: min(330px, 92%);
@@ -816,21 +827,22 @@ canvas {
 }
 
 .site-footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  z-index: 99999;
-  width: 100%;
-  padding: 6px 0;
-  text-align: center;
-  font-size: 12px;
-  background: rgba(255, 255, 255, 0.85);
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    z-index: 99999;
+    width: 100%;
+    padding: 6px 0;
+    text-align: center;
+    font-size: 12px;
+    background: rgba(255, 255, 255, 0.85);
 }
 
 .site-footer a {
-  color: #999;
-  text-decoration: none;
+    color: #999;
+    text-decoration: none;
 }
+
 .site-footer a:hover {
-  color: #666;
+    color: #666;
 }

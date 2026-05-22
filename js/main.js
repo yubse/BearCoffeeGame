@@ -91,13 +91,20 @@
         const PLAYER_BOUNDS = { 1: { minX: 30, maxX: 290, minY: 170, maxY: 350 }, 2: { minX: 20, maxX: 300, minY: 180, maxY: 300 }, 3: { minX: 20, maxX: 280, minY: 185, maxY: 350 } };
         const OBSTACLES = {
             1: [{ x: 80, y: 100, w: 170, h: 70 }, { x: 60, y: 180, w: 20, h: 30 }, { x: 20, y: 250, w: 30, h: 30 }, { x: 40, y: 320, w: 30, h: 30 }, { x: 140, y: 290, w: 50, h: 50 }, { x: 220, y: 320, w: 60, h: 30 }, { x: 290, y: 230, w: 20, h: 50 }, { x: 200, y: 215, w: 40, h: 40 }],
-            2: [{ x: 130, y: 210, w: 100, h: 50 }],
+            2: [{ x: 130, y: 210, w: 30, h: 55 }/*兔子*/, { x: 160, y: 240, w: 40, h: 25 }/*桌子*/, { x: 200, y: 220, w: 30, h: 50 }/*猫*/],
             3: [{ x: 155, y: 310, w: 120, h: 40 }/*横桌子*/, { x: 80, y: 270, w: 70, h: 100 }/*面包panpan桌子*/, { x: 260, y: 250, w: 20, h: 30 }/*路牌*/, { x: 90, y: 250, w: 35, h: 20 }/*面包潘潘*/, { x: 100, y: 185, w: 20, h: 30 }/*猫*/, { x: 180, y: 270, w: 40, h: 40 }/*可颂潘潘*/, { x: 40, y: 170, w: 60, h: 55 }/*panny桌子*/]
         };
         const SHOW_OBSTACLES_DEBUG = false;
 
         let orders = []; let isTyping = false; let typingTimer = null; let pages = ['']; let pageIndex = 0; let currentPageText = ''; let currentChoices = []; let currentChoiceIndex = 0; let isChoiceMode = false; let currentNodeId = ''; let currentNextNode = null;
-        let summonUserName = ''; let summonEndingChoiceIndex = 0; let summonEndingStep = 'name'; let summonSharePosterDataUrl = '';
+        let summonUserName = '';
+        let summonEndingChoiceIndex = 0;
+        let summonEndingStep = 'name';
+        let summonSharePosterDataUrl = '';
+
+        //是否领取过壁纸
+        let hasPickedWallpaper = false;
+
         let inventoryGainMessage = '';
         let gameStartTimestamp = 0;
         const GAME_TIMER_LIMIT_MS = 20 * 60 * 1000;
@@ -114,14 +121,17 @@
 
         // 随机壁纸池：weight 越大，被抽中的概率越高。
         // 概率计算方式：单张概率 = 当前 weight / 所有 weight 之和。
-        // 把 url 替换成你的壁纸 Shopify CDN 链接即可。
         const WALLPAPER_POOL = [
             { url: './static/images/wallpapers/01.png', weight: 10 },
-            { url: './static/images/wallpapers/02.png', weight: 10 },
-            { url: './static/images/wallpapers/03.png', weight: 10 },
             { url: './static/images/wallpapers/04.jpg', weight: 10 },
-            { url: './static/images/wallpapers/05.jpg', weight: 10 },
+            { url: './static/images/wallpapers/05.jpg', weight: 2 },
             { url: './static/images/wallpapers/06.jpg', weight: 10 },
+            { url: './static/images/wallpapers/07.jpg', weight: 5 },
+            { url: './static/images/wallpapers/08.jpg', weight: 5 },
+            { url: './static/images/wallpapers/09.jpg', weight: 5 },
+            { url: './static/images/wallpapers/10.jpg', weight: 10 },
+            { url: './static/images/wallpapers/11.jpg', weight: 2 }
+
         ];
 
         const storyData = {
@@ -131,26 +141,26 @@
             },
             "panny_croissant": { name: "panny", text: "Coco昨晚梦到了扁扁可颂！\n扁可颂就是要像这样压的扁扁的！| 你可以去大厅找个空座位坐下，\n稍后Coco会帮你送过去的～ \n[按B结束]", choices: null },
             "panny_pudding": { name: "panny", text: "好的！你可以去大厅先找个空座位坐下，稍后Coco会帮你送过去的～ \n[按B结束]", choices: null },
-            "popea_start": { name: "popea", text: "我是popea，今天想喝点什么呢？\n [按A继续] |虽然我没有在咖啡节获得名次，但收到了伙伴们为我准备的奖杯，真的特别感动。\n|我们有许多优质的豆子，都是Cooky从森林中带来的!\n|想喝什么口味的豆子？去右边告诉豆豆吧！\n[按B结束]", choices: null },
-            "cooky_start": { name: "cooky", text: "我是cooky，今天的咖啡豆怎么样？\n都是刚刚从森林里带回来的哦。\n[按B结束]", choices: null },
+            "popea_start": { name: "popea", text: "我是popea，今天想要喝点什么呢？\n [按A继续] |虽然我没有在咖啡节获得名次，但收到了伙伴们为我准备的奖杯，真的特别感动。\n|我们有许多优质的豆子，都是Cooky从森林中带来的!\n|想喝什么口味的豆子？去右边告诉豆豆吧！\n[按B结束]", choices: null },
+            "cooky_start": { name: "cooky", text: "我是cooky，今天的咖啡豆怎么样？都是刚从森林里带回来的。\n[按B结束]", choices: null },
             "doudou_start": { name: "豆豆", text: "我是豆豆，这就帮你磨豆豆！\n你需要什么风味的？\n[按A继续]", choices: [{ text: "我想试试花果香味的浅烘", next: "doudou_light", action: () => orders.push("浅烘咖啡") }, { text: "来一份榛果风味的中烘", next: "doudou_medium", action: () => orders.push("中烘咖啡") }, { text: "就选浓郁巧克力的深烘", next: "doudou_dark", action: () => orders.push("深烘咖啡") }] },
             "doudou_light": { name: "豆豆", text: "浅烘豆子需要像细砂糖细腻哦。\n你可以先找个空座位坐一会～\n[按B结束]", choices: null },
             "doudou_medium": { name: "豆豆", text: "中烘的豆子，中等研磨度～\n你可以先找个空座位坐一会～\n[按B结束]", choices: null },
             "doudou_dark": { name: "豆豆", text: "深烘豆需要像海盐般的颗粒呢。\n你可以先找个空座位坐一会～\n[按B结束]", choices: null },
             "coco_wait": { name: "coco", text: "hello，我是服务员coco。\n稍后帮你把餐品送过去。\n[按B结束]", choices: null },
-            "seat_empty": { name: "系统", text: "这是一张空桌子。你还没有点任何东西，先去吧台找店员点餐吧！[按B结束]", choices: null },
+            "seat_empty": { name: "系统", text: "这是一张空桌子。\n你还没有点任何东西。\n[按B结束]", choices: null },
             "seat_sit": { name: "系统", text: "你拉开椅子坐了下来。", choices: [{ text: "耐心等待...", next: "coco_serve" }] },
             "coco_serve": { name: "coco", text: "（动态生成的文字，会被替换）", choices: [{ text: "不错不错", next: "coco_good" }, { text: "一般般吧", next: "coco_bad" }] },
             "coco_good": { name: "coco", text: "对吧！我也觉得餐品超棒的！\n恭喜你成为了我们今天的幸运客人！\n[按A继续]|送你一个珍妮花纸杯蛋糕！希望你会喜欢！\n[按B结束]", choices: null },
             "coco_bad": { name: "coco", text: "诶？一定是哪个环节出问题了... \n这样子好了，我偷偷的送给你一份小礼物（珍妮花纸杯蛋糕）吧，希望下次您再来的时候会有更好的体验！\n[按B结束]", choices: null },
             "pangpang_start": { name: "乓乓", text: "啊！是乓乓！被困在果冻里了\n[按A继续]", choices: [{ text: "把他救出来！", next: "pangpang_save" }, { text: "还是不管了！", next: "pangpang_ignore" }] },
-            "pangpang_save": { name: "乓乓", text: "唔，我..我其实是在..帮忙的\n谢谢你，这份果冻送给你吃好了！\n[按B结束]", choices: null },
+            "pangpang_save": { name: "乓乓", text: "唔，我其实是在...帮忙的!\n谢谢你，这份果冻送给你！\n[按B结束]", choices: null },
             "pangpang_ignore": { name: "系统", text: "你默默地走开了...\n乓乓继续在果冻里挣扎...\n[按B结束]", choices: null },
             "pingping_start": { name: "乒乒", text: "啊啊啊！谁来救一下乓乓啊！！！\n[按B结束]", choices: null },
             "guest_start": { name: "珍妮花", text: "你好，这阳台的风景真好。\n请问.. 方便帮我拍一张照片吗？\n [按A继续]", choices: [{ text: "没问题！交给我吧", next: "guest_yes" }, { text: "可是我不是很会拍照耶", next: "guest_no" }] },
             "guest_yes": { name: "珍妮花", text: "（咔嚓）\n哇塞，谢谢你！拍的超棒的！\n[按B结束]", choices: null },
             "guest_no": { name: "珍妮花", text: "没关系，我会教你操作的！\n（咔嚓）哇塞，拍的超棒的！\n[按B结束]", choices: null },
-            "oliver_start": { name: "奥利维亚", text: "（咔嚓）你好呀，这里真不错，对吧？[按B结束]", choices: null },
+            "oliver_start": { name: "奥利维亚", text: "（咔嚓）你好呀，这里真不错，对吧？\n[按B结束]", choices: null },
             "chef_start": { name: "主厨", text: "哎呀，你怎么来厨房了！\n我刚给扁可颂涂完黄油呢\n[按B结束]", choices: null },
             "helper_start": {
                 name: "帮厨Coco", text: "最近我们新进了一批豆子，\n你可以帮忙拿给豆豆吗？\n[按A继续]", choices: [{ text: "在面包架上吗？", next: "helper_sad" }, { text: "在洗水槽上吗？", next: "helper_happy" }, { text: "在桌子上吗？", next: "helper_desk" }]
@@ -164,7 +174,7 @@
                 choices: null
             },
             "find_item_0": {
-                name: "系统", text: "你发现吧台上有小撮深色的东西，\n散发着淡淡的香味，靠近看看？",
+                name: "系统", text: "你发现吧台上有撮深色的东西,\n散发着淡淡的香味，靠近看看？",
                 choices: [
                     { text: "走！去问问Popea这是什么！", action: () => { state.inventory[0] = true; openInventory(); $('inv-text-0').innerText = '咖啡渣'; }, next: "none" },
                     { text: "不要了吧...", next: "leave_item" }
@@ -180,7 +190,7 @@
             "find_item_2": {
                 name: "系统", text: "这是他们要用的咖啡豆吗？",
                 choices: [
-                    { text: "那给DoDo吧！", action: () => { state.inventory[2] = true; openInventory(); $('inv-text-2').innerText = '咖啡豆'; }, next: "none" },
+                    { text: "拿给DoDo吧！", action: () => { state.inventory[2] = true; openInventory(); $('inv-text-2').innerText = '咖啡豆'; }, next: "none" },
                     { text: "还是再问问吧...", next: "leave_item" }
                 ]
             },
@@ -205,13 +215,13 @@
             },
             "summon_god_dialogue_4": {
                 name: "咖神",
-                text: "我是咖神。\n我诞生于咖啡渣，\n也诞生于咖啡人不肯停下的双手。",
+                text: "我是咖神。\n我诞生于咖啡渣，\n也诞生于人们不肯停下的双手。",
                 choices: null,
                 next: "summon_god_dialogue_5"
             },
             "summon_god_dialogue_5": {
                 name: "咖神",
-                text: "让咖啡拥有灵魂的，不只是配方。\n而是一次次练习之后，\n仍然相信下一杯会更好。",
+                text: "让咖啡拥有灵魂的，不只是配方。而是一次次练习之后，\n仍然相信下一杯会更好。",
                 choices: null,
                 next: "summon_god_dialogue_6"
             },
@@ -230,15 +240,15 @@
             { id: 5, name: "coco", x: 60, y: 200, hidden: true, emoji: "💁", node: "coco_wait", scene: 1 },
             { id: 8, name: "座位", x: 80, y: 340, hidden: true, emoji: "🪑", node: "seat", scene: 1 },
             { id: 9, name: "座位", x: 245, y: 340, hidden: true, emoji: "🪑", node: "seat", scene: 1 },
-            { id: 7, name: "珍妮花", x: 140, y: 230, hidden: true, emoji: "📸", node: "guest_start", scene: 2 },
-            { id: 11, name: "奥利维亚", x: 220, y: 230, hidden: true, emoji: "📸", node: "oliver_start", scene: 2 },
+            { id: 7, name: "珍妮花", x: 140, y: 250, hidden: true, emoji: "📸", node: "guest_start", scene: 2 },
+            { id: 11, name: "奥利维亚", x: 220, y: 250, hidden: true, emoji: "📸", node: "oliver_start", scene: 2 },
             { id: 6, name: "乓乓", x: 35, y: 280, hidden: true, emoji: "🍮", node: "pangpang_start", scene: 1 },
             { id: 10, name: "乒乒", x: 160, y: 240, img: "https://cdn.shopify.com/s/files/1/0651/5186/0943/files/c063ffe11fbded9f4e12b59983d5b045.png?v=1776071486", node: "pingping_start", scene: 1, dx: 1.5, dy: 1.2 },
             { id: 1, name: "panny", x: 80, y: 220, hidden: true, emoji: "🍰", node: "panny_start", scene: 3 },
             { id: 12, name: "主厨", x: 115, y: 270, hidden: true, emoji: "👨‍🍳", node: "chef_start", scene: 3 },
             { id: 13, name: "帮厨小李", x: 190, y: 290, hidden: true, emoji: "🧑", node: "helper_start", scene: 3 },
-            { id: 20, name: "未知物品1", x: 145, y: 180, hidden: true, emoji: "✨", node: "find_item_0", scene: 1 },
-            { id: 21, name: "未知物品2", x: 80, y: 180, hidden: true, emoji: "✨", node: "find_item_1", scene: 2 },
+            { id: 20, name: "未知物品1", x: 150, y: 160, hidden: true, emoji: "✨", node: "find_item_0", scene: 1 },
+            { id: 21, name: "未知物品2", x: 85, y: 180, hidden: true, emoji: "✨", node: "find_item_1", scene: 2 },
             { id: 22, name: "未知物品3", x: 130, y: 160, hidden: true, emoji: "✨", node: "find_item_2", scene: 3 },
             { id: 14, name: "lucy", x: 115, y: 220, hidden: true, emoji: "👧", node: "lucy_start", scene: 3 },
         ];
@@ -382,7 +392,7 @@
             npcs.filter(npc => npc.scene === state.scene).forEach(npc => {
                 const img = npcImages[npc.id];
                 if (img && img.complete) { ctx.drawImage(img, npc.x - 16, npc.y - 32, 32, 35); } else if (!npc.hidden && npc.emoji) { ctx.font = '24px PixelFont'; ctx.fillText(npc.emoji, npc.x - 12, npc.y); }
-                const near = Math.hypot(npc.x - state.player.x, npc.y - state.player.y) < 35;
+                const near = Math.hypot(npc.x - state.player.x, npc.y - state.player.y) < 45;
                 if (near) {
                     if (npc.id === 20 && state.inventory[0]) return;
                     if (npc.id === 21 && state.inventory[1]) return;
@@ -694,26 +704,50 @@
 
         function renderSummonEndingChoices() {
             document.querySelectorAll('.summon-ending-choice').forEach((btn, index) => {
+                const isWallpaperBtn = btn.dataset.endingChoice === 'wallpaper';
+
                 btn.classList.toggle('selected', index === summonEndingChoiceIndex);
+                btn.classList.toggle('disabled', isWallpaperBtn && hasPickedWallpaper);
+                btn.disabled = isWallpaperBtn && hasPickedWallpaper;
+
+                if (isWallpaperBtn && hasPickedWallpaper) {
+                    btn.innerText = '已领取';
+                }
             });
         }
-
         function moveSummonEndingChoice(direction) {
             if (!state.isSummonEndingOpen || summonEndingStep !== 'menu') return;
-            if (direction === 'left') summonEndingChoiceIndex = 0;
-            if (direction === 'right') summonEndingChoiceIndex = 1;
+
+            if (direction === 'left') {
+                summonEndingChoiceIndex = 0;
+            }
+
+            if (direction === 'right') {
+                if (hasPickedWallpaper) {
+                    summonEndingChoiceIndex = 0;
+                } else {
+                    summonEndingChoiceIndex = 1;
+                }
+            }
+
             renderSummonEndingChoices();
         }
 
         function confirmSummonEndingAction() {
             if (!state.isSummonEndingOpen) return;
+
             if (summonEndingStep === 'name') {
                 confirmSummonName();
                 return;
             }
+
             if (summonEndingStep === 'menu') {
-                if (summonEndingChoiceIndex === 0) openSummonShareCard();
-                else openSummonWallpaperCard();
+                if (summonEndingChoiceIndex === 0) {
+                    openSummonShareCard();
+                } else {
+                    if (hasPickedWallpaper) return;
+                    openSummonWallpaperCard();
+                }
             }
         }
 
@@ -738,6 +772,10 @@
         }
 
         function openSummonWallpaperCard() {
+
+            if (hasPickedWallpaper) return;
+            hasPickedWallpaper = true;
+
             summonEndingStep = 'wallpaper';
             const selectedWallpaper = pickWeightedWallpaper();
             const wallpaperImg = $('summon-wallpaper-img');
