@@ -164,8 +164,8 @@
             "seat_empty": { name: "系统", text: "这是一张空桌子。\n你还没有点任何东西。\n[按B结束]", choices: null },
             "seat_sit": { name: "系统", text: "你拉开椅子坐了下来。", choices: [{ text: "耐心等待...", next: "coco_serve" }] },
             "coco_serve": { name: "coco", text: "（动态生成的文字，会被替换）", choices: [{ text: "不错不错", next: "coco_good" }, { text: "一般般吧", next: "coco_bad" }] },
-            "coco_good": { name: "coco", text: "对吧！我也觉得餐品超棒的！\n恭喜你成为今天的幸运客人！\n[按A继续]|送你一个珍妮花纸杯蛋糕！希望你会喜欢！\n[按B结束]", choices: null },
-            "coco_bad": { name: "coco", text: "诶？一定是哪个环节出问题了... \n|这样子好了，我偷偷的送给你一份小礼物（珍妮花纸杯蛋糕）吧！|希望下次您再来的时候会有更好的体验！\n[按B结束]", choices: null },
+            "coco_good": { name: "coco", text: "对吧！我也觉得餐品超棒的！\n恭喜你成为今天的幸运客人！\n[按A继续]|送你一份珍妮花纸杯蛋糕！希望你会喜欢！\n[按B结束]", choices: null },
+            "coco_bad": { name: "coco", text: "诶？一定是哪个环节出问题了... \n|这样子好了，我偷偷的送给你一份珍妮花纸杯蛋糕吧！|希望下次您再来的时候会有更好的体验！\n[按B结束]", choices: null },
             "pangpang_start": { name: "乓乓", text: "啊！是乓乓！被困在果冻里了\n[按A继续]", choices: [{ text: "把他救出来！", next: "pangpang_save" }, { text: "还是不管了！", next: "pangpang_ignore" }] },
             "pangpang_save": { name: "乓乓", text: "唔，我其实是在...帮忙的!\n谢谢你，这份果冻送给你！\n[按B结束]", choices: null },
             "pangpang_ignore": { name: "系统", text: "你默默地走开了...\n乓乓继续在果冻里挣扎...\n[按B结束]", choices: null },
@@ -435,30 +435,49 @@
         function setDialogueTheme(name) {
             $('dialogue-bg').src = DIALOGUE_BG[name] || DIALOGUE_BG['系统'];
         }
-        function setDialogueExtraImage(nodeId) {
+
+        function hideDialogueExtraImage() {
             const img = $('dialogue-extra-img');
             if (!img) return;
 
             img.classList.add('hide');
             img.removeAttribute('src');
-
-            if (nodeId === 'popea_start') {
-                img.src = ASSETS.popeaTrophy;
-                img.classList.remove('hide');
-                img.classList.add('extra-trophy');
-                img.classList.remove('extra-cupcake');
-                return;
-            }
-
-            if (nodeId === 'coco_good' || nodeId === 'coco_bad') {
-                img.src = ASSETS.cocoCupcake;
-                img.classList.remove('hide');
-                img.classList.add('extra-cupcake');
-                img.classList.remove('extra-trophy');
-                return;
-            }
-
             img.classList.remove('extra-trophy', 'extra-cupcake');
+        }
+
+        function showDialogueExtraImage(src, className) {
+            const img = $('dialogue-extra-img');
+            if (!img || !src) return;
+
+            img.src = src;
+            img.classList.remove('hide');
+            img.classList.remove('extra-trophy', 'extra-cupcake');
+
+            if (className) {
+                img.classList.add(className);
+            }
+        }
+
+        function updateDialogueExtraImageForVisibleText(visibleText = '') {
+            hideDialogueExtraImage();
+
+            const text = String(visibleText || '');
+
+            // popea：只有“奖杯”这两个字已经显示出来时，才显示奖杯
+            if (currentNodeId === 'popea_start' && text.includes('奖杯')) {
+                showDialogueExtraImage(ASSETS.popeaTrophy, 'extra-trophy');
+                return;
+            }
+
+            // coco：只有选择之后进入 coco_good / coco_bad，
+            // 并且“珍妮花纸杯蛋糕”这几个字已经显示出来时，才显示纸杯蛋糕
+            if (
+                (currentNodeId === 'coco_good' || currentNodeId === 'coco_bad') &&
+                text.includes('珍妮花纸杯蛋糕')
+            ) {
+                showDialogueExtraImage(ASSETS.cocoCupcake, 'extra-cupcake');
+                return;
+            }
         }
         function splitText(text, limit = 55) {
             const raw = String(text || '').trim(); if (!raw) return ['']; const result = []; const manualChunks = raw.split('|');
@@ -487,7 +506,6 @@
             $('dialogue-container').classList.remove('hide');
             $('name-tag').innerText = speaker;
             setDialogueTheme(speaker);
-            setDialogueExtraImage(nodeId);
             toggleDarkMask(true);
             pages = splitText(text);
             pageIndex = 0;
@@ -497,14 +515,59 @@
         }
 
         function typePage(speed = 35) {
-            clearTyping(); const container = $('dialogue-container'); const message = $('message-text'); container.classList.remove('is-choice-page'); message.classList.remove('page-changing'); message.innerText = ''; $('choices-box').innerHTML = '';
-            currentPageText = pages[pageIndex] || ''; isTyping = true; isChoiceMode = false; updatePageIcon(true);
-            let i = 0; typingTimer = setInterval(() => { message.innerText += currentPageText[i] || ''; i++; if (i >= currentPageText.length) { clearTyping(); isTyping = false; updatePageIcon(false); } }, speed);
+            clearTyping();
+
+            const container = $('dialogue-container');
+            const message = $('message-text');
+
+            container.classList.remove('is-choice-page');
+            message.classList.remove('page-changing');
+            message.innerText = '';
+            $('choices-box').innerHTML = '';
+
+            currentPageText = pages[pageIndex] || '';
+            isTyping = true;
+            isChoiceMode = false;
+
+            // 每一页刚开始时先隐藏图片，等关键词真的打出来再显示
+            hideDialogueExtraImage();
+
+            updatePageIcon(true);
+
+            let i = 0;
+
+            typingTimer = setInterval(() => {
+                message.innerText += currentPageText[i] || '';
+                i++;
+
+                // 关键：每打出一个字，就检查当前已经显示的文字
+                updateDialogueExtraImageForVisibleText(message.innerText);
+
+                if (i >= currentPageText.length) {
+                    clearTyping();
+                    isTyping = false;
+
+                    // 打字结束后再检查一次，防止最后一个字刚好是关键词尾字
+                    updateDialogueExtraImageForVisibleText(message.innerText);
+
+                    updatePageIcon(false);
+                }
+            }, speed);
         }
-
         function clearTyping() { if (typingTimer) { clearInterval(typingTimer); typingTimer = null; } }
-        function finishTyping() { if (!isTyping) return; clearTyping(); isTyping = false; $('message-text').innerText = currentPageText; updatePageIcon(false); }
+        function finishTyping() {
+            if (!isTyping) return;
 
+            clearTyping();
+            isTyping = false;
+
+            $('message-text').innerText = currentPageText;
+
+            // 玩家按 A 跳过打字时，也要立刻根据完整文字显示/隐藏图片
+            updateDialogueExtraImageForVisibleText(currentPageText);
+
+            updatePageIcon(false);
+        }
         function updatePageIcon(forceHide = false) {
             const icon = $('page-next-icon');
             icon.src = ASSETS.nextIcon;
@@ -553,7 +616,16 @@
             }
         }
 
-        function openChoicePage() { isChoiceMode = true; updatePageIcon(true); $('dialogue-container').classList.add('is-choice-page'); renderChoices(); }
+        function openChoicePage() {
+            isChoiceMode = true;
+
+            // 进入选项页时隐藏图案，避免上一页图片残留
+            hideDialogueExtraImage();
+
+            updatePageIcon(true);
+            $('dialogue-container').classList.add('is-choice-page');
+            renderChoices();
+        }
 
         function renderChoices() {
             const box = $('choices-box'); box.innerHTML = ''; currentChoices.forEach((choice, index) => {
@@ -589,12 +661,7 @@
             $('dialogue-container').classList.remove('is-choice-page');
             $('choices-box').innerHTML = '';
             $('message-text').innerText = '';
-            const extraImg = $('dialogue-extra-img');
-            if (extraImg) {
-                extraImg.classList.add('hide');
-                extraImg.removeAttribute('src');
-                extraImg.classList.remove('extra-trophy', 'extra-cupcake');
-            }
+            hideDialogueExtraImage();
             $('page-next-icon').classList.add('hide');
             state.keys = { up: false, down: false, left: false, right: false };
         }
@@ -858,7 +925,11 @@
             state.isDialogue = false; isTyping = false; isChoiceMode = false; pages = ['']; pageIndex = 0; currentChoices = []; currentChoiceIndex = 0; currentNodeId = ''; currentNextNode = null;
             $('dialogue-container').classList.add('hide');
             $('dialogue-container').classList.remove('is-choice-page');
-            $('choices-box').innerHTML = ''; $('message-text').innerText = '';
+            $('choices-box').innerHTML = '';
+            $('message-text').innerText = '';
+
+            hideDialogueExtraImage();
+
             $('page-next-icon').classList.add('hide');
             state.keys = { up: false, down: false, left: false, right: false };
             toggleDarkMask(false);
