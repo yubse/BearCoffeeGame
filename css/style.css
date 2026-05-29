@@ -650,6 +650,74 @@ canvas {
 }
 
 
+
+
+/* ====== PanPan 生日贺图 / 二维码保存图 ====== */
+#birthday-card-screen {
+    position: absolute;
+    inset: 0;
+    z-index: 230;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    pointer-events: auto;
+}
+
+#birthday-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    image-rendering: auto;
+    pointer-events: auto;
+    touch-action: auto;
+    user-select: auto;
+    -webkit-user-select: auto;
+    -webkit-user-drag: element;
+    -webkit-touch-callout: default;
+}
+
+#qr-card-screen {
+    position: absolute;
+    inset: 0;
+    z-index: 520;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.72);
+    pointer-events: auto;
+}
+
+.qr-card-panel {
+    width: min(380px, 92%);
+    text-align: center;
+    pointer-events: auto;
+}
+
+#qr-card-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    image-rendering: auto;
+    pointer-events: auto;
+    touch-action: auto;
+    user-select: auto;
+    -webkit-user-select: auto;
+    -webkit-user-drag: element;
+    -webkit-touch-callout: default;
+}
+
+.qr-card-hint {
+    margin-top: 10px;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #8b4513;
+    font-weight: bold;
+    text-align: center;
+    font-family: 'PixelFont', sans-serif !important;
+}
+
 /* ====== 咖神结局：昵称 / 分享 / 随机壁纸 ====== */
 #summon-ending-screen {
     position: absolute;
@@ -717,12 +785,13 @@ canvas {
 .summon-ending-choice-row {
     display: flex;
     justify-content: center;
-    gap: 18px;
+    gap: 10px;
     margin-top: 12px;
+    flex-wrap: wrap;
 }
 
 .summon-ending-choice {
-    min-width: 88px;
+    min-width: 76px;
     padding: 8px 10px;
     border: 2px solid #8b4513;
     border-radius: 10px;

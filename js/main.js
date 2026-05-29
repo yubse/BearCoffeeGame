@@ -29,6 +29,8 @@
             uiCharSelect: './static/images/ui/char-select-bg.png',
             consoleShell: './static/images/ui/console-shell.png',
             controlGuide: './static/images/ui/control-guide.jpg',
+            birthdayCard: './static/images/birthday/panpan-birthday.png',
+            purchaseQrCard: './static/images/promo/purchase-qr.png',
 
             floor1Normal: './static/images/scenes/floor1.jpg',
             floor2Normal: './static/images/scenes/floor2.jpg',
@@ -88,12 +90,13 @@
             isDialogue: false, isTransitioning: false, hasGameStarted: false, isLoaded: false, currentTarget: null,
             isSelectingChar: false, selectedChar: 'char1', isInventoryOpen: false, inventory: [false, false, false],
             isSummonScreenOpen: false, isSummonEndingOpen: false,
-            isControlGuideOpen: false, hasControlGuideShown: false
+            isControlGuideOpen: false, hasControlGuideShown: false,
+            isBirthdayCardOpen: false, isQrCardOpen: false
         };
 
         const PLAYER_BOUNDS = { 1: { minX: 30, maxX: 290, minY: 170, maxY: 350 }, 2: { minX: 20, maxX: 300, minY: 180, maxY: 300 }, 3: { minX: 20, maxX: 280, minY: 185, maxY: 350 } };
         const OBSTACLES = {
-            1: [{ x: 80, y: 100, w: 170, h: 70 }, { x: 60, y: 180, w: 20, h: 30 }, { x: 20, y: 250, w: 30, h: 30 }, { x: 40, y: 320, w: 30, h: 30 }, { x: 140, y: 290, w: 50, h: 50 }, { x: 220, y: 320, w: 60, h: 30 }, { x: 290, y: 230, w: 20, h: 50 }, { x: 200, y: 215, w: 40, h: 40 }],
+            1: [{ x: 20, y: 100, w: 220, h: 60 }/*桌子*/, { x: 260, y: 210, w: 20, h: 60 }/*焦焦*/, { x: 20, y: 250, w: 30, h: 30 }/*果冻*/, { x: 40, y: 320, w: 30, h: 30 }/*左凳子*/, { x: 140, y: 290, w: 50, h: 50 }/*潘潘*/, { x: 230, y: 320, w: 60, h: 30 }/*右凳子*/, { x: 255, y: 260, w: 50, h: 25 }/*右凳子2*/, { x: 110, y: 200, w: 40, h: 60 }/*cooky*/],
             2: [{ x: 130, y: 210, w: 30, h: 55 }/*兔子*/, { x: 160, y: 240, w: 40, h: 25 }/*桌子*/, { x: 200, y: 220, w: 30, h: 50 }/*猫*/],
             3: [{ x: 155, y: 310, w: 120, h: 40 }/*横桌子*/, { x: 80, y: 270, w: 70, h: 100 }/*面包panpan桌子*/, { x: 260, y: 250, w: 20, h: 30 }/*路牌*/, { x: 90, y: 250, w: 35, h: 20 }/*面包潘潘*/, { x: 100, y: 185, w: 20, h: 30 }/*猫*/, { x: 180, y: 270, w: 40, h: 40 }/*可颂潘潘*/, { x: 40, y: 170, w: 60, h: 55 }/*panny桌子*/]
         };
@@ -148,6 +151,24 @@
         ];
 
         const storyData = {
+            "panpan_birthday_1": {
+                name: "系统",
+                text: "熊熊咖啡屋今天提前挂上了彩旗，\n大家把祝福藏进了咖啡香里。\n[按A继续]",
+                choices: null,
+                next: "panpan_birthday_2"
+            },
+            "panpan_birthday_2": {
+                name: "系统",
+                text: "Popea、Panny、Cooky、豆豆、Coco，\n还有乒乒和乓乓一起说：\nPanPan，生日快乐！\n[按A继续]",
+                choices: null,
+                next: "panpan_birthday_3"
+            },
+            "panpan_birthday_3": {
+                name: "系统",
+                text: "愿新一岁的PanPan，\n每天都有热咖啡、甜蛋糕，\n还有一屋子笨拙但真心的朋友。\n长按保存这张生日图吧。\n[按A继续]",
+                choices: null,
+                next: "panpan_start"
+            },
             "panpan_start": { name: "panpan", text: "欢迎光临～我是店长panpan!\n想喝咖啡可以去吧台点餐\n [按A继续] | 二楼可以从右上角的楼梯上去。\n厨房在左上角，欢迎去参观哦！\n [按B结束]", choices: null },
             "panny_start": {
                 name: "panny", text: "你好呀～我是panny，正在给蛋糕裱花。\n[按A继续]", choices: [{ text: "今天的可颂看着不错呢", next: "panny_croissant", action: () => orders.push("扁扁可颂") }, { text: "请给我一份布丁！", next: "panny_pudding", action: () => orders.push("焦糖布丁") }]
@@ -248,15 +269,16 @@
         const npcs = [
             { id: 0, name: "panpan", x: 160, y: 335, hidden: true, emoji: "🐻", node: "panpan_start", scene: 1 },
             { id: 2, name: "popea", x: 100, y: 180, hidden: true, emoji: "☕", node: "popea_start", scene: 1 },
-            { id: 3, name: "cooky", x: 200, y: 240, hidden: true, emoji: "🥤", node: "cooky_start", scene: 1 },
+            { id: 3, name: "cooky", x: 110, y: 230, hidden: true, emoji: "🥤", node: "cooky_start", scene: 1 },
             { id: 4, name: "豆豆", x: 200, y: 180, hidden: true, emoji: "🤎", node: "doudou_start", scene: 1 },
-            { id: 5, name: "coco", x: 60, y: 200, hidden: true, emoji: "💁", node: "coco_wait", scene: 1 },
+            { id: 5, name: "coco", x: 260, y: 250, hidden: true, emoji: "💁", node: "coco_wait", scene: 1 },
+            { id: 23, name: "生日限定", x: 30, y: 160, hidden: true, emoji: "🎁", action: () => openQrCard(), scene: 1 },
             { id: 8, name: "座位", x: 80, y: 340, hidden: true, emoji: "🪑", node: "seat", scene: 1 },
             { id: 9, name: "座位", x: 245, y: 340, hidden: true, emoji: "🪑", node: "seat", scene: 1 },
             { id: 7, name: "珍妮花", x: 140, y: 250, hidden: true, emoji: "📸", node: "guest_start", scene: 2 },
             { id: 11, name: "奥利维亚", x: 220, y: 250, hidden: true, emoji: "📸", node: "oliver_start", scene: 2 },
             { id: 6, name: "乓乓", x: 35, y: 280, hidden: true, emoji: "🍮", node: "pangpang_start", scene: 1 },
-            { id: 10, name: "乒乒", x: 160, y: 240, img: "https://cdn.shopify.com/s/files/1/0651/5186/0943/files/c063ffe11fbded9f4e12b59983d5b045.png?v=1776071486", node: "pingping_start", scene: 1, dx: 1.5, dy: 1.2 },
+            { id: 10, name: "乒乒", x: 60, y: 240, img: "https://cdn.shopify.com/s/files/1/0651/5186/0943/files/c063ffe11fbded9f4e12b59983d5b045.png?v=1776071486", node: "pingping_start", scene: 1, dx: 1.5, dy: 1.2 },
             { id: 1, name: "panny", x: 80, y: 220, hidden: true, emoji: "🍰", node: "panny_start", scene: 3 },
             { id: 12, name: "主厨", x: 115, y: 270, hidden: true, emoji: "👨‍🍳", node: "chef_start", scene: 3 },
             { id: 13, name: "帮厨小李", x: 190, y: 290, hidden: true, emoji: "🧑", node: "helper_start", scene: 3 },
@@ -301,6 +323,8 @@
             $('console-shell').src = ASSETS.consoleShell;
             $('scene-bg').src = ASSETS.floor1Normal;
             if ($('control-guide-img')) $('control-guide-img').src = ASSETS.controlGuide;
+            if ($('birthday-card-img')) $('birthday-card-img').src = ASSETS.birthdayCard;
+            if ($('qr-card-img')) $('qr-card-img').src = ASSETS.purchaseQrCard;
             $('char-select-bg').src = ASSETS.uiCharSelect;
             $('start-image-flash').src = ASSETS.uiStartFlash;
             $('preview-char1').src = playerImageSets.char1.down;
@@ -388,10 +412,10 @@
         function gameLoop() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (state.scene === 1 && !state.isTransitioning && Math.hypot(state.player.x - 280, state.player.y - 190) < 25) { switchScene(2, 46, 270); }
-            if (state.scene === 2 && !state.isTransitioning && Math.hypot(state.player.x - 20, state.player.y - 270) < 25) { switchScene(1, 280, 220); }
-            if (state.scene === 1 && !state.isTransitioning && Math.hypot(state.player.x - 20, state.player.y - 220) < 25) { switchScene(3, 250, 250); }
+            if (state.scene === 2 && !state.isTransitioning && Math.hypot(state.player.x - 20, state.player.y - 270) < 25) { switchScene(1, 255, 200); }
+            if (state.scene === 1 && !state.isTransitioning && Math.hypot(state.player.x - 20, state.player.y - 230) < 25) { switchScene(3, 250, 250); }
             if (state.scene === 3 && !state.isTransitioning && Math.hypot(state.player.x - 280, state.player.y - 250) < 25) { switchScene(1, 72, 270); }
-            if (!state.isDialogue && !state.isTransitioning && !state.isInventoryOpen && !state.isSummonScreenOpen && !state.isSummonEndingOpen && !state.isControlGuideOpen) { movePlayer(); moveRoamingNpcs(); }
+            if (!state.isDialogue && !state.isTransitioning && !state.isInventoryOpen && !state.isSummonScreenOpen && !state.isSummonEndingOpen && !state.isControlGuideOpen && !state.isQrCardOpen) { movePlayer(); moveRoamingNpcs(); }
             if (SHOW_OBSTACLES_DEBUG) {
                 ctx.strokeStyle = 'rgba(255, 0, 0, 0.6)'; ctx.lineWidth = 1; const currentObstacles = OBSTACLES[state.scene] || [];
                 for (let obs of currentObstacles) { ctx.strokeRect(obs.x, obs.y, obs.w, obs.h); }
@@ -411,7 +435,7 @@
                     if (npc.id === 21 && state.inventory[1]) return;
                     if (npc.id === 22 && state.inventory[2]) return;
                     state.currentTarget = npc;
-                    if (!state.isDialogue && !state.isTransitioning && !state.isInventoryOpen && !state.isSummonScreenOpen) { ctx.fillStyle = '#f3e5ab'; ctx.font = 'bold 9px PixelFont'; ctx.textAlign = 'center'; ctx.fillText('[按 A 交互]', npc.x, npc.y - 35); ctx.textAlign = 'left'; }
+                    if (!state.isDialogue && !state.isTransitioning && !state.isInventoryOpen && !state.isSummonScreenOpen && !state.isQrCardOpen) { ctx.fillStyle = '#f3e5ab'; ctx.font = 'bold 9px PixelFont'; ctx.textAlign = 'center'; ctx.fillText('[按 A 交互]', npc.x, npc.y - 35); ctx.textAlign = 'left'; }
                 }
             });
         }
@@ -426,10 +450,40 @@
         }
 
         function tryInteract() {
-            if (!state.hasGameStarted || state.isDialogue || state.isTransitioning || state.isInventoryOpen || state.isSummonScreenOpen || state.isSummonEndingOpen || state.isControlGuideOpen) return;
+            if (!state.hasGameStarted || state.isDialogue || state.isTransitioning || state.isInventoryOpen || state.isSummonScreenOpen || state.isSummonEndingOpen || state.isControlGuideOpen || state.isQrCardOpen) return;
             const target = state.currentTarget; if (!target) return;
+            if (typeof target.action === 'function') {
+                target.action();
+                return;
+            }
             if (target.emoji === '🪑') { if (orders.length > 0) { state.player.x = target.x; state.player.y = target.y - 25; openNode('seat_sit', '系统'); } else { openNode('seat_empty', '系统'); } return; }
             openNode(target.node, target.name);
+        }
+
+        function isBirthdayNode(nodeId) {
+            return ['panpan_birthday_1', 'panpan_birthday_2', 'panpan_birthday_3'].includes(nodeId);
+        }
+
+        function showBirthdayCard() {
+            const screen = $('birthday-card-screen');
+            const img = $('birthday-card-img');
+            if (!screen || !img) return;
+
+            img.src = ASSETS.birthdayCard;
+            state.isBirthdayCardOpen = true;
+            screen.classList.remove('hide');
+        }
+
+        function hideBirthdayCard() {
+            const screen = $('birthday-card-screen');
+            if (!screen) return;
+
+            state.isBirthdayCardOpen = false;
+            screen.classList.add('hide');
+        }
+
+        function startBirthdayIntro() {
+            openNode('panpan_birthday_1', '系统');
         }
 
         function setDialogueTheme(name) {
@@ -494,6 +548,12 @@
 
             currentNodeId = nodeId;
             currentNextNode = node.next || null;
+
+            if (isBirthdayNode(nodeId)) {
+                showBirthdayCard();
+            } else if (state.isBirthdayCardOpen) {
+                hideBirthdayCard();
+            }
 
             const speaker = node.name || fallbackName;
             let text = node.text;
@@ -666,6 +726,32 @@
             state.keys = { up: false, down: false, left: false, right: false };
         }
 
+        function openQrCard() {
+            if (state.isDialogue) hideDialogueOnly();
+
+            const screen = $('qr-card-screen');
+            const img = $('qr-card-img');
+            if (!screen || !img) return;
+
+            img.src = ASSETS.purchaseQrCard;
+            state.isQrCardOpen = true;
+            state.keys = { up: false, down: false, left: false, right: false };
+            screen.classList.remove('hide');
+            toggleDarkMask(true);
+        }
+
+        function closeQrCard() {
+            const screen = $('qr-card-screen');
+            if (screen) screen.classList.add('hide');
+
+            state.isQrCardOpen = false;
+            state.keys = { up: false, down: false, left: false, right: false };
+
+            if (!state.isDialogue && !state.isInventoryOpen && !state.isSummonEndingOpen && !state.isBirthdayCardOpen) {
+                toggleDarkMask(false);
+            }
+        }
+
         function showSummonEndingPanel(panelId) {
             ['summon-name-panel', 'summon-choice-panel', 'summon-share-panel', 'summon-wallpaper-panel'].forEach(id => {
                 const el = $(id);
@@ -812,31 +898,49 @@
             renderSummonEndingChoices();
         }
 
+        function getSummonEndingChoiceButtons() {
+            return Array.from(document.querySelectorAll('.summon-ending-choice'));
+        }
+
         function renderSummonEndingChoices() {
-            document.querySelectorAll('.summon-ending-choice').forEach((btn, index) => {
+            const buttons = getSummonEndingChoiceButtons();
+
+            buttons.forEach((btn) => {
                 const isWallpaperBtn = btn.dataset.endingChoice === 'wallpaper';
+                const shouldDisable = isWallpaperBtn && hasPickedWallpaper;
 
-                btn.classList.toggle('selected', index === summonEndingChoiceIndex);
-                btn.classList.toggle('disabled', isWallpaperBtn && hasPickedWallpaper);
-                btn.disabled = isWallpaperBtn && hasPickedWallpaper;
+                btn.classList.toggle('disabled', shouldDisable);
+                btn.disabled = shouldDisable;
 
-                if (isWallpaperBtn && hasPickedWallpaper) {
-                    btn.innerText = '已领取';
+                if (isWallpaperBtn) {
+                    btn.innerText = hasPickedWallpaper ? '已领取' : '这是？';
                 }
             });
-        }
-        function moveSummonEndingChoice(direction) {
-            if (!state.isSummonEndingOpen || summonEndingStep !== 'menu') return;
 
-            if (direction === 'left') {
-                summonEndingChoiceIndex = 0;
+            if (buttons.length && buttons[summonEndingChoiceIndex]?.disabled) {
+                const firstAvailableIndex = buttons.findIndex(btn => !btn.disabled);
+                summonEndingChoiceIndex = firstAvailableIndex >= 0 ? firstAvailableIndex : 0;
             }
 
-            if (direction === 'right') {
-                if (hasPickedWallpaper) {
-                    summonEndingChoiceIndex = 0;
-                } else {
-                    summonEndingChoiceIndex = 1;
+            buttons.forEach((btn, index) => {
+                btn.classList.toggle('selected', index === summonEndingChoiceIndex);
+            });
+        }
+
+        function moveSummonEndingChoice(direction) {
+            if (!state.isSummonEndingOpen || summonEndingStep !== 'menu' || state.isQrCardOpen) return;
+
+            const buttons = getSummonEndingChoiceButtons();
+            if (!buttons.length) return;
+
+            const step = direction === 'left' ? -1 : 1;
+            let nextIndex = summonEndingChoiceIndex;
+
+            for (let i = 0; i < buttons.length; i++) {
+                nextIndex = (nextIndex + step + buttons.length) % buttons.length;
+                if (!buttons[nextIndex].disabled) {
+                    summonEndingChoiceIndex = nextIndex;
+                    break;
                 }
             }
 
@@ -844,7 +948,7 @@
         }
 
         function confirmSummonEndingAction() {
-            if (!state.isSummonEndingOpen) return;
+            if (!state.isSummonEndingOpen || state.isQrCardOpen) return;
 
             if (summonEndingStep === 'name') {
                 confirmSummonName();
@@ -852,11 +956,22 @@
             }
 
             if (summonEndingStep === 'menu') {
-                if (summonEndingChoiceIndex === 0) {
+                const button = getSummonEndingChoiceButtons()[summonEndingChoiceIndex];
+                const actionType = button ? button.dataset.endingChoice : '';
+
+                if (actionType === 'share') {
                     openSummonShareCard();
-                } else {
+                    return;
+                }
+
+                if (actionType === 'wallpaper') {
                     if (hasPickedWallpaper) return;
                     openSummonWallpaperCard();
+                    return;
+                }
+
+                if (actionType === 'purchase') {
+                    openQrCard();
                 }
             }
         }
@@ -921,6 +1036,9 @@
         }
 
         function closeDialogue() {
+            const closingNodeId = currentNodeId;
+            const shouldContinueAfterBirthday = isBirthdayNode(closingNodeId);
+
             clearTyping();
             state.isDialogue = false; isTyping = false; isChoiceMode = false; pages = ['']; pageIndex = 0; currentChoices = []; currentChoiceIndex = 0; currentNodeId = ''; currentNextNode = null;
             $('dialogue-container').classList.add('hide');
@@ -929,6 +1047,7 @@
             $('message-text').innerText = '';
 
             hideDialogueExtraImage();
+            if (state.isBirthdayCardOpen) hideBirthdayCard();
 
             $('page-next-icon').classList.add('hide');
             state.keys = { up: false, down: false, left: false, right: false };
@@ -936,6 +1055,11 @@
             // 📍 新增判定：如果是在召唤神明状态下关闭的对话，则顺便把 GIF 层也关了
             if (state.isSummonScreenOpen) {
                 closeSummon();
+                return;
+            }
+
+            if (shouldContinueAfterBirthday) {
+                setTimeout(() => openNode('panpan_start', 'panpan'), 120);
             }
         }
 
@@ -1044,7 +1168,7 @@
                     }
                     return;
                 }
-                if (state.isControlGuideOpen) return;
+                if (state.isControlGuideOpen || state.isQrCardOpen) return;
                 if (state.isSummonEndingOpen) {
                     if (key === 'left' || key === 'right') moveSummonEndingChoice(key);
                     return;
@@ -1070,7 +1194,7 @@
             if (!state.isControlGuideOpen) return;
             state.isControlGuideOpen = false;
             $('control-guide-screen').classList.add('hide');
-            setTimeout(() => openNode('panpan_start', 'panpan'), 120);
+            setTimeout(() => startBirthdayIntro(), 120);
         }
 
         function startGame() {
@@ -1095,7 +1219,7 @@
                     openControlGuide();
                 } else {
                     state.isTransitioning = false;
-                    setTimeout(() => openNode('panpan_start', 'panpan'), 300);
+                    setTimeout(() => startBirthdayIntro(), 300);
                 }
             }, 600);
         }
@@ -1158,7 +1282,12 @@
                 return;
             }
 
-            // 3. 咖神昵称 / 分享 / 随机壁纸界面
+            // 3. 二维码图片展示中：只允许长按保存或按 B 返回
+            if (state.isQrCardOpen) {
+                return;
+            }
+
+            // 4. 咖神昵称 / 分享 / 随机壁纸 / 购买界面
             if (state.isSummonEndingOpen) {
                 confirmSummonEndingAction();
                 return;
@@ -1197,6 +1326,10 @@
 
         bindSimpleClick($('btn-b'), () => {
             if (state.isControlGuideOpen) return;
+            if (state.isQrCardOpen) {
+                closeQrCard();
+                return;
+            }
             if (state.isSummonEndingOpen) {
                 backSummonEnding();
                 return;
@@ -1216,7 +1349,7 @@
 
             if (state.isInventoryOpen) { closeInventory(); return; }
         }); bindSimpleClick($('btn-select'), () => {
-            if (state.isSummonScreenOpen || state.isSummonEndingOpen || state.isControlGuideOpen) return;
+            if (state.isSummonScreenOpen || state.isSummonEndingOpen || state.isControlGuideOpen || state.isQrCardOpen) return;
             if (state.isDialogue) closeDialogue();
             if (state.isInventoryOpen) { closeInventory(); } else { openInventory(); }
         });
