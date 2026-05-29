@@ -29,7 +29,7 @@
             uiCharSelect: './static/images/ui/char-select-bg.png',
             consoleShell: './static/images/ui/console-shell.png',
             controlGuide: './static/images/ui/control-guide.jpg',
-            birthdayCard: './static/images/birthday/panpan-birthday.png',
+            birthdayCard: './static/images/birthday/panpan-birthday.jpg',
             purchaseQrCard: './static/images/promo/purchase-qr.png',
 
             floor1Normal: './static/images/scenes/floor1.jpg',
@@ -153,19 +153,19 @@
         const storyData = {
             "panpan_birthday_1": {
                 name: "系统",
-                text: "熊熊咖啡屋今天提前挂上了彩旗，\n大家把祝福藏进了咖啡香里。\n[按A继续]",
+                text: "熊熊咖啡屋今天挂上了彩旗，\n大家把祝福藏进了咖啡香里。\n[按A继续]",
                 choices: null,
                 next: "panpan_birthday_2"
             },
             "panpan_birthday_2": {
                 name: "系统",
-                text: "Popea、Panny、Cooky、豆豆、Coco，\n还有乒乒和乓乓一起说：\nPanPan，生日快乐！\n[按A继续]",
+                text: "伙伴们聚在一起对PanPan说：\n生日快乐！\n[按A继续]",
                 choices: null,
                 next: "panpan_birthday_3"
             },
             "panpan_birthday_3": {
                 name: "系统",
-                text: "愿新一岁的PanPan，\n每天都有热咖啡、甜蛋糕，\n还有一屋子笨拙但真心的朋友。\n长按保存这张生日图吧。\n[按A继续]",
+                text: "愿新一岁的PanPan，\n每天都有开心快乐！\n长按保存这张生日图吧。\n[按A继续]",
                 choices: null,
                 next: "panpan_start"
             },
@@ -415,7 +415,20 @@
             if (state.scene === 2 && !state.isTransitioning && Math.hypot(state.player.x - 20, state.player.y - 270) < 25) { switchScene(1, 255, 200); }
             if (state.scene === 1 && !state.isTransitioning && Math.hypot(state.player.x - 20, state.player.y - 230) < 25) { switchScene(3, 250, 250); }
             if (state.scene === 3 && !state.isTransitioning && Math.hypot(state.player.x - 280, state.player.y - 250) < 25) { switchScene(1, 72, 270); }
-            if (!state.isDialogue && !state.isTransitioning && !state.isInventoryOpen && !state.isSummonScreenOpen && !state.isSummonEndingOpen && !state.isControlGuideOpen && !state.isQrCardOpen) { movePlayer(); moveRoamingNpcs(); }
+            if (
+                !state.isDialogue &&
+                !state.isTransitioning &&
+                !state.isInventoryOpen &&
+                !state.isSummonScreenOpen &&
+                !state.isSummonEndingOpen &&
+                !state.isControlGuideOpen &&
+                !state.isQrCardOpen &&
+                !state.isBirthdayCardOpen
+            ) {
+                movePlayer();
+                moveRoamingNpcs();
+            }
+
             if (SHOW_OBSTACLES_DEBUG) {
                 ctx.strokeStyle = 'rgba(255, 0, 0, 0.6)'; ctx.lineWidth = 1; const currentObstacles = OBSTACLES[state.scene] || [];
                 for (let obs of currentObstacles) { ctx.strokeRect(obs.x, obs.y, obs.w, obs.h); }
@@ -450,7 +463,18 @@
         }
 
         function tryInteract() {
-            if (!state.hasGameStarted || state.isDialogue || state.isTransitioning || state.isInventoryOpen || state.isSummonScreenOpen || state.isSummonEndingOpen || state.isControlGuideOpen || state.isQrCardOpen) return;
+            if (
+                !state.hasGameStarted ||
+                state.isDialogue ||
+                state.isTransitioning ||
+                state.isInventoryOpen ||
+                state.isSummonScreenOpen ||
+                state.isSummonEndingOpen ||
+                state.isControlGuideOpen ||
+                state.isQrCardOpen ||
+                state.isBirthdayCardOpen
+            ) return;
+
             const target = state.currentTarget; if (!target) return;
             if (typeof target.action === 'function') {
                 target.action();
@@ -482,10 +506,23 @@
             screen.classList.add('hide');
         }
 
-        function startBirthdayIntro() {
-            openNode('panpan_birthday_1', '系统');
-        }
+        let birthdayIntroTimer = null;
 
+        function startBirthdayIntro() {
+            clearTimeout(birthdayIntroTimer);
+
+            // 先只显示生日海报，不显示对话框
+            showBirthdayCard();
+            toggleDarkMask(true);
+
+            // 防止等待期间角色继续移动
+            state.keys = { up: false, down: false, left: false, right: false };
+
+            // 2秒后再出现生日祝福对话
+            birthdayIntroTimer = setTimeout(() => {
+                openNode('panpan_birthday_1', '系统');
+            }, 2000);
+        }
         function setDialogueTheme(name) {
             $('dialogue-bg').src = DIALOGUE_BG[name] || DIALOGUE_BG['系统'];
         }
@@ -1286,7 +1323,9 @@
             if (state.isQrCardOpen) {
                 return;
             }
-
+if (state.isBirthdayCardOpen && !state.isDialogue) {
+    return;
+}
             // 4. 咖神昵称 / 分享 / 随机壁纸 / 购买界面
             if (state.isSummonEndingOpen) {
                 confirmSummonEndingAction();
