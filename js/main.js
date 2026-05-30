@@ -32,7 +32,7 @@
             birthdayCard: './static/images/birthday/panpan-birthday.png',
             purchaseQrCard: './static/images/promo/purchase-qr.png',
 
-            floor1Normal: './static/images/scenes/floor1.JPG',
+            floor1Normal: './static/images/scenes/floor1.jpg',
             floor2Normal: './static/images/scenes/floor2.jpg',
             kitchenNormal: './static/images/scenes/kitchen.jpg',
 
