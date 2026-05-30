@@ -29,7 +29,7 @@
             uiCharSelect: './static/images/ui/char-select-bg.png',
             consoleShell: './static/images/ui/console-shell.png',
             controlGuide: './static/images/ui/control-guide.jpg',
-            birthdayCard: './static/images/birthday/panpan-birthday.jpg',
+            birthdayCard: './static/images/birthday/panpan-birthday.jpg?v=20260530',
             purchaseQrCard: './static/images/promo/purchase-qr.png',
 
             floor1Normal: './static/images/scenes/floor1.jpg',
