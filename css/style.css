@@ -223,7 +223,7 @@ canvas {
     z-index: 50;
     opacity: 0;
     pointer-events: none;
-    background: transparent;
+    background: #000;
     transition: opacity .5s ease-in-out;
 }
 
@@ -494,26 +494,27 @@ canvas {
 }
 
 #dialogue-extra-img {
-  position: absolute;
-  z-index: 4;
-  width: 58px;
-  height: auto;
-  object-fit: contain;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
+    position: absolute;
+    z-index: 4;
+    width: 58px;
+    height: auto;
+    object-fit: contain;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
 }
 
 #dialogue-extra-img.extra-trophy {
-  left: 72%;
-  top: 88%;
-  width: 30px;
+    left: 72%;
+    top: 88%;
+    width: 30px;
 }
 
 #dialogue-extra-img.extra-cupcake {
-  left: 74%;
-  top: 83%;
-  width: 30px;
+    left: 74%;
+    top: 83%;
+    width: 30px;
 }
+
 #dialogue-container {
     position: absolute;
     inset: 0;
@@ -653,29 +654,59 @@ canvas {
 
 
 /* ====== PanPan 生日贺图 / 二维码保存图 ====== */
+/* ====== PanPan 生日贺图：对话结束后单独展示 ====== */
 #birthday-card-screen {
     position: absolute;
     inset: 0;
-    z-index: 230;
+    z-index: 520;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: transparent;
+    background: #000;
+    pointer-events: auto;
+}
+
+#birthday-card-screen.dialogue-backdrop {
+    z-index: 240;
+    pointer-events: none;
+}
+
+#birthday-card-screen.dialogue-backdrop .birthday-card-hint {
+    display: none;
+}
+
+.birthday-card-panel {
+    position: relative;
+    width: min(330px, 92%);
+    text-align: center;
     pointer-events: auto;
 }
 
 #birthday-card-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    display: block;
+    width: 35%;
+    height: 35%;
+    margin: 0 auto;
+    object-fit: contain;
     image-rendering: auto;
     pointer-events: auto;
-    touch-action: auto;
-    user-select: auto;
-    -webkit-user-select: auto;
-    -webkit-user-drag: element;
-    -webkit-touch-callout: default;
+    touch-action: auto !important;
+    user-select: auto !important;
+    -webkit-user-select: auto !important;
+    -webkit-user-drag: auto !important;
+    -webkit-touch-callout: default !important;
 }
+
+.birthday-card-hint {
+    margin-top: 10px;
+    font-size: 11px;
+    line-height: 1.4;
+    color: #fffaf0;
+    font-weight: bold;
+    text-align: center;
+    font-family: 'PixelFont', sans-serif !important;
+}
+
 
 #qr-card-screen {
     position: absolute;
@@ -913,7 +944,8 @@ canvas {
 
 @font-face {
     font-family: 'PixelFont';
-    src: url('https://cdn.shopify.com/s/files/1/0651/5186/0943/files/fusion-pixel.woff2?v=1776237202') format('woff2');
+    src: url('../static/fonts/fusion-pixel.woff2') format('woff2');
+    font-display: swap;
 }
 
 .site-footer {
