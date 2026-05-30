@@ -128,9 +128,9 @@
         // 随机壁纸池：weight 越大，被抽中的概率越高。
         // 概率计算方式：单张概率 = 当前 weight / 所有 weight 之和。
         const WALLPAPER_POOL = [
-            { url: './static/images/wallpapers/01.png', weight: 5 },
-            { url: './static/images/wallpapers/02.png', weight: 10 },
-            { url: './static/images/wallpapers/03.png', weight: 5 },
+            { url: './static/images/wallpapers/01.JPG', weight: 5 },
+            { url: './static/images/wallpapers/02.JPG', weight: 10 },
+            { url: './static/images/wallpapers/03.JPG', weight: 5 },
             { url: './static/images/wallpapers/04.jpg', weight: 10 },
             { url: './static/images/wallpapers/05.jpg', weight: 2 },
             { url: './static/images/wallpapers/06.jpg', weight: 2 },
@@ -138,15 +138,15 @@
             { url: './static/images/wallpapers/09.jpg', weight: 5 },
             { url: './static/images/wallpapers/10.jpg', weight: 10 },
             { url: './static/images/wallpapers/11.jpg', weight: 2 },
-            { url: './static/images/wallpapers/12.png', weight: 5 },
-            { url: './static/images/wallpapers/13.png', weight: 10 },
-            { url: './static/images/wallpapers/14.png', weight: 5 },
-            { url: './static/images/wallpapers/15.png', weight: 10 },
-            { url: './static/images/wallpapers/16.png', weight: 10 },
-            { url: './static/images/wallpapers/17.png', weight: 2 },
-            { url: './static/images/wallpapers/18.png', weight: 5 },
-            { url: './static/images/wallpapers/19.png', weight: 2 },
-            { url: './static/images/wallpapers/20.png', weight: 5 }
+            { url: './static/images/wallpapers/12.JPG', weight: 5 },
+            { url: './static/images/wallpapers/13.JPG', weight: 10 },
+            { url: './static/images/wallpapers/14.JPG', weight: 5 },
+            { url: './static/images/wallpapers/15.JPG', weight: 10 },
+            { url: './static/images/wallpapers/16.JPG', weight: 10 },
+            { url: './static/images/wallpapers/17.JPG', weight: 2 },
+            { url: './static/images/wallpapers/18.JPG', weight: 5 },
+            { url: './static/images/wallpapers/19.JPG', weight: 2 },
+            { url: './static/images/wallpapers/20.JPG', weight: 5 }
 
         ];
 
