@@ -468,7 +468,7 @@
                     if (npc.id === 21 && state.inventory[1]) return;
                     if (npc.id === 22 && state.inventory[2]) return;
                     state.currentTarget = npc;
-                    if (!state.isDialogue && !state.isTransitioning && !state.isInventoryOpen && !state.isSummonScreenOpen && !state.isQrCardOpen) { ctx.fillStyle = '#f3e5ab'; ctx.font = 'bold 9px PixelFont'; ctx.textAlign = 'center'; ctx.fillText('[按 A 交互]', npc.x, npc.y - 35); ctx.textAlign = 'left'; }
+                    if (!state.isDialogue && !state.isTransitioning && !state.isInventoryOpen && !state.isSummonScreenOpen && !state.isQrCardOpen) { ctx.fillStyle = '#f3e5ab'; ctx.font = 'bold 9px PixelFont'; ctx.textAlign = 'center'; ctx.fillText('[按 A 交流]', npc.x, npc.y - 35); ctx.textAlign = 'left'; }
                 }
             });
         }
