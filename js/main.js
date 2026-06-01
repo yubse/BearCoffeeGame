@@ -55,6 +55,7 @@
             popeaTrophy: './static/images/dialogue/popea-trophy.png',
             cocoCupcake: './static/images/dialogue/coco-cupcake.png'
         };
+        const SHOP_H5_URL = 'https://channels.weixin.qq.com/shop/b/1xJ8rIw9UxUa4wE?entrance_id=h5';
 
         const DIALOGUE_BG = {
             panpan: './static/images/dialogue/3.png',
@@ -272,7 +273,7 @@
             { id: 3, name: "cooky", x: 110, y: 230, hidden: true, emoji: "🥤", node: "cooky_start", scene: 1 },
             { id: 4, name: "豆豆", x: 200, y: 180, hidden: true, emoji: "🤎", node: "doudou_start", scene: 1 },
             { id: 5, name: "coco", x: 260, y: 250, hidden: true, emoji: "💁", node: "coco_wait", scene: 1 },
-            { id: 23, name: "生日限定", x: 30, y: 160, hidden: true, emoji: "🎁", action: () => openQrCard(), scene: 1 },
+            { id: 23, name: "生日限定", x: 30, y: 160, hidden: true, emoji: "🎁", action: () => openShopLink(), scene: 1 },
             { id: 8, name: "座位", x: 80, y: 340, hidden: true, emoji: "🪑", node: "seat", scene: 1 },
             { id: 9, name: "座位", x: 245, y: 340, hidden: true, emoji: "🪑", node: "seat", scene: 1 },
             { id: 7, name: "珍妮花", x: 140, y: 250, hidden: true, emoji: "📸", node: "guest_start", scene: 2 },
@@ -815,6 +816,12 @@
             toggleDarkMask(true);
         }
 
+        function openShopLink() {
+            if (state.isDialogue) hideDialogueOnly();
+            state.keys = { up: false, down: false, left: false, right: false };
+            window.location.href = SHOP_H5_URL;
+        }
+
         function closeQrCard() {
             const screen = $('qr-card-screen');
             if (screen) screen.classList.add('hide');
@@ -1046,7 +1053,7 @@
                 }
 
                 if (actionType === 'purchase') {
-                    openQrCard();
+                    openShopLink();
                 }
             }
         }
