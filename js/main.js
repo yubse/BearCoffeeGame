@@ -819,6 +819,10 @@
         function openShopLink() {
             if (state.isDialogue) hideDialogueOnly();
             state.keys = { up: false, down: false, left: false, right: false };
+            if (/miniprogram/i.test(navigator.userAgent) || window.__wxjs_environment === 'miniprogram') {
+                openQrCard();
+                return;
+            }
             window.location.href = SHOP_H5_URL;
         }
 
