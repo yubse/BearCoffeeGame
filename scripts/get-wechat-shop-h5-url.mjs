@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-const APPID = process.env.WECHAT_APPID || 'wx705a021eaa92de1b';
+const APPID = process.env.WECHAT_APPID || '';
 const APPSECRET = process.env.WECHAT_APPSECRET;
 const WECOM_CORP_ID = process.env.WECOM_CORP_ID || '';
 const WECOM_USER_ID = process.env.WECOM_USER_ID || '';
