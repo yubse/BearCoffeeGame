@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>&#27426;&#36814;&#20809;&#20020;&#29066;&#29066;&#21654;&#21857;&#23627;</title>
+    <base href="../../">
+    <link rel="icon" type="image/png" href="./static/images/logo.png">
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+    <section class="playgame-section">
+        <div id="start-screen">
+            <img id="start-image-base" src="./static/images/ui/start-base.png" alt="">
+            <img id="start-image-flash" class="hide" alt="">
+        </div>
+
+        <div id="char-select-screen" class="hide">
+            <img id="char-select-bg" alt="">
+            <div class="char-ui-container">
+                <div class="char-title">&#35831;&#36873;&#25321;&#20320;&#30340;&#24418;&#35937;</div>
+                <br>
+                <div class="char-options">
+                    <div id="char-card-char1" class="char-card selected" data-char="char1">
+                        <img id="preview-char1" alt="character 1">
+                    </div>
+                    <div id="char-card-char2" class="char-card" data-char="char2">
+                        <img id="preview-char2" alt="character 2">
+                    </div>
+                </div>
+                <div class="char-title" id="btn-confirm-char" style="cursor: pointer; margin-top: 10px;">&#30830;&#23450; [A]</div>
+                <div class="char-title" style="font-size: 12px; color: #999;">* SELECT &#26597;&#30475;&#32972;&#21253; *</div>
+            </div>
+        </div>
+
+        <div id="console">
+            <div id="game-screen">
+                <img id="scene-bg" alt=""
+                    style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; pointer-events: none;">
+                <canvas id="gameCanvas" style="position: relative; z-index: 5;"></canvas>
+                <div id="transition-overlay"></div>
+
+                <div id="control-guide-screen" class="hide">
+                    <img id="control-guide-img" alt="control guide">
+                </div>
+
+                <div id="birthday-card-screen" class="hide">
+                    <div class="birthday-card-panel">
+                        <img id="birthday-card-img" alt="PanPan birthday card">
+                        <div class="birthday-card-hint">&#38271;&#25353;&#20445;&#23384;&#22721;&#32440;&#65292;&#25353; B &#32487;&#32493;</div>
+                    </div>
+                </div>
+
+                <div id="qr-card-screen" class="hide">
+                    <div class="qr-card-panel">
+                        <img id="qr-card-img" alt="purchase QR code">
+                        <div class="qr-card-hint">&#38271;&#25353;&#20445;&#23384;&#22270;&#29255;&#65292;&#25353; B &#36820;&#22238;</div>
+                    </div>
+                </div>
+
+                <div id="dark-mask" class="hide" style="z-index: 10;"></div>
+
+                <div id="inventory-screen" class="hide">
+                    <img id="inv-dialogue-bg" alt="">
+                    <div class="inv-avatar-box"><img id="inv-avatar" alt=""></div>
+                    <div id="summon-hint" class="hide">&#19977;&#20010;&#29289;&#21697;&#24050;&#38598;&#40784;&#65292;&#25353; A &#21484;&#21796;&#21654;&#31070;&#65281;</div>
+                    <div id="inv-gain-message" class="hide"></div>
+
+                    <div class="inv-items-container">
+                        <div class="inv-item"><img id="inv-item-0" alt="">
+                            <div class="inv-text" id="inv-text-0">???</div>
+                        </div>
+                        <div class="inv-item"><img id="inv-item-1" alt="">
+                            <div class="inv-text" id="inv-text-1">???</div>
+                        </div>
+                        <div class="inv-item"><img id="inv-item-2" alt="">
+                            <div class="inv-text" id="inv-text-2">???</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="summon-screen" class="hide">
+                    <div id="summon-content">
+                        <img id="summon-bg" alt="">
+                        <img id="summon-gif-img" alt="summon">
+                        <div class="summon-text-group" id="summon-text-container"></div>
+                    </div>
+                </div>
+
+                <div id="dialogue-container" class="hide">
+                    <img id="dialogue-bg" alt="">
+                    <img id="dialogue-extra-img" class="hide" alt="">
+                    <div id="close-dialogue">&times;</div>
+                    <div id="name-tag"></div>
+                    <div id="message-text"></div>
+                    <img id="page-next-icon" class="hide" alt="">
+                    <div id="choices-box" class="choice-list hide"></div>
+                </div>
+
+                <div id="summon-ending-screen" class="hide">
+                    <div id="summon-name-panel" class="summon-ending-panel">
+                        <div class="summon-ending-title">&#26159;&#35841;&#21796;&#37266;&#20102;&#25105;&#65311;</div>
+                        <div class="summon-ending-desc">&#35831;&#30041;&#19979;&#20320;&#30340;&#21517;&#23383;&#12290;</div>
+                        <input id="summon-name-input" type="text" maxlength="12" placeholder="nickname" autocomplete="off">
+                        <div class="summon-ending-hint">&#36755;&#20837;&#21518;&#25353; A &#30830;&#35748;</div>
+                    </div>
+
+                    <div id="summon-choice-panel" class="summon-ending-panel hide">
+                        <div class="summon-ending-title">&#21654;&#31070;&#35760;&#20303;&#20102;&#20320;&#30340;&#21517;&#23383;</div>
+                        <div class="summon-ending-desc" id="summon-choice-name"></div>
+                        <div class="summon-ending-choice-row">
+                            <button type="button" class="summon-ending-choice selected" data-ending-choice="share">&#20998;&#20139;</button>
+                            <button type="button" class="summon-ending-choice" data-ending-choice="wallpaper">&#36825;&#26159;&#65311;</button>
+                            <button type="button" class="summon-ending-choice" data-ending-choice="purchase">&#36141;&#20080;</button>
+                        </div>
+                        <div class="summon-ending-hint">&#25353;&#24038;&#21491;&#36873;&#25321;&#65292;&#25353; A &#30830;&#35748;&#65292;&#25353; B &#20851;&#38381;</div>
+                    </div>
+
+                    <div id="summon-share-panel" class="summon-card-panel hide">
+                        <div class="summon-card-wrap">
+                            <img id="summon-share-card-img" alt="share card">
+                            <div id="summon-share-name"></div>
+                        </div>
+                        <div id="summon-share-time-label" class="summon-share-time-label hide"></div>
+                        <div class="summon-ending-hint">&#38271;&#25353;&#20445;&#23384;&#22721;&#32440;&#65292;&#25353; B &#36820;&#22238;&#36873;&#25321;</div>
+                        <div class="summon-ending-hint">&#31105;&#27490;&#20108;&#20256;&#20108;&#25913;&#21830;&#29992;</div>
+                    </div>
+
+                    <div id="summon-wallpaper-panel" class="summon-card-panel hide">
+                        <div class="summon-wallpaper-title">&#21654;&#31070;&#20026;&#20320;&#25277;&#20013;&#20102;&#36825;&#24352;&#22721;&#32440;</div>
+                        <div class="summon-card-wrap">
+                            <img id="summon-wallpaper-img" alt="wallpaper">
+                        </div>
+                        <div class="summon-ending-hint" style="color: #fffaf0;">&#38271;&#25353;&#20445;&#23384;&#22721;&#32440;&#65292;&#25353; B &#36820;&#22238;&#36873;&#25321;</div>
+                        <div class="summon-ending-hint" style="color: #fffaf0;">&#31105;&#27490;&#20108;&#20256;&#20108;&#25913;&#21830;&#29992;</div>
+                    </div>
+                </div>
+            </div>
+
+            <img id="console-shell" alt="">
+
+            <div id="btn-b" class="touch-btn"></div>
+            <div id="btn-select" class="touch-btn"></div>
+            <div id="up" class="touch-btn"></div>
+            <div id="down" class="touch-btn"></div>
+            <div id="left" class="touch-btn"></div>
+            <div id="right" class="touch-btn"></div>
+            <div id="btn-a" class="touch-btn"></div>
+        </div>
+
+        <audio id="bgm" loop preload="auto">
+            <source src="./static/audio/bgm.mp3" type="audio/mpeg">
+        </audio>
+    </section>
+
+    <footer class="site-footer">
+        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">
+            &#31908;ICP&#22791;2021111496&#21495;-3
+        </a>
+    </footer>
+
+    <script>
+        window.BEAR_COFFEE_SHOP_CHANNEL = 'taobao';
+        window.BEAR_COFFEE_TAOBAO_URL = 'https://item.taobao.com/item.htm?id=1050353753381&mi_id=0000f9tRxL7mD06HHND_hl_jToAdYJhhs684XpmYBZDjoc4&spm=a21xtw.29178619.0.0&xxc=shop&skuId=6248511322336';
+    </script>
+    <script src="./js/main.js" defer></script>
+</body>
+
+</html>
