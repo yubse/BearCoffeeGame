@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <a class="map-entry-link" href="./map/index.html" aria-label="前往地图">地图</a>
+    <a class="map-entry-link" href="/map" aria-label="前往地图">地图</a>
 
     <section class="playgame-section">
         <div id="start-screen">
@@ -162,6 +162,13 @@
         </a>
     </footer>
 
+    <script>
+        document.querySelector('.map-entry-link')?.addEventListener('click', function (event) {
+            if (window.location.protocol !== 'file:') return;
+            event.preventDefault();
+            window.location.href = './map/index.html';
+        });
+    </script>
     <script src="./js/main.js" defer></script>
 </body>
 

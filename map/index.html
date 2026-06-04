@@ -15,7 +15,7 @@
         <p class="map-coming-soon-label">MAP</p>
         <h1>地图</h1>
         <p class="map-coming-soon-text">敬请期待</p>
-        <a class="map-coming-soon-back" href="../index.html">返回咖啡屋</a>
+        <a class="map-coming-soon-back" href="/">返回咖啡屋</a>
     </main>
 
     <footer class="site-footer">
@@ -23,6 +23,14 @@
             &#31908;ICP&#22791;2021111496&#21495;-3
         </a>
     </footer>
+
+    <script>
+        document.querySelector('.map-coming-soon-back')?.addEventListener('click', function (event) {
+            if (window.location.protocol !== 'file:') return;
+            event.preventDefault();
+            window.location.href = '../index.html';
+        });
+    </script>
 </body>
 
 </html>
