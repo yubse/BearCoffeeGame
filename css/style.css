@@ -969,3 +969,91 @@ canvas {
 .site-footer a:hover {
     color: #666;
 }
+
+.map-entry-link {
+    position: fixed;
+    right: 14px;
+    top: 14px;
+    z-index: 100000;
+    min-width: 54px;
+    padding: 8px 12px;
+    border: 2px solid #8b4513;
+    border-radius: 8px;
+    background: rgba(255, 250, 240, 0.92);
+    color: #4a2e1b;
+    font-family: 'PixelFont', -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 3px 0 rgba(74, 46, 27, 0.24);
+}
+
+.map-entry-link:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(74, 46, 27, 0.24);
+}
+
+.map-page {
+    min-height: 100vh;
+    margin: 0;
+    background: #f7ead8;
+    color: #4a2e1b;
+    font-family: 'PixelFont', -apple-system, sans-serif;
+}
+
+.map-coming-soon {
+    min-height: 100vh;
+    padding: 48px 24px 72px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.map-coming-soon-logo {
+    width: min(108px, 30vw);
+    height: auto;
+    margin-bottom: 22px;
+    image-rendering: pixelated;
+}
+
+.map-coming-soon-label {
+    margin: 0 0 10px;
+    font-size: 13px;
+    letter-spacing: 0;
+    color: #8b4513;
+}
+
+.map-coming-soon h1 {
+    margin: 0 0 18px;
+    font-size: clamp(28px, 8vw, 46px);
+    line-height: 1.2;
+}
+
+.map-coming-soon-text {
+    margin: 0 0 28px;
+    font-size: clamp(18px, 5vw, 26px);
+    line-height: 1.4;
+}
+
+.map-coming-soon-back {
+    min-width: 130px;
+    padding: 10px 16px;
+    border: 2px solid #8b4513;
+    border-radius: 8px;
+    background: #fffaf0;
+    color: #4a2e1b;
+    font-size: 14px;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 3px 0 rgba(74, 46, 27, 0.25);
+}
+
+.map-coming-soon-back:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 rgba(74, 46, 27, 0.25);
+}

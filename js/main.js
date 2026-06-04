@@ -56,11 +56,8 @@
             cocoCupcake: './static/images/dialogue/coco-cupcake.png'
         };
         const SHOP_LINKS = {
-            wechat: 'https://channels.weixin.qq.com/shop/b/1xJ8rIw9UxUa4wE?entrance_id=h5',
-            taobao: window.BEAR_COFFEE_TAOBAO_URL || 'https://item.taobao.com/item.htm?id=1050353753381&mi_id=0000f9tRxL7mD06HHND_hl_jToAdYJhhs684XpmYBZDjoc4&spm=a21xtw.29178619.0.0&xxc=shop&skuId=6248511322336'
+            wechat: 'https://channels.weixin.qq.com/shop/b/1xJ8rIw9UxUa4wE?entrance_id=h5'
         };
-        const SHOP_CHANNEL = window.BEAR_COFFEE_SHOP_CHANNEL ||
-            (/(^|\/)index\/taobao\/?$/.test(window.location.pathname.replace(/\/index\.html$/, '/')) ? 'taobao' : 'wechat');
 
         const DIALOGUE_BG = {
             panpan: './static/images/dialogue/3.png',
@@ -824,8 +821,8 @@
         function openShopLink() {
             if (state.isDialogue) hideDialogueOnly();
             state.keys = { up: false, down: false, left: false, right: false };
-            const shopUrl = SHOP_LINKS[SHOP_CHANNEL] || SHOP_LINKS.wechat;
-            if (SHOP_CHANNEL !== 'taobao' && (/miniprogram/i.test(navigator.userAgent) || window.__wxjs_environment === 'miniprogram')) {
+            const shopUrl = SHOP_LINKS.wechat;
+            if (/miniprogram/i.test(navigator.userAgent) || window.__wxjs_environment === 'miniprogram') {
                 openQrCard();
                 return;
             }
