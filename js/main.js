@@ -91,7 +91,7 @@
         const state = {
             player: { x: 120, y: 320, speed: 2.5, direction: 'down' }, keys: { up: false, down: false, left: false, right: false }, scene: 1,
             isDialogue: false, isTransitioning: false, hasGameStarted: false, isLoaded: false, currentTarget: null,
-            isSelectingChar: false, selectedChar: 'char1', isInventoryOpen: false, inventory: [false, false, false],
+            isSelectingLanguage: false, isSelectingChar: false, selectedChar: 'char1', isInventoryOpen: false, inventory: [false, false, false],
             isSummonScreenOpen: false, isSummonEndingOpen: false,
             isControlGuideOpen: false, hasControlGuideShown: false,
             isBirthdayCardOpen: false, isQrCardOpen: false
@@ -153,6 +153,140 @@
 
         ];
 
+        const LANGUAGE_KEY = 'bearCoffeeLanguage';
+        const SUPPORTED_LANGUAGES = ['zh', 'en'];
+        let currentLanguage = SUPPORTED_LANGUAGES.includes(localStorage.getItem(LANGUAGE_KEY)) ? localStorage.getItem(LANGUAGE_KEY) : 'zh';
+
+        const UI_TEXT = {
+            zh: {
+                mapLink: '地图',
+                charTitle: '请选择你的形象',
+                confirmChar: '确定 [A]',
+                selectHint: '* SELECT 查看背包 *',
+                languageTitle: '选择你的语言',
+                languageName: '中文',
+                birthdayHint: '长按保存壁纸，按 B 继续',
+                qrHint: '长按保存图片，按 B 返回',
+                summonHint: '三个物品已集齐，按 A 召唤咖神！',
+                summonNameTitle: '是谁唤醒了我？',
+                summonNameDesc: '请留下你的名字。',
+                summonNameHint: '输入后按 A 确认',
+                summonChoiceTitle: '咖神记住了你的名字',
+                shareButton: '分享',
+                wallpaperButton: '这是？',
+                wallpaperClaimed: '已领取',
+                purchaseButton: '购买',
+                summonChoiceHint: '按左右选择，按 A 确认，按 B 关闭',
+                shareHint: '长按保存壁纸，按 B 返回选择',
+                copyrightHint: '禁止二传二改商用',
+                wallpaperTitle: '咖神为你抽中了这张壁纸',
+                interactHint: '[按 A 交流]',
+                mysteryName: '神秘咖啡人',
+                elapsedSeconds: (seconds) => `用时 ${seconds}秒`,
+                elapsedMinutes: (minutes, seconds) => `用时 ${minutes}分${String(seconds).padStart(2, '0')}秒`,
+                summonChoiceName: (name) => `「${name}」唤醒了咖神。`,
+                gainItem: (itemName) => `恭喜获得：${itemName}`,
+                cocoServe: (items) => `halo，这里是coco。你点的『${items}』送来啦！感觉餐品还满意吗？`,
+                orderJoin: ' 和 '
+            },
+            en: {
+                mapLink: 'Map',
+                charTitle: 'Choose your character',
+                confirmChar: 'Confirm [A]',
+                selectHint: '* SELECT opens your bag *',
+                languageTitle: 'Choose your language',
+                languageName: 'English',
+                birthdayHint: 'Long press to save wallpaper, press B to continue',
+                qrHint: 'Long press to save image, press B to go back',
+                summonHint: 'All 3 items collected. Press A to summon the Coffee Spirit!',
+                summonNameTitle: 'Who awakened me?',
+                summonNameDesc: 'Please leave your name.',
+                summonNameHint: 'Press A to confirm after typing',
+                summonChoiceTitle: 'The Coffee Spirit remembers your name',
+                shareButton: 'Share',
+                wallpaperButton: 'What?',
+                wallpaperClaimed: 'Claimed',
+                purchaseButton: 'Buy',
+                summonChoiceHint: 'Press left/right to choose, A to confirm, B to close',
+                shareHint: 'Long press to save wallpaper, press B to go back',
+                copyrightHint: 'Do not repost, edit, or use commercially',
+                wallpaperTitle: 'The Coffee Spirit picked this wallpaper for you',
+                interactHint: '[Press A to talk]',
+                mysteryName: 'Mysterious Coffee Guest',
+                elapsedSeconds: (seconds) => `Time ${seconds}s`,
+                elapsedMinutes: (minutes, seconds) => `Time ${minutes}m ${String(seconds).padStart(2, '0')}s`,
+                summonChoiceName: (name) => `"${name}" awakened the Coffee Spirit.`,
+                gainItem: (itemName) => `Received: ${itemName}`,
+                cocoServe: (items) => `Halo, Coco here. Your ${items} is ready! How does everything taste?`,
+                orderJoin: ' and '
+            }
+        };
+
+        const NAME_TEXT = {
+            zh: { 豆豆: '豆豆', 珍妮花: '珍妮花', 奥利维亚: '奥利维亚', 乒乒: '乒乒', 乓乓: '乓乓', 系统: '系统', 主厨: '主厨', 帮厨Coco: '帮厨Coco', 帮厨小李: '帮厨小李', 咖神: '咖神' },
+            en: { 豆豆: 'DoDo', 珍妮花: 'Jennifer', 奥利维亚: 'Olivia', 乒乒: 'PinPin', 乓乓: 'PangPang', 系统: 'System', 主厨: 'Chef', 帮厨Coco: 'Kitchen Helper Coco', 帮厨小李: 'Kitchen Helper Li', 咖神: 'Coffee Spirit', 生日限定: 'Birthday Special', 座位: 'Seat' }
+        };
+
+        const ITEM_TEXT = {
+            item0: { zh: '咖啡渣', en: 'Coffee grounds' },
+            item1: { zh: '咖啡的香气', en: 'Coffee aroma' },
+            item2: { zh: '咖啡豆', en: 'Coffee beans' }
+        };
+
+        const ORDER_TEXT = {
+            croissant: { zh: '扁扁可颂', en: 'flat croissant' },
+            pudding: { zh: '焦糖布丁', en: 'caramel pudding' },
+            lightRoast: { zh: '浅烘咖啡', en: 'light roast coffee' },
+            mediumRoast: { zh: '中烘咖啡', en: 'medium roast coffee' },
+            darkRoast: { zh: '深烘咖啡', en: 'dark roast coffee' }
+        };
+
+        const STORY_EN = {
+            panpan_birthday_1: { text: "Bear Coffee House is covered in bunting today,\nand everyone's wishes are tucked into the coffee aroma.\n[Press A to continue]" },
+            panpan_birthday_2: { text: "Everyone gathers around PanPan and says:\nHappy birthday!\n[Press A to continue]" },
+            panpan_birthday_3: { text: "May PanPan's new year be filled\nwith joy every single day!\n[Press A to continue]" },
+            panpan_start: { text: "Welcome in! I'm panpan, the manager.\nIf you want coffee, order at the bar.\n [Press A to continue] | The second floor is up the stairs in the upper right.\nThe kitchen is in the upper left. Feel free to visit!\n [Press B to end]" },
+            panny_start: { text: "Hi there! I'm panny, decorating cakes right now.\n[Press A to continue]", choices: ["Today's croissant looks pretty good.", "Please give me one pudding!"] },
+            panny_croissant: { text: "Coco dreamed about flat croissants last night!\nA flat croissant should be pressed exactly like this!| You can find an empty seat in the hall.\nCoco will bring it over soon.\n[Press B to end]" },
+            panny_pudding: { text: "Sure! Find an empty seat in the hall first.\nCoco will bring it over soon.\n[Press B to end]" },
+            popea_start: { text: "I'm popea. What would you like today?\n [Press A to continue] |I didn't place at the coffee festival, but my friends made me a trophy. I was really touched.\n|We have lots of high-quality beans. Cooky brought them from the forest!\n|What flavor would you like? Tell DoDo on the right!\n[Press B to end]" },
+            cooky_start: { text: "I'm cooky. How are today's coffee beans?\nThey were just brought back from the forest.\n[Press B to end]" },
+            doudou_start: { text: "I'm DoDo. I'll grind the beans for you!\nWhat flavor do you need?\n[Press A to continue]", choices: ["I'd like a light roast with fruity floral notes.", "I'll have a medium roast with hazelnut notes.", "I'll choose a rich chocolatey dark roast."] },
+            doudou_light: { text: "Light roast beans should be ground fine like caster sugar.\nFind an empty seat and relax for a bit.\n[Press B to end]" },
+            doudou_medium: { text: "Medium roast beans need a medium grind.\nFind an empty seat and relax for a bit.\n[Press B to end]" },
+            doudou_dark: { text: "Dark roast beans should be as coarse as sea salt.\nFind an empty seat and relax for a bit.\n[Press B to end]" },
+            coco_wait: { text: "Hello, I'm Coco, your server.\nI'll bring your order over soon.\n[Press B to end]" },
+            seat_empty: { text: "This is an empty table.\nYou haven't ordered anything yet.\n[Press B to end]" },
+            seat_sit: { text: "You pull out the chair and sit down.", choices: ["Wait patiently..."] },
+            coco_serve: { choices: ["Pretty good!", "It's just okay."] },
+            coco_good: { text: "Right? I think everything is amazing too!\nCongratulations, you're today's lucky guest!\n[Press A to continue]|Here's a Jennifer cupcake for you.\nI hope you like it!\n[Press B to end]" },
+            coco_bad: { text: "Huh? Something must have gone wrong...\n|How about this: I'll secretly give you a Jennifer cupcake.|I hope your next visit is even better!\n[Press B to end]" },
+            pangpang_start: { text: "Ah! It's PangPang! He's trapped in jelly.\n[Press A to continue]", choices: ["Save him!", "Maybe leave him there!"] },
+            pangpang_save: { text: "Mm, I was actually... helping!\nThank you. Take this jelly!\n[Press B to end]" },
+            pangpang_ignore: { text: "You quietly walk away...\nPangPang keeps struggling in the jelly...\n[Press B to end]" },
+            pingping_start: { text: "Aaaah! Somebody save PangPang!!!\n[Press B to end]" },
+            guest_start: { text: "Hello. The balcony view is wonderful.\nWould you mind taking a photo for me?\n [Press A to continue]", choices: ["No problem! Leave it to me.", "But I'm not very good at photos."] },
+            guest_yes: { text: "(Click)\nWow, thank you! The photo is amazing!\n[Press B to end]" },
+            guest_no: { text: "No worries, I'll show you how!\n(Click) Wow, the photo is amazing!\n[Press B to end]" },
+            oliver_start: { text: "(Click) Hi there. This place is lovely, isn't it?\n[Press B to end]" },
+            chef_start: { text: "Oh my, what brings you to the kitchen?\nI just finished buttering the flat croissants.\n[Press B to end]" },
+            helper_start: { text: "We recently got a new batch of beans.\nCould you bring them to DoDo?\n[Press A to continue]", choices: ["Are they on the bread rack?", "Are they by the sink?", "Are they on the table?"] },
+            helper_happy: { text: "Yes! Thank you!\n[Press B to end]" },
+            helper_sad: { text: "Nope. Keep looking!\n[Press B to end]" },
+            helper_desk: { text: "Nope. Keep looking!\n[Press B to end]" },
+            lucy_start: { text: "Meow~\n[Press B to end]" },
+            find_item_0: { text: "You find a pinch of dark stuff on the bar.\nIt gives off a faint aroma. Take a closer look?", choices: ["Let's ask Popea what this is!", "Maybe not..."] },
+            find_item_1: { text: "Huh? What's that smell?\nA warm coffee aroma floats from the table.", choices: ["It smells like caramel and nuts.", "Let PinPin clean the table!"] },
+            find_item_2: { text: "Are these the coffee beans they need?", choices: ["Bring them to DoDo!", "Maybe ask again first..."] },
+            leave_item: { text: "You decide to leave it alone.\n[Press B to end]" },
+            summon_god_dialogue_1: { text: "In the dark corners, the coffee grounds\nsuddenly begin to glow faintly.\n[Press A to continue]" },
+            summon_god_dialogue_2: { text: "They are no ordinary residue.\nThey come from thousands of attempts:\ngrinding, brewing, failing, and trying again." },
+            summon_god_dialogue_3: { text: "Every sincere effort poured into coffee,\nwhen the wish grows strong enough,\ncondenses into form within aroma and steam." },
+            summon_god_dialogue_4: { text: "I am the Coffee Spirit.\nI was born from coffee grounds,\nand from hands that refused to stop." },
+            summon_god_dialogue_5: { text: "What gives coffee a soul is not only the recipe.\nIt is believing, after every practice,\nthat the next cup can be better." },
+            summon_god_dialogue_6: { text: "Who awakened me?" }
+        };
+
         const storyData = {
             "panpan_birthday_1": {
                 name: "panpan",
@@ -174,13 +308,13 @@
             },
             "panpan_start": { name: "panpan", text: "欢迎光临～我是店长panpan!\n想喝咖啡可以去吧台点餐\n [按A继续] | 二楼可以从右上角的楼梯上去。\n厨房在左上角，欢迎去参观哦！\n [按B结束]", choices: null },
             "panny_start": {
-                name: "panny", text: "你好呀～我是panny，正在给蛋糕裱花。\n[按A继续]", choices: [{ text: "今天的可颂看着不错呢", next: "panny_croissant", action: () => orders.push("扁扁可颂") }, { text: "请给我一份布丁！", next: "panny_pudding", action: () => orders.push("焦糖布丁") }]
+                name: "panny", text: "你好呀～我是panny，正在给蛋糕裱花。\n[按A继续]", choices: [{ text: "今天的可颂看着不错呢", next: "panny_croissant", action: () => orders.push("croissant") }, { text: "请给我一份布丁！", next: "panny_pudding", action: () => orders.push("pudding") }]
             },
             "panny_croissant": { name: "panny", text: "Coco昨晚梦到了扁扁可颂！\n扁可颂就是要像这样压的扁扁的！| 你可以去大厅找个空座位坐下，\n稍后Coco会帮你送过去的～ \n[按B结束]", choices: null },
             "panny_pudding": { name: "panny", text: "好的！你可以去大厅先找个空座位坐下，稍后Coco会帮你送过去的～ \n[按B结束]", choices: null },
             "popea_start": { name: "popea", text: "我是popea，今天想要喝点什么呢？\n [按A继续] |虽然我没有在咖啡节获得名次，但收到了伙伴们为我准备的奖杯，真的特别感动。\n|我们有许多优质的豆子，都是Cooky从森林中带来的!\n|想喝什么口味的豆子？去右边告诉豆豆吧！\n[按B结束]", choices: null },
             "cooky_start": { name: "cooky", text: "我是cooky，今天的咖啡豆怎么样？都是刚从森林里带回来的。\n[按B结束]", choices: null },
-            "doudou_start": { name: "豆豆", text: "我是豆豆，这就帮你磨豆豆！\n你需要什么风味的？\n[按A继续]", choices: [{ text: "我想试试花果香味的浅烘", next: "doudou_light", action: () => orders.push("浅烘咖啡") }, { text: "来一份榛果风味的中烘", next: "doudou_medium", action: () => orders.push("中烘咖啡") }, { text: "就选浓郁巧克力的深烘", next: "doudou_dark", action: () => orders.push("深烘咖啡") }] },
+            "doudou_start": { name: "豆豆", text: "我是豆豆，这就帮你磨豆豆！\n你需要什么风味的？\n[按A继续]", choices: [{ text: "我想试试花果香味的浅烘", next: "doudou_light", action: () => orders.push("lightRoast") }, { text: "来一份榛果风味的中烘", next: "doudou_medium", action: () => orders.push("mediumRoast") }, { text: "就选浓郁巧克力的深烘", next: "doudou_dark", action: () => orders.push("darkRoast") }] },
             "doudou_light": { name: "豆豆", text: "浅烘豆子需要像细砂糖细腻哦。\n你可以先找个空座位坐一会～\n[按B结束]", choices: null },
             "doudou_medium": { name: "豆豆", text: "中烘的豆子，中等研磨度～\n你可以先找个空座位坐一会～\n[按B结束]", choices: null },
             "doudou_dark": { name: "豆豆", text: "深烘豆需要像海盐般的颗粒呢。\n你可以先找个空座位坐一会～\n[按B结束]", choices: null },
@@ -213,21 +347,21 @@
             "find_item_0": {
                 name: "系统", text: "你发现吧台上有撮深色的东西,\n散发着淡淡的香味，靠近看看？",
                 choices: [
-                    { text: "走！去问问Popea这是什么！", action: () => { inventoryGainMessage = '恭喜获得：咖啡渣'; state.inventory[0] = true; $('inv-text-0').innerText = '咖啡渣'; openInventory(); }, next: "none" },
+                    { text: "走！去问问Popea这是什么！", action: () => { gainInventoryItem(0); }, next: "none" },
                     { text: "不要了吧...", next: "leave_item" }
                 ]
             },
             "find_item_1": {
                 name: "系统", text: "诶？是什么味道？\n桌上飘来了一股温热的咖啡香。",
                 choices: [
-                    { text: "是焦糖和坚果的味道。", action: () => { inventoryGainMessage = '恭喜获得：咖啡的香气'; state.inventory[1] = true; $('inv-text-1').innerText = '咖啡的香气'; openInventory(); }, next: "none" },
+                    { text: "是焦糖和坚果的味道。", action: () => { gainInventoryItem(1); }, next: "none" },
                     { text: "等PinPin收拾桌子吧！", next: "leave_item" }
                 ]
             },
             "find_item_2": {
                 name: "系统", text: "这是他们要用的咖啡豆吗？",
                 choices: [
-                    { text: "拿给DoDo吧！", action: () => { inventoryGainMessage = '恭喜获得：咖啡豆'; state.inventory[2] = true; $('inv-text-2').innerText = '咖啡豆'; openInventory(); }, next: "none" },
+                    { text: "拿给DoDo吧！", action: () => { gainInventoryItem(2); }, next: "none" },
                     { text: "还是再问问吧...", next: "leave_item" }
                 ]
             },
@@ -353,6 +487,7 @@
             $('scene-bg').src = ASSETS.floor1Normal;
             if ($('control-guide-img')) $('control-guide-img').src = ASSETS.controlGuide;
             if ($('birthday-card-img')) $('birthday-card-img').src = ASSETS.birthdayCard;
+            if ($('language-select-bg')) $('language-select-bg').src = ASSETS.uiCharSelect;
             $('char-select-bg').src = ASSETS.uiCharSelect;
             $('start-image-flash').src = ASSETS.uiStartFlash;
             $('preview-char1').src = playerImageSets.char1.down;
@@ -360,6 +495,96 @@
             $('inv-item-0').src = ASSETS.item0Uncollected;
             $('inv-item-1').src = ASSETS.item1Uncollected;
             $('inv-item-2').src = ASSETS.item2Uncollected;
+        }
+
+        function uiText(key) {
+            return (UI_TEXT[currentLanguage] && UI_TEXT[currentLanguage][key]) || UI_TEXT.zh[key] || '';
+        }
+
+        function getLocalizedName(name) {
+            return (NAME_TEXT[currentLanguage] && NAME_TEXT[currentLanguage][name]) || name || '';
+        }
+
+        function getItemText(itemKey) {
+            return (ITEM_TEXT[itemKey] && ITEM_TEXT[itemKey][currentLanguage]) || (ITEM_TEXT[itemKey] && ITEM_TEXT[itemKey].zh) || '';
+        }
+
+        function getOrderText(orderKey) {
+            return (ORDER_TEXT[orderKey] && ORDER_TEXT[orderKey][currentLanguage]) || (ORDER_TEXT[orderKey] && ORDER_TEXT[orderKey].zh) || orderKey;
+        }
+
+        function getStoryText(nodeId, node) {
+            if (currentLanguage === 'en' && STORY_EN[nodeId]?.text) return STORY_EN[nodeId].text;
+            return node.text;
+        }
+
+        function getChoiceText(nodeId, choice, index) {
+            if (currentLanguage === 'en' && STORY_EN[nodeId]?.choices?.[index]) return STORY_EN[nodeId].choices[index];
+            return choice.text;
+        }
+
+        function setText(id, value) {
+            const el = $(id);
+            if (el) el.innerText = value;
+        }
+
+        function updateInventoryText() {
+            ['item0', 'item1', 'item2'].forEach((itemKey, index) => {
+                const el = $(`inv-text-${index}`);
+                if (el) el.innerText = state.inventory[index] ? getItemText(itemKey) : '???';
+            });
+        }
+
+        function updateStaticText() {
+            document.documentElement.lang = currentLanguage === 'en' ? 'en' : 'zh-CN';
+            document.title = currentLanguage === 'en' ? 'Welcome to Bear Coffee House' : '欢迎光临熊熊咖啡屋';
+
+            document.querySelectorAll('[data-i18n]').forEach((el) => {
+                const key = el.dataset.i18n;
+                const value = uiText(key);
+                if (value) el.innerText = value;
+            });
+
+            const mapLink = document.querySelector('.map-entry-link');
+            if (mapLink) mapLink.setAttribute('aria-label', currentLanguage === 'en' ? 'Go to map' : '前往地图');
+
+            document.querySelectorAll('.language-choice-row').forEach((row) => {
+                row.classList.toggle('selected', row.dataset.language === currentLanguage);
+            });
+
+            updateInventoryText();
+            renderSummonEndingChoices();
+
+            if (state.isSummonEndingOpen && summonEndingStep === 'menu') {
+                const nameBox = $('summon-choice-name');
+                if (nameBox) nameBox.innerText = uiText('summonChoiceName')(summonUserName || uiText('mysteryName'));
+            }
+        }
+
+        function setLanguage(language) {
+            if (!SUPPORTED_LANGUAGES.includes(language) || language === currentLanguage) return;
+            currentLanguage = language;
+            localStorage.setItem(LANGUAGE_KEY, currentLanguage);
+            updateStaticText();
+        }
+
+        function toggleLanguage() {
+            setLanguage(currentLanguage === 'zh' ? 'en' : 'zh');
+        }
+
+        function openCharacterSelect() {
+            state.isSelectingLanguage = false;
+            state.isSelectingChar = true;
+            $('language-select-screen').classList.add('hide');
+            $('char-select-screen').classList.remove('hide');
+        }
+
+        function gainInventoryItem(index) {
+            const itemKey = `item${index}`;
+            state.inventory[index] = true;
+            inventoryGainMessage = uiText('gainItem')(getItemText(itemKey));
+            updateInventoryText();
+            openInventory();
         }
 
         function playBgm() { const bgm = $('bgm'); if (!bgm) return; bgm.volume = 0.5; const promise = bgm.play(); if (promise) promise.catch(() => { }); }
@@ -471,7 +696,7 @@
                     if (npc.id === 21 && state.inventory[1]) return;
                     if (npc.id === 22 && state.inventory[2]) return;
                     state.currentTarget = npc;
-                    if (!state.isDialogue && !state.isTransitioning && !state.isInventoryOpen && !state.isSummonScreenOpen && !state.isQrCardOpen) { ctx.fillStyle = '#f3e5ab'; ctx.font = 'bold 9px PixelFont'; ctx.textAlign = 'center'; ctx.fillText('[按 A 交流]', npc.x, npc.y - 35); ctx.textAlign = 'left'; }
+                    if (!state.isDialogue && !state.isTransitioning && !state.isInventoryOpen && !state.isSummonScreenOpen && !state.isQrCardOpen) { ctx.fillStyle = '#f3e5ab'; ctx.font = 'bold 9px PixelFont'; ctx.textAlign = 'center'; ctx.fillText(uiText('interactHint'), npc.x, npc.y - 35); ctx.textAlign = 'left'; }
                 }
             });
         }
@@ -591,7 +816,7 @@
             const text = String(visibleText || '');
 
             // popea：只有“奖杯”这两个字已经显示出来时，才显示奖杯
-            if (currentNodeId === 'popea_start' && text.includes('奖杯')) {
+            if (currentNodeId === 'popea_start' && (text.includes('奖杯') || text.toLowerCase().includes('trophy'))) {
                 showDialogueExtraImage(ASSETS.popeaTrophy, 'extra-trophy');
                 return;
             }
@@ -600,7 +825,7 @@
             // 并且“珍妮花纸杯蛋糕”这几个字已经显示出来时，才显示纸杯蛋糕
             if (
                 (currentNodeId === 'coco_good' || currentNodeId === 'coco_bad') &&
-                text.includes('珍妮花纸杯蛋糕')
+                (text.includes('珍妮花纸杯蛋糕') || text.toLowerCase().includes('jennifer cupcake'))
             ) {
                 showDialogueExtraImage(ASSETS.cocoCupcake, 'extra-cupcake');
                 return;
@@ -627,15 +852,15 @@
             }
 
             const speaker = node.name || fallbackName;
-            let text = node.text;
+            let text = getStoryText(nodeId, node);
             if (nodeId === 'coco_serve') {
-                const items = Array.from(new Set(orders)).join(' 和 ');
-                text = `halo，这里是coco。你点的『${items}』送来啦！感觉餐品还满意吗？`;
+                const items = Array.from(new Set(orders)).map(getOrderText).join(uiText('orderJoin'));
+                text = uiText('cocoServe')(items);
                 orders = [];
             }
             state.isDialogue = true;
             $('dialogue-container').classList.remove('hide');
-            $('name-tag').innerText = speaker;
+            $('name-tag').innerText = getLocalizedName(speaker);
             setDialogueTheme(speaker);
             toggleDarkMask(true);
             pages = splitText(text);
@@ -768,7 +993,7 @@
         function renderChoices() {
             const box = $('choices-box'); box.innerHTML = ''; currentChoices.forEach((choice, index) => {
                 const row = document.createElement('div'); const cursor = document.createElement('img'); const text = document.createElement('div');
-                row.className = 'choice-row'; cursor.className = 'choice-cursor'; cursor.src = ASSETS.cursor; cursor.style.visibility = index === currentChoiceIndex ? 'visible' : 'hidden'; text.className = 'choice-text'; text.innerText = choice.text;
+                row.className = 'choice-row'; cursor.className = 'choice-cursor'; cursor.src = ASSETS.cursor; cursor.style.visibility = index === currentChoiceIndex ? 'visible' : 'hidden'; text.className = 'choice-text'; text.innerText = getChoiceText(currentNodeId, choice, index);
                 row.append(cursor, text); box.appendChild(row);
             });
         }
@@ -874,8 +1099,8 @@
             const totalSeconds = Math.max(0, Math.floor(elapsedMs / 1000));
             const minutes = Math.floor(totalSeconds / 60);
             const seconds = totalSeconds % 60;
-            if (minutes <= 0) return `用时 ${seconds}秒`;
-            return `用时 ${minutes}分${String(seconds).padStart(2, '0')}秒`;
+            if (minutes <= 0) return uiText('elapsedSeconds')(seconds);
+            return uiText('elapsedMinutes')(minutes, seconds);
         }
 
         function loadCanvasImage(src) {
@@ -892,7 +1117,7 @@
             const outputImg = $('summon-share-card-img');
             const fallbackName = $('summon-share-name');
             const timeLabel = $('summon-share-time-label');
-            const nameText = `${SUMMON_ENDING_CONFIG.shareNameTextPrefix}${summonUserName || '神秘咖啡人'}${SUMMON_ENDING_CONFIG.shareNameTextSuffix}`;
+            const nameText = `${SUMMON_ENDING_CONFIG.shareNameTextPrefix}${summonUserName || uiText('mysteryName')}${SUMMON_ENDING_CONFIG.shareNameTextSuffix}`;
             const elapsedText = getGameElapsedText();
             summonSharePosterDataUrl = '';
 
@@ -978,11 +1203,11 @@
         function confirmSummonName() {
             const input = $('summon-name-input');
             const value = input ? input.value.trim() : '';
-            summonUserName = value || '神秘咖啡人';
+            summonUserName = value || uiText('mysteryName');
             summonEndingStep = 'menu';
             summonEndingChoiceIndex = 0;
             const nameBox = $('summon-choice-name');
-            if (nameBox) nameBox.innerText = `「${summonUserName}」唤醒了咖神。`;
+            if (nameBox) nameBox.innerText = uiText('summonChoiceName')(summonUserName);
             showSummonEndingPanel('summon-choice-panel');
             renderSummonEndingChoices();
         }
@@ -1001,9 +1226,9 @@
                 btn.classList.toggle('disabled', shouldDisable);
                 btn.disabled = shouldDisable;
 
-                if (isWallpaperBtn) {
-                    btn.innerText = hasPickedWallpaper ? '已领取' : '这是？';
-                }
+                btn.innerText = isWallpaperBtn
+                    ? (hasPickedWallpaper ? uiText('wallpaperClaimed') : uiText('wallpaperButton'))
+                    : uiText(`${btn.dataset.endingChoice}Button`);
             });
 
             if (buttons.length && buttons[summonEndingChoiceIndex]?.disabled) {
@@ -1159,6 +1384,7 @@
             $('inv-item-0').src = state.inventory[0] ? ASSETS.item0Collected : ASSETS.item0Uncollected;
             $('inv-item-1').src = state.inventory[1] ? ASSETS.item1Collected : ASSETS.item1Uncollected;
             $('inv-item-2').src = state.inventory[2] ? ASSETS.item2Collected : ASSETS.item2Uncollected;
+            updateInventoryText();
             const gainMessageEl = $('inv-gain-message');
             if (gainMessageEl) {
                 if (inventoryGainMessage) {
@@ -1247,6 +1473,12 @@
             const start = (e) => {
                 e.preventDefault();
                 if (!state.hasGameStarted) return;
+                if (state.isSelectingLanguage) {
+                    if (key === 'up' || key === 'down') {
+                        toggleLanguage();
+                    }
+                    return;
+                }
                 // 选角状态下的特殊逻辑
                 if (state.isSelectingChar) {
                     if (key === 'left' || key === 'right') {
@@ -1290,8 +1522,8 @@
             startGameTimer();
             state.hasGameStarted = true; playBgm();
             $('start-screen').classList.add('hide');
-            state.isSelectingChar = true;
-            $('char-select-screen').classList.remove('hide');
+            state.isSelectingLanguage = true;
+            $('language-select-screen').classList.remove('hide');
         }
 
         function confirmCharacter() {
@@ -1314,6 +1546,12 @@
 
         $('start-screen').onclick = startGame;
         $('btn-confirm-char').onclick = confirmCharacter;
+        document.querySelectorAll('.language-choice-row').forEach((row) => {
+            bindSimpleClick(row, () => {
+                if (!state.isSelectingLanguage) return;
+                setLanguage(row.dataset.language);
+            });
+        });
         document.querySelectorAll('.char-card').forEach(card => {
             card.onclick = () => {
                 if (!state.isSelectingChar) return;
@@ -1355,6 +1593,12 @@
             // 1. 开屏阶段：按 A 开始游戏
             if (!state.hasGameStarted && !state.isSelectingChar) {
                 startGame();
+                return;
+            }
+
+            // 1.5 语言选择阶段：按 A 确认语言
+            if (state.isSelectingLanguage) {
+                openCharacterSelect();
                 return;
             }
 
@@ -1456,6 +1700,7 @@
         const fontReady = document.fonts ? document.fonts.ready : Promise.resolve();
         Promise.all([fontReady, preloadAllImages()]).then(() => {
             initStaticImages();
+            updateStaticText();
             updateResponsiveScale();
 
             window.addEventListener('resize', updateResponsiveScale);
@@ -1468,6 +1713,7 @@
         }).catch(err => {
             console.warn("部分资源加载失败，强制进入游戏流程");
             initStaticImages();
+            updateStaticText();
             state.isLoaded = true;
             $('start-image-flash').classList.remove('hide');
             gameLoop();

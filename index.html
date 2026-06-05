@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <a class="map-entry-link" href="/map" aria-label="前往地图">地图</a>
+    <a class="map-entry-link" href="/map" aria-label="前往地图" data-i18n="mapLink">地图</a>
 
     <section class="playgame-section">
         <div id="start-screen">
@@ -18,10 +18,28 @@
             <img id="start-image-flash" class="hide" alt="">
         </div>
 
+        <div id="language-select-screen" class="hide">
+            <img id="language-select-bg" alt="">
+            <div class="language-ui-container">
+                <div class="char-title language-title" data-i18n="languageTitle">选择你的语言</div>
+                <div class="language-choice-list" aria-label="Language">
+                    <button type="button" class="language-choice-row selected" data-language="zh">
+                        <span class="language-choice-cursor">&#9656;</span>
+                        <span class="language-choice-text">中文</span>
+                    </button>
+                    <button type="button" class="language-choice-row" data-language="en">
+                        <span class="language-choice-cursor">&#9656;</span>
+                        <span class="language-choice-text">English</span>
+                    </button>
+                </div>
+                <div class="char-title language-confirm-hint" data-i18n="confirmChar">确定 [A]</div>
+            </div>
+        </div>
+
         <div id="char-select-screen" class="hide">
             <img id="char-select-bg" alt="">
             <div class="char-ui-container">
-                <div class="char-title">&#35831;&#36873;&#25321;&#20320;&#30340;&#24418;&#35937;</div>
+                <div class="char-title" data-i18n="charTitle">&#35831;&#36873;&#25321;&#20320;&#30340;&#24418;&#35937;</div>
                 <br>
                 <div class="char-options">
                     <div id="char-card-char1" class="char-card selected" data-char="char1">
@@ -31,8 +49,8 @@
                         <img id="preview-char2" alt="character 2">
                     </div>
                 </div>
-                <div class="char-title" id="btn-confirm-char" style="cursor: pointer; margin-top: 10px;">&#30830;&#23450; [A]</div>
-                <div class="char-title" style="font-size: 12px; color: #999;">* SELECT &#26597;&#30475;&#32972;&#21253; *</div>
+                <div class="char-title" id="btn-confirm-char" style="cursor: pointer; margin-top: 10px;" data-i18n="confirmChar">&#30830;&#23450; [A]</div>
+                <div class="char-title" style="font-size: 12px; color: #999;" data-i18n="selectHint">* SELECT &#26597;&#30475;&#32972;&#21253; *</div>
             </div>
         </div>
 
@@ -50,14 +68,14 @@
                 <div id="birthday-card-screen" class="hide">
                     <div class="birthday-card-panel">
                         <img id="birthday-card-img" alt="PanPan birthday card">
-                        <div class="birthday-card-hint">&#38271;&#25353;&#20445;&#23384;&#22721;&#32440;&#65292;&#25353; B &#32487;&#32493;</div>
+                        <div class="birthday-card-hint" data-i18n="birthdayHint">&#38271;&#25353;&#20445;&#23384;&#22721;&#32440;&#65292;&#25353; B &#32487;&#32493;</div>
                     </div>
                 </div>
 
                 <div id="qr-card-screen" class="hide">
                     <div class="qr-card-panel">
                         <img id="qr-card-img" alt="purchase QR code">
-                        <div class="qr-card-hint">&#38271;&#25353;&#20445;&#23384;&#22270;&#29255;&#65292;&#25353; B &#36820;&#22238;</div>
+                        <div class="qr-card-hint" data-i18n="qrHint">&#38271;&#25353;&#20445;&#23384;&#22270;&#29255;&#65292;&#25353; B &#36820;&#22238;</div>
                     </div>
                 </div>
 
@@ -66,7 +84,7 @@
                 <div id="inventory-screen" class="hide">
                     <img id="inv-dialogue-bg" alt="">
                     <div class="inv-avatar-box"><img id="inv-avatar" alt=""></div>
-                    <div id="summon-hint" class="hide">&#19977;&#20010;&#29289;&#21697;&#24050;&#38598;&#40784;&#65292;&#25353; A &#21484;&#21796;&#21654;&#31070;&#65281;</div>
+                    <div id="summon-hint" class="hide" data-i18n="summonHint">&#19977;&#20010;&#29289;&#21697;&#24050;&#38598;&#40784;&#65292;&#25353; A &#21484;&#21796;&#21654;&#31070;&#65281;</div>
                     <div id="inv-gain-message" class="hide"></div>
 
                     <div class="inv-items-container">
@@ -102,21 +120,21 @@
 
                 <div id="summon-ending-screen" class="hide">
                     <div id="summon-name-panel" class="summon-ending-panel">
-                        <div class="summon-ending-title">&#26159;&#35841;&#21796;&#37266;&#20102;&#25105;&#65311;</div>
-                        <div class="summon-ending-desc">&#35831;&#30041;&#19979;&#20320;&#30340;&#21517;&#23383;&#12290;</div>
+                        <div class="summon-ending-title" data-i18n="summonNameTitle">&#26159;&#35841;&#21796;&#37266;&#20102;&#25105;&#65311;</div>
+                        <div class="summon-ending-desc" data-i18n="summonNameDesc">&#35831;&#30041;&#19979;&#20320;&#30340;&#21517;&#23383;&#12290;</div>
                         <input id="summon-name-input" type="text" maxlength="12" placeholder="nickname" autocomplete="off">
-                        <div class="summon-ending-hint">&#36755;&#20837;&#21518;&#25353; A &#30830;&#35748;</div>
+                        <div class="summon-ending-hint" data-i18n="summonNameHint">&#36755;&#20837;&#21518;&#25353; A &#30830;&#35748;</div>
                     </div>
 
                     <div id="summon-choice-panel" class="summon-ending-panel hide">
-                        <div class="summon-ending-title">&#21654;&#31070;&#35760;&#20303;&#20102;&#20320;&#30340;&#21517;&#23383;</div>
+                        <div class="summon-ending-title" data-i18n="summonChoiceTitle">&#21654;&#31070;&#35760;&#20303;&#20102;&#20320;&#30340;&#21517;&#23383;</div>
                         <div class="summon-ending-desc" id="summon-choice-name"></div>
                         <div class="summon-ending-choice-row">
-                            <button type="button" class="summon-ending-choice selected" data-ending-choice="share">&#20998;&#20139;</button>
-                            <button type="button" class="summon-ending-choice" data-ending-choice="wallpaper">&#36825;&#26159;&#65311;</button>
-                            <button type="button" class="summon-ending-choice" data-ending-choice="purchase">&#36141;&#20080;</button>
+                            <button type="button" class="summon-ending-choice selected" data-ending-choice="share" data-i18n="shareButton">&#20998;&#20139;</button>
+                            <button type="button" class="summon-ending-choice" data-ending-choice="wallpaper" data-i18n="wallpaperButton">&#36825;&#26159;&#65311;</button>
+                            <button type="button" class="summon-ending-choice" data-ending-choice="purchase" data-i18n="purchaseButton">&#36141;&#20080;</button>
                         </div>
-                        <div class="summon-ending-hint">&#25353;&#24038;&#21491;&#36873;&#25321;&#65292;&#25353; A &#30830;&#35748;&#65292;&#25353; B &#20851;&#38381;</div>
+                        <div class="summon-ending-hint" data-i18n="summonChoiceHint">&#25353;&#24038;&#21491;&#36873;&#25321;&#65292;&#25353; A &#30830;&#35748;&#65292;&#25353; B &#20851;&#38381;</div>
                     </div>
 
                     <div id="summon-share-panel" class="summon-card-panel hide">
@@ -125,17 +143,17 @@
                             <div id="summon-share-name"></div>
                         </div>
                         <div id="summon-share-time-label" class="summon-share-time-label hide"></div>
-                        <div class="summon-ending-hint">&#38271;&#25353;&#20445;&#23384;&#22721;&#32440;&#65292;&#25353; B &#36820;&#22238;&#36873;&#25321;</div>
-                        <div class="summon-ending-hint">&#31105;&#27490;&#20108;&#20256;&#20108;&#25913;&#21830;&#29992;</div>
+                        <div class="summon-ending-hint" data-i18n="shareHint">&#38271;&#25353;&#20445;&#23384;&#22721;&#32440;&#65292;&#25353; B &#36820;&#22238;&#36873;&#25321;</div>
+                        <div class="summon-ending-hint" data-i18n="copyrightHint">&#31105;&#27490;&#20108;&#20256;&#20108;&#25913;&#21830;&#29992;</div>
                     </div>
 
                     <div id="summon-wallpaper-panel" class="summon-card-panel hide">
-                        <div class="summon-wallpaper-title">&#21654;&#31070;&#20026;&#20320;&#25277;&#20013;&#20102;&#36825;&#24352;&#22721;&#32440;</div>
+                        <div class="summon-wallpaper-title" data-i18n="wallpaperTitle">&#21654;&#31070;&#20026;&#20320;&#25277;&#20013;&#20102;&#36825;&#24352;&#22721;&#32440;</div>
                         <div class="summon-card-wrap">
                             <img id="summon-wallpaper-img" alt="wallpaper">
                         </div>
-                        <div class="summon-ending-hint" style="color: #fffaf0;">&#38271;&#25353;&#20445;&#23384;&#22721;&#32440;&#65292;&#25353; B &#36820;&#22238;&#36873;&#25321;</div>
-                        <div class="summon-ending-hint" style="color: #fffaf0;">&#31105;&#27490;&#20108;&#20256;&#20108;&#25913;&#21830;&#29992;</div>
+                        <div class="summon-ending-hint" style="color: #fffaf0;" data-i18n="shareHint">&#38271;&#25353;&#20445;&#23384;&#22721;&#32440;&#65292;&#25353; B &#36820;&#22238;&#36873;&#25321;</div>
+                        <div class="summon-ending-hint" style="color: #fffaf0;" data-i18n="copyrightHint">&#31105;&#27490;&#20108;&#20256;&#20108;&#25913;&#21830;&#29992;</div>
                     </div>
                 </div>
             </div>
