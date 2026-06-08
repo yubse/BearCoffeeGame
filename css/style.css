@@ -709,66 +709,6 @@ canvas {
     overflow-wrap: break-word;
     word-break: break-word;
 }
-
-
-
-
-/* ====== PanPan 生日贺图 / 二维码保存图 ====== */
-/* ====== PanPan 生日贺图：对话结束后单独展示 ====== */
-#birthday-card-screen {
-    position: absolute;
-    inset: 0;
-    z-index: 520;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #000;
-    pointer-events: auto;
-}
-
-#birthday-card-screen.dialogue-backdrop {
-    z-index: 240;
-    pointer-events: none;
-}
-
-#birthday-card-screen.dialogue-backdrop .birthday-card-hint {
-    display: none;
-}
-
-.birthday-card-panel {
-    position: relative;
-    width: min(330px, 92%);
-    text-align: center;
-    pointer-events: auto;
-}
-
-#birthday-card-img {
-    display: block;
-    width: 35%;
-    height: auto;
-    max-height: 70vh;
-    margin: 0 auto;
-    object-fit: contain;
-    image-rendering: auto;
-    pointer-events: auto;
-    touch-action: auto !important;
-    user-select: auto !important;
-    -webkit-user-select: auto !important;
-    -webkit-user-drag: auto !important;
-    -webkit-touch-callout: default !important;
-}
-
-.birthday-card-hint {
-    margin-top: 10px;
-    font-size: 11px;
-    line-height: 1.4;
-    color: #fffaf0;
-    font-weight: bold;
-    text-align: center;
-    font-family: 'PixelFont', sans-serif !important;
-}
-
-
 #qr-card-screen {
     position: absolute;
     inset: 0;

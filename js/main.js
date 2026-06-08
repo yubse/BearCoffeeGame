@@ -29,7 +29,6 @@
             uiCharSelect: './static/images/ui/char-select-bg.png',
             consoleShell: './static/images/ui/console-shell.png',
             controlGuide: './static/images/ui/control-guide.jpg',
-            birthdayCard: './static/images/birthday/panpan-birthday.jpg?v=20260530',
             purchaseQrCard: './static/images/promo/purchase-qr.png',
 
             floor1Normal: './static/images/scenes/floor1.jpg',
@@ -94,7 +93,7 @@
             isSelectingLanguage: false, isSelectingChar: false, selectedChar: 'char1', isInventoryOpen: false, inventory: [false, false, false],
             isSummonScreenOpen: false, isSummonEndingOpen: false,
             isControlGuideOpen: false, hasControlGuideShown: false,
-            isBirthdayCardOpen: false, isQrCardOpen: false
+            isQrCardOpen: false
         };
 
         const PLAYER_BOUNDS = { 1: { minX: 30, maxX: 290, minY: 170, maxY: 350 }, 2: { minX: 20, maxX: 300, minY: 180, maxY: 300 }, 3: { minX: 20, maxX: 280, minY: 185, maxY: 350 } };
@@ -165,7 +164,6 @@
                 selectHint: '* SELECT 查看背包 *',
                 languageTitle: '选择你的语言',
                 languageName: '中文',
-                birthdayHint: '长按保存壁纸，按 B 继续',
                 qrHint: '长按保存图片，按 B 返回',
                 summonHint: '三个物品已集齐，按 A 召唤咖神！',
                 summonNameTitle: '是谁唤醒了我？',
@@ -196,7 +194,6 @@
                 selectHint: '* SELECT opens your bag *',
                 languageTitle: 'Choose your language',
                 languageName: 'English',
-                birthdayHint: 'Long press to save wallpaper, press B to continue',
                 qrHint: 'Long press to save image, press B to go back',
                 summonHint: 'All 3 items collected. Press A to summon the Coffee Spirit!',
                 summonNameTitle: 'Who awakened me?',
@@ -242,9 +239,6 @@
         };
 
         const STORY_EN = {
-            panpan_birthday_1: { text: "Bear Coffee House is covered in bunting today,\nand everyone's wishes are tucked into the coffee aroma.\n[Press A to continue]" },
-            panpan_birthday_2: { text: "Everyone gathers around PanPan and says:\nHappy birthday!\n[Press A to continue]" },
-            panpan_birthday_3: { text: "May PanPan's new year be filled\nwith joy every single day!\n[Press A to continue]" },
             panpan_start: { text: "Welcome in! I'm panpan, the manager.\nIf you want coffee, order at the bar.\n [Press A to continue] | The second floor is up the stairs in the upper right.\nThe kitchen is in the upper left. Feel free to visit!\n [Press B to end]" },
             panny_start: { text: "Hi there! I'm panny, decorating cakes right now.\n[Press A to continue]", choices: ["Today's croissant looks pretty good.", "Please give me one pudding!"] },
             panny_croissant: { text: "Coco dreamed about flat croissants last night!\nA flat croissant should be pressed exactly like this!| You can find an empty seat in the hall.\nCoco will bring it over soon.\n[Press B to end]" },
@@ -288,24 +282,6 @@
         };
 
         const storyData = {
-            "panpan_birthday_1": {
-                name: "panpan",
-                text: "熊熊咖啡屋今天挂上了彩旗，\n大家把祝福藏进了咖啡香里。\n[按A继续]",
-                choices: null,
-                next: "panpan_birthday_2"
-            },
-            "panpan_birthday_2": {
-                name: "panpan",
-                text: "伙伴们聚在一起对PanPan说：\n生日快乐！\n[按A继续]",
-                choices: null,
-                next: "panpan_birthday_3"
-            },
-            "panpan_birthday_3": {
-                name: "panpan",
-                text: "愿新一岁的PanPan，\n每天都有开心快乐！\n[按A继续]",
-                choices: null,
-                next: null
-            },
             "panpan_start": { name: "panpan", text: "欢迎光临～我是店长panpan!\n想喝咖啡可以去吧台点餐\n [按A继续] | 二楼可以从右上角的楼梯上去。\n厨房在左上角，欢迎去参观哦！\n [按B结束]", choices: null },
             "panny_start": {
                 name: "panny", text: "你好呀～我是panny，正在给蛋糕裱花。\n[按A继续]", choices: [{ text: "今天的可颂看着不错呢", next: "panny_croissant", action: () => orders.push("croissant") }, { text: "请给我一份布丁！", next: "panny_pudding", action: () => orders.push("pudding") }]
@@ -433,7 +409,6 @@
             'uiCharSelect',
             'consoleShell',
             'controlGuide',
-            'birthdayCard',
             'floor1Normal',
             'floor2Normal',
             'kitchenNormal',
@@ -486,7 +461,6 @@
             $('console-shell').src = ASSETS.consoleShell;
             $('scene-bg').src = ASSETS.floor1Normal;
             if ($('control-guide-img')) $('control-guide-img').src = ASSETS.controlGuide;
-            if ($('birthday-card-img')) $('birthday-card-img').src = ASSETS.birthdayCard;
             if ($('language-select-bg')) $('language-select-bg').src = ASSETS.uiCharSelect;
             $('char-select-bg').src = ASSETS.uiCharSelect;
             $('start-image-flash').src = ASSETS.uiStartFlash;
@@ -670,8 +644,7 @@
                 !state.isSummonScreenOpen &&
                 !state.isSummonEndingOpen &&
                 !state.isControlGuideOpen &&
-                !state.isQrCardOpen &&
-                !state.isBirthdayCardOpen
+                !state.isQrCardOpen
             ) {
                 movePlayer();
                 moveRoamingNpcs();
@@ -719,8 +692,7 @@
                 state.isSummonScreenOpen ||
                 state.isSummonEndingOpen ||
                 state.isControlGuideOpen ||
-                state.isQrCardOpen ||
-                state.isBirthdayCardOpen
+                state.isQrCardOpen
             ) return;
 
             const target = state.currentTarget; if (!target) return;
@@ -732,57 +704,12 @@
             openNode(target.node, target.name);
         }
 
-        function isBirthdayNode(nodeId) {
-            return ['panpan_birthday_1', 'panpan_birthday_2', 'panpan_birthday_3'].includes(nodeId);
-        }
-
-        function showBirthdayCard() {
-            const screen = $('birthday-card-screen');
-            const img = $('birthday-card-img');
-            if (!screen || !img) return;
-
-            img.src = ASSETS.birthdayCard;
-            state.isBirthdayCardOpen = true;
-            screen.classList.remove('hide');
-        }
-
-        function hideBirthdayCard() {
-            const screen = $('birthday-card-screen');
-            if (!screen) return;
-
-            state.isBirthdayCardOpen = false;
-            screen.classList.add('hide');
-        }
-
-        let shouldOpenPanpanAfterBirthdayCard = false;
-
-        function closeBirthdayCardAndOpenPanpan() {
-            const overlay = $('transition-overlay');
-            if (overlay) {
-                overlay.style.transition = 'none';
-                overlay.style.opacity = 1;
-                overlay.offsetHeight;
-            }
-            hideBirthdayCard();
-            shouldOpenPanpanAfterBirthdayCard = false;
-            toggleDarkMask(false);
-            setTimeout(() => {
-                openNode('panpan_start', 'panpan');
-                if (overlay) {
-                    overlay.offsetHeight;
-                    overlay.style.transition = 'opacity .5s ease-in-out';
-                    overlay.style.opacity = 0;
-                }
-            }, 220);
-        }
-
-        function startBirthdayIntro() {
-            hideBirthdayCard();
+        function startPanpanIntro() {
             toggleDarkMask(true);
 
             state.keys = { up: false, down: false, left: false, right: false };
 
-            openNode('panpan_birthday_1', 'panpan');
+            openNode('panpan_start', 'panpan');
         }
         function setDialogueTheme(name) {
             $('dialogue-bg').src = DIALOGUE_BG[name] || DIALOGUE_BG['系统'];
@@ -846,10 +773,6 @@
 
             currentNodeId = nodeId;
             currentNextNode = node.next || null;
-
-            if (state.isBirthdayCardOpen) {
-                hideBirthdayCard();
-            }
 
             const speaker = node.name || fallbackName;
             let text = getStoryText(nodeId, node);
@@ -964,13 +887,6 @@
                 return;
             }
 
-            if (currentNodeId === 'panpan_birthday_3' && pageIndex === pages.length - 1) {
-                hideDialogueOnly();
-                showBirthdayCard();
-                shouldOpenPanpanAfterBirthdayCard = true;
-                return;
-            }
-
             // 支持 storyData 中的 next 字段：咖神对话就是靠这里从第 1 句跳到第 2 句
             if (currentNextNode) {
                 const nextNode = currentNextNode;
@@ -1061,7 +977,7 @@
             state.isQrCardOpen = false;
             state.keys = { up: false, down: false, left: false, right: false };
 
-            if (!state.isDialogue && !state.isInventoryOpen && !state.isSummonEndingOpen && !state.isBirthdayCardOpen) {
+            if (!state.isDialogue && !state.isInventoryOpen && !state.isSummonEndingOpen) {
                 toggleDarkMask(false);
             }
         }
@@ -1354,16 +1270,6 @@
             $('message-text').innerText = '';
 
             hideDialogueExtraImage();
-            if (state.isBirthdayCardOpen) {
-                hideBirthdayCard();
-
-                if (shouldOpenPanpanAfterBirthdayCard) {
-                    shouldOpenPanpanAfterBirthdayCard = false;
-                    openNode('panpan_start', 'panpan');
-                }
-
-                return;
-            }
 
             $('page-next-icon').classList.add('hide');
             state.keys = { up: false, down: false, left: false, right: false };
@@ -1514,7 +1420,7 @@
             if (!state.isControlGuideOpen) return;
             state.isControlGuideOpen = false;
             $('control-guide-screen').classList.add('hide');
-            setTimeout(() => startBirthdayIntro(), 120);
+            setTimeout(() => startPanpanIntro(), 120);
         }
 
         function startGame() {
@@ -1539,7 +1445,7 @@
                     openControlGuide();
                 } else {
                     state.isTransitioning = false;
-                    setTimeout(() => startBirthdayIntro(), 300);
+                    setTimeout(() => startPanpanIntro(), 300);
                 }
             }, 600);
         }
@@ -1618,9 +1524,6 @@
             if (state.isQrCardOpen) {
                 return;
             }
-            if (state.isBirthdayCardOpen && !state.isDialogue) {
-                return;
-            }
             // 4. 咖神昵称 / 分享 / 随机壁纸 / 购买界面
             if (state.isSummonEndingOpen) {
                 confirmSummonEndingAction();
@@ -1666,16 +1569,6 @@
             }
             if (state.isSummonEndingOpen) {
                 backSummonEnding();
-                return;
-            }
-
-            // 📍 优先判断：如果正在对话，先走对话关闭流程
-            if (state.isBirthdayCardOpen && !state.isDialogue) {
-                closeBirthdayCardAndOpenPanpan();
-                return;
-            }
-
-            if (state.isDialogue && isBirthdayNode(currentNodeId)) {
                 return;
             }
 
