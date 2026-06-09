@@ -997,63 +997,46 @@ canvas {
 .map-page {
     min-height: 100vh;
     margin: 0;
-    background: #f7ead8;
+    background: #CCCCCC;
     color: #4a2e1b;
     font-family: 'PixelFont', -apple-system, sans-serif;
-}
-
-.map-coming-soon {
-    min-height: 100vh;
-    padding: 48px 24px 72px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    text-align: center;
-    box-sizing: border-box;
 }
 
-.map-coming-soon-logo {
-    width: min(108px, 30vw);
+.map-waiting {
+    position: relative;
+    width: 100%;
+    line-height: 0;
+}
+
+.map-waiting-image {
+    display: block;
+    width: 100%;
     height: auto;
-    margin-bottom: 22px;
-    image-rendering: pixelated;
 }
 
-.map-coming-soon-label {
-    margin: 0 0 10px;
-    font-size: 13px;
-    letter-spacing: 0;
-    color: #8b4513;
-}
-
-.map-coming-soon h1 {
-    margin: 0 0 18px;
-    font-size: clamp(28px, 8vw, 46px);
-    line-height: 1.2;
-}
-
-.map-coming-soon-text {
-    margin: 0 0 28px;
-    font-size: clamp(18px, 5vw, 26px);
-    line-height: 1.4;
-}
-
-.map-coming-soon-back {
-    min-width: 130px;
+.map-waiting-back {
+    position: absolute;
+    left: 50%;
+    bottom: -25%;
+    transform: translateX(-50%);
+    min-width: 120px;
     padding: 10px 16px;
-    border: 2px solid #8b4513;
-    border-radius: 8px;
-    background: #fffaf0;
-    color: #4a2e1b;
-    font-size: 14px;
+    border: 3px solid #111;
+    border-radius: 6px;
+    background: #fff;
+    color: #111;
+    font-size: clamp(13px, 3.5vw, 18px);
     line-height: 1.2;
     text-align: center;
     text-decoration: none;
-    box-shadow: 0 3px 0 rgba(74, 46, 27, 0.25);
+    box-shadow: 0 4px 0 #111;
+    box-sizing: border-box;
 }
 
-.map-coming-soon-back:active {
-    transform: translateY(2px);
-    box-shadow: 0 1px 0 rgba(74, 46, 27, 0.25);
+.map-waiting-back:active {
+    transform: translate(-50%, 3px);
+    box-shadow: 0 1px 0 #111;
 }

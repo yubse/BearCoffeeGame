@@ -10,22 +10,13 @@
 </head>
 
 <body class="map-page">
-    <main class="map-coming-soon">
-        <img class="map-coming-soon-logo" src="../static/images/logo.png" alt="熊熊咖啡屋">
-        <p class="map-coming-soon-label">MAP</p>
-        <h1>地图</h1>
-        <p class="map-coming-soon-text">敬请期待</p>
-        <a class="map-coming-soon-back" href="/">返回咖啡屋</a>
+    <main class="map-waiting">
+        <img class="map-waiting-image" src="../static/images/map/waiting.jpg" alt="地图施工中">
+        <a class="map-waiting-back" href="/" aria-label="返回咖啡屋">返回咖啡屋</a>
     </main>
 
-    <footer class="site-footer">
-        <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">
-            &#31908;ICP&#22791;2021111496&#21495;-3
-        </a>
-    </footer>
-
     <script>
-        document.querySelector('.map-coming-soon-back')?.addEventListener('click', function (event) {
+        document.querySelector('.map-waiting-back')?.addEventListener('click', function (event) {
             if (window.location.protocol !== 'file:') return;
             event.preventDefault();
             window.location.href = '../index.html';
