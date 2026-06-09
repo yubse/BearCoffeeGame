@@ -1020,7 +1020,7 @@ canvas {
 .map-waiting-back {
     position: absolute;
     left: 50%;
-    bottom: -25%;
+    bottom: 0;
     transform: translateX(-50%);
     min-width: 120px;
     padding: 10px 16px;
