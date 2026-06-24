@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>潜在 IP 候选池</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">IP Candidate Pool</p>
+      <h1>潜在 IP 调研</h1>
+      <p class="subtitle">点击头像跳转小红书主页，点击卡片查看分析。</p>
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <section class="toolbar">
+    <label class="search">
+      <span>搜索</span>
+      <input id="searchInput" placeholder="输入账号、IP、风格、产品类型…" />
+    </label>
+    <label>
+      <span>匹配度</span>
+      <select id="matchFilter">
+        <option value="">全部</option>
+      </select>
+    </label>
+    <label>
+      <span>优先级</span>
+      <select id="priorityFilter">
+        <option value="">全部</option>
+      </select>
+    </label>
+  </section>
+
+  <main id="grid" class="grid"></main>
+
+  <dialog id="detailDialog" class="dialog">
+    <button class="close" id="closeDialog" aria-label="关闭">×</button>
+    <div id="detailRoot"></div>
+  </dialog>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
