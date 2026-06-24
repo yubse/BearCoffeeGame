@@ -17,25 +17,22 @@
     <div class="stats" id="stats"></div>
   </header>
 
-  <div class="topicBar" id="topicBar" aria-label="标签筛选"></div>
-
-  <section class="toolbar">
-    <label class="search">
-      <span>搜索</span>
-      <input id="searchInput" placeholder="输入账号、IP、风格、产品类型..." />
-    </label>
-    <label>
-      <span>匹配度</span>
-      <select id="matchFilter">
-        <option value="">全部</option>
-      </select>
-    </label>
-    <label>
-      <span>优先级</span>
-      <select id="priorityFilter">
-        <option value="">全部</option>
-      </select>
-    </label>
+  <section class="filterBar">
+    <div class="topicBar" id="topicBar" aria-label="标签筛选"></div>
+    <div class="filterControls">
+      <label>
+        <span>匹配度</span>
+        <select id="matchFilter">
+          <option value="">全部</option>
+        </select>
+      </label>
+      <label>
+        <span>优先级</span>
+        <select id="priorityFilter">
+          <option value="">全部</option>
+        </select>
+      </label>
+    </div>
   </section>
 
   <main id="grid" class="grid"></main>
