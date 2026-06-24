@@ -2,7 +2,7 @@ const data = window.IP_DATA || [];
 
 const grid = document.querySelector('#grid');
 const stats = document.querySelector('#stats');
-const searchInput = document.querySelector('#searchInput');
+const topicBar = document.querySelector('#topicBar');
 const matchFilter = document.querySelector('#matchFilter');
 const priorityFilter = document.querySelector('#priorityFilter');
 const dialog = document.querySelector('#detailDialog');
@@ -19,6 +19,8 @@ const analysisFields = [
   '合作空间判断（新版）', '明显不适合原因（新版）', '店铺入口',
   '备注'
 ];
+const topicLabels = ['全部', '表情包头像', '动画剧情', '打工人情绪', '动物萌宠', '文创周边', '治愈陪伴', '其他'];
+let activeTopic = '全部';
 
 function uniqueValues(field) {
   return [...new Set(data.map(x => x[field]).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'zh-CN'));
@@ -35,6 +37,25 @@ function fillSelect(select, values) {
 
 fillSelect(matchFilter, uniqueValues('白熊百货匹配度'));
 fillSelect(priorityFilter, uniqueValues('合作优先级'));
+
+function topicMatches(item, label) {
+  if (label === '全部') return true;
+  const tags = item._topicTags || [];
+  if (label === '其他') return tags.includes('其他') || tags.length <= 1;
+  return tags.includes(label);
+}
+
+function topicCount(label) {
+  return data.filter(item => topicMatches(item, label)).length;
+}
+
+function renderTopicBar() {
+  topicBar.innerHTML = topicLabels.map(label => `
+    <button class="topicBtn ${label === activeTopic ? 'active' : ''}" data-topic="${escapeHtml(label)}">
+      ${escapeHtml(label)}<span class="topicCount">${topicCount(label)}</span>
+    </button>
+  `).join('');
+}
 
 function escapeHtml(text = '') {
   return String(text).replace(/[&<>"']/g, s => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[s]));
@@ -80,17 +101,17 @@ function card(item) {
 }
 
 function matches(item) {
-  const q = searchInput.value.trim().toLowerCase();
   const m = matchFilter.value;
   const p = priorityFilter.value;
+  if (!topicMatches(item, activeTopic)) return false;
   if (m && item['白熊百货匹配度'] !== m) return false;
   if (p && item['合作优先级'] !== p) return false;
-  if (!q) return true;
-  return JSON.stringify(item).toLowerCase().includes(q);
+  return true;
 }
 
 function render() {
   const items = data.filter(matches);
+  renderTopicBar();
   grid.innerHTML = items.map(card).join('');
   stats.innerHTML = `
     <span class="pill">总计 ${data.length} 个 IP</span>
@@ -134,6 +155,12 @@ closeDialog.addEventListener('click', () => dialog.close());
 dialog.addEventListener('click', e => {
   if (e.target === dialog) dialog.close();
 });
-[searchInput, matchFilter, priorityFilter].forEach(el => el.addEventListener('input', render));
+topicBar.addEventListener('click', e => {
+  const btn = e.target.closest('.topicBtn');
+  if (!btn) return;
+  activeTopic = btn.dataset.topic;
+  render();
+});
+[matchFilter, priorityFilter].forEach(el => el.addEventListener('input', render));
 
 render();
