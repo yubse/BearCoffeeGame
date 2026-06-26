@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>潜在 IP 候选池</title>
+  <title>小红书潜在 IP 候选池</title>
   <link rel="icon" type="image/png" href="../static/images/logo.png">
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -11,34 +11,32 @@
   <header class="topbar">
     <div>
       <p class="eyebrow">IP Candidate Pool</p>
-      <h1>潜在 IP 调研</h1>
-      <p class="subtitle">点击头像跳转小红书主页，点击卡片查看分析。</p>
+      <h1>小红书潜在 IP 调研</h1>
+      <p class="subtitle">从候选池表格与 assets 图片自动生成。点击头像跳转小红书主页，点击卡片查看分析。</p>
     </div>
     <div class="stats" id="stats"></div>
   </header>
 
-  <section class="filterBar">
+  <section class="toolbar">
     <div class="topicBar" id="topicBar" aria-label="标签筛选"></div>
-    <div class="filterControls">
-      <label>
-        <span>匹配度</span>
-        <select id="matchFilter">
-          <option value="">全部</option>
-        </select>
-      </label>
-      <label>
-        <span>优先级</span>
-        <select id="priorityFilter">
-          <option value="">全部</option>
-        </select>
-      </label>
-    </div>
+    <label>
+      <span>匹配度</span>
+      <select id="matchFilter">
+        <option value="">全部</option>
+      </select>
+    </label>
+    <label>
+      <span>优先级</span>
+      <select id="priorityFilter">
+        <option value="">全部</option>
+      </select>
+    </label>
   </section>
 
   <main id="grid" class="grid"></main>
 
   <dialog id="detailDialog" class="dialog">
-    <button class="close" id="closeDialog" aria-label="关闭">x</button>
+    <button class="close" id="closeDialog" aria-label="关闭">×</button>
     <div id="detailRoot"></div>
   </dialog>
 

@@ -39,24 +39,22 @@ h1 { margin: 0; font-size: clamp(28px, 4vw, 48px); letter-spacing: -.04em; }
   padding: 8px 12px; border-radius: 999px; background: #fff; border: 1px solid var(--line);
   box-shadow: 0 6px 18px rgba(92,34,45,.06); font-size: 13px;
 }
-.filterBar {
+.toolbar {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 22px;
+  grid-template-columns: minmax(320px, 1fr) repeat(2, minmax(130px, 180px));
+  gap: 14px;
+  padding: 18px clamp(18px, 4vw, 56px);
   align-items: end;
-  padding: 40px clamp(18px, 4vw, 56px) 20px;
 }
-.topicBar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; min-width: 0; }
+.topicBar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .topicBtn {
   border: 1px solid var(--line);
   background: rgba(255,255,255,.92);
   border-radius: 999px;
-  min-height: 42px;
-  padding: 10px 15px;
+  padding: 11px 14px;
   color: #7c4852;
   font: inherit;
   font-size: 14px;
-  line-height: 1;
   cursor: pointer;
   box-shadow: 0 8px 24px rgba(92,34,45,.06);
   transition: transform .15s ease, background .15s ease, color .15s ease;
@@ -64,12 +62,6 @@ h1 { margin: 0; font-size: clamp(28px, 4vw, 48px); letter-spacing: -.04em; }
 .topicBtn:hover { transform: translateY(-1px); }
 .topicBtn.active { background: var(--red); color: #fff; border-color: var(--red); }
 .topicCount { opacity: .72; font-size: 12px; margin-left: 3px; }
-.filterControls {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(150px, 180px));
-  gap: 14px;
-  align-items: end;
-}
 label span { display: block; color: var(--muted); font-size: 12px; margin-bottom: 6px; }
 input, select {
   width: 100%;
@@ -150,8 +142,7 @@ input:focus, select:focus { border-color: rgba(255,36,66,.55); }
 @media (max-width: 720px) {
   .topbar { position: static; display: block; }
   .stats { justify-content: flex-start; margin-top: 14px; }
-  .filterBar { grid-template-columns: 1fr; padding-top: 24px; }
-  .filterControls { grid-template-columns: 1fr 1fr; }
+  .toolbar { grid-template-columns: 1fr; }
   .grid { column-width: 100%; }
   .detail { padding: 18px; }
   .detailHead { grid-template-columns: 1fr; }
