@@ -10,7 +10,8 @@
 </head>
 
 <body>
-    <a class="map-entry-link" href="/map" aria-label="前往地图" data-i18n="mapLink">地图</a>
+    <a class="top-entry-link map-entry-link" href="/map" aria-label="前往地图" data-i18n="mapLink">地图</a>
+    <a class="top-entry-link cbti-entry-link" href="./coffee-ti/" aria-label="前往 CBTI 咖啡人格测试" hidden>CBTI</a>
 
     <section class="playgame-section">
         <div id="start-screen">
@@ -178,6 +179,11 @@
             if (window.location.protocol !== 'file:') return;
             event.preventDefault();
             window.location.href = './map/index.html';
+        });
+        document.querySelector('.cbti-entry-link')?.addEventListener('click', function (event) {
+            if (window.location.protocol !== 'file:') return;
+            event.preventDefault();
+            window.location.href = './coffee-ti/index.html';
         });
     </script>
     <script src="./js/main.js" defer></script>

@@ -970,10 +970,9 @@ canvas {
     color: #666;
 }
 
-.map-entry-link {
+.top-entry-link {
     position: fixed;
     right: 14px;
-    top: 14px;
     z-index: 100000;
     min-width: 54px;
     padding: 8px 12px;
@@ -989,7 +988,15 @@ canvas {
     box-shadow: 0 3px 0 rgba(74, 46, 27, 0.24);
 }
 
-.map-entry-link:active {
+.map-entry-link {
+    top: 14px;
+}
+
+.cbti-entry-link {
+    top: 58px;
+}
+
+.top-entry-link:active {
     transform: translateY(2px);
     box-shadow: 0 1px 0 rgba(74, 46, 27, 0.24);
 }
