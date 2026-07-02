@@ -1,27 +1,968 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>熊熊咖啡屋地图</title>
-    <link rel="icon" type="image/png" href="../static/images/logo.png">
-    <link rel="stylesheet" href="../css/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>咖啡地图</title>
+
+  <!-- 引入 MapLibre GL 的样式文件，用来正确显示地图控件和图层 -->
+  <link href="./vendor/maplibre-gl/maplibre-gl.css" rel="stylesheet">
+
+  <!-- 引入 MapLibre GL 的脚本文件，用来创建和控制地图 -->
+  <script src="./vendor/maplibre-gl/maplibre-gl.js"></script>
+
+  <!-- 引入本地 GeoJSON 数据对应的 JS 版本，双击 HTML 时也能读取轮廓数据 -->
+  <script src="./province-outlines-data.js"></script>
+  <script src="./city-outlines-data.js"></script>
+  <script src="./guangdong-cities-data.js"></script>
+  <script src="./coffee-shops-data.js"></script>
+
+  <style>
+    /* 去掉浏览器默认边距，让地图铺满整个页面 */
+    body {
+      margin: 0;
+    }
+
+    /* 地图容器占满整个浏览器窗口 */
+    #map {
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* 让鼠标移到可点击区域上时显示手型 */
+    .maplibregl-canvas.clickable-area {
+      cursor: pointer;
+    }
+
+    /* 咖啡店自定义标注，里面的图片可通过 coffee-shops.geojson 里的 iconUrl 替换 */
+    .coffee-marker {
+      width: 42px;
+      height: 42px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .coffee-marker img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 8px rgba(54, 32, 18, 0.28));
+    }
+
+    .cafe-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 18px 76px;
+      pointer-events: none;
+    }
+
+    .cafe-modal.is-open {
+      display: flex;
+    }
+
+    .cafe-modal__shell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: min(430px, calc(100vw - 36px));
+      pointer-events: auto;
+    }
+
+    .cafe-modal__panel {
+      width: 100%;
+      max-height: min(74vh, 700px);
+      overflow: hidden;
+      border-radius: 0;
+      background: #ffffff;
+      box-shadow: 0 20px 54px rgba(44, 28, 18, 0.24);
+    }
+
+    .cafe-modal__close {
+      width: 42px;
+      height: 42px;
+      margin-top: 14px;
+      border: 1px solid rgba(47, 33, 24, 0.12);
+      border-radius: 999px;
+      background: #ffffff;
+      color: #2f2118;
+      cursor: pointer;
+      font-size: 24px;
+      line-height: 40px;
+      box-shadow: 0 10px 24px rgba(44, 28, 18, 0.2);
+    }
+
+    .coffee-popup {
+      width: 100%;
+      max-height: min(74vh, 700px);
+      overflow-y: auto;
+      background: #ffffff;
+      color: #2f2118;
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+    }
+
+    .coffee-popup__body {
+      padding: 22px 20px 18px;
+    }
+
+    .coffee-popup__heading {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 10px;
+    }
+
+    .coffee-popup h3 {
+      margin: 0;
+      font-size: 21px;
+      line-height: 1.3;
+      color: #2a1a10;
+    }
+
+    .coffee-popup__title-stamp {
+      width: 58px;
+      height: 58px;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      cursor: zoom-in;
+    }
+
+    .coffee-popup__title-stamp img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+
+    .coffee-popup p {
+      margin: 0;
+      line-height: 1.65;
+      color: #5a4637;
+      font-size: 14px;
+    }
+
+    .coffee-popup__intro {
+      margin-bottom: 12px;
+    }
+
+    .coffee-popup__expand {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 8px;
+      border: 0;
+      background: transparent;
+      color: #9b4f20;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 0;
+    }
+
+    .coffee-popup__facts {
+      display: grid;
+      gap: 8px;
+      margin: 16px 0;
+      padding: 14px;
+      border: 1px solid #ead8c2;
+      border-radius: 10px;
+      background: #fff5e8;
+    }
+
+    .coffee-popup__fact {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .coffee-popup__label {
+      color: #9b4f20;
+      font-weight: 700;
+    }
+
+    .coffee-popup__value {
+      color: #3d2b20;
+      min-width: 0;
+    }
+
+    .coffee-popup__copy-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      align-items: center;
+      width: 100%;
+      border: 0;
+      padding: 0;
+      background: transparent;
+      color: #3d2b20;
+      cursor: pointer;
+      font: inherit;
+      line-height: 1.5;
+      text-align: left;
+    }
+
+    .coffee-popup__copy-row + .coffee-popup__copy-row {
+      margin-top: 6px;
+    }
+
+    .coffee-popup__copy-status {
+      flex: 0 0 auto;
+      border: 1px solid #d9b994;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #8b4518;
+      font-size: 12px;
+      padding: 3px 8px;
+    }
+
+    .coffee-popup__link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: #9b4f20;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .coffee-popup__link:hover {
+      text-decoration: underline;
+    }
+
+    .coffee-popup__gallery {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 6px 20px 20px;
+    }
+
+    .coffee-popup__gallery:has(.coffee-popup__photo:only-child) {
+      justify-content: center;
+    }
+
+    .coffee-popup__photo {
+      flex: 0 0 auto;
+      width: min(82%, 330px);
+      height: auto;
+      border: 0;
+      padding: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: transparent;
+      cursor: zoom-in;
+      scroll-snap-align: start;
+    }
+
+    .coffee-popup__photo img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .image-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(27, 18, 12, 0.78);
+    }
+
+    .image-lightbox.is-open {
+      display: flex;
+    }
+
+    .image-lightbox img {
+      max-width: min(92vw, 980px);
+      max-height: 88vh;
+      border-radius: 12px;
+      box-shadow: 0 18px 60px rgba(0, 0, 0, 0.36);
+      object-fit: contain;
+      background: #fffaf2;
+    }
+
+    .image-lightbox button {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      width: 38px;
+      height: 38px;
+      border: 0;
+      border-radius: 999px;
+      background: #fffaf2;
+      color: #2f2118;
+      cursor: pointer;
+      font-size: 24px;
+      line-height: 36px;
+    }
+
+    @media (max-width: 520px) {
+      .cafe-modal {
+        padding: 18px 14px 72px;
+      }
+
+      .cafe-modal__shell {
+        width: calc(100vw - 28px);
+      }
+
+      .cafe-modal__panel,
+      .coffee-popup {
+        max-height: 76vh;
+      }
+
+      .coffee-popup__body {
+        padding: 18px 16px 14px;
+      }
+
+      .coffee-popup__gallery {
+        padding-inline: 16px;
+      }
+
+      .coffee-popup__fact {
+        grid-template-columns: 68px minmax(0, 1fr);
+      }
+    }
+  </style>
 </head>
 
-<body class="map-page">
-    <main class="map-waiting">
-        <img class="map-waiting-image" src="../static/images/map/waiting.png" alt="地图施工中">
-        <a class="map-waiting-back" href="/" aria-label="返回咖啡屋">返回咖啡屋</a>
-    </main>
+<body>
+  <!-- MapLibre 会把地图渲染到这个 div 里面 -->
+  <div id="map"></div>
+  <div class="cafe-modal" id="cafe-modal" aria-hidden="true">
+    <div class="cafe-modal__shell">
+      <div class="cafe-modal__panel" id="cafe-modal-panel"></div>
+      <button class="cafe-modal__close" id="cafe-modal-close" type="button" aria-label="关闭弹窗">×</button>
+    </div>
+  </div>
+  <div class="image-lightbox" id="image-lightbox" aria-hidden="true">
+    <button type="button" aria-label="关闭大图">×</button>
+    <img src="" alt="">
+  </div>
 
-    <script>
-        document.querySelector('.map-waiting-back')?.addEventListener('click', function (event) {
-            if (window.location.protocol !== 'file:') return;
-            event.preventDefault();
-            window.location.href = '../index.html';
+  <script>
+    // 创建 MapLibre 地图实例
+    const map = new maplibregl.Map({
+      // 指定地图要显示在哪个 HTML 元素中，对应上面的 id="map"
+      container: 'map',
+
+      // 使用 MapTiler streets-v4 在线底图样式；如果 key 失效，地图底图会无法加载
+      style: 'https://api.maptiler.com/maps/streets-v4/style.json?key=LNvapYnYvAycgHEiQP5X',
+
+      // 设置地图初始中心点，经纬度格式是 [经度, 纬度]
+      center: [114.16369, 22.77325],
+
+      // 设置初始缩放级别，数字越大地图越近
+      zoom: 9.6,
+
+      // 允许用户手动放大到更近的门店视角
+      maxZoom: 30
+    });
+
+    // 暴露到 window 上，方便在浏览器控制台里调试地图状态
+    window.map = map;
+
+    // 添加缩放和旋转控件，方便在浏览器中操作地图
+    map.addControl(new maplibregl.NavigationControl(), 'top-right');
+
+    // 计算一个 GeoJSON 几何图形的外接矩形，用于点击省份后自动放大到该省份范围
+    function getGeometryBounds(geometry) {
+      const bounds = new maplibregl.LngLatBounds();
+
+      // 递归读取 Polygon / MultiPolygon 里的所有坐标点
+      function extendBounds(coordinates) {
+        if (typeof coordinates[0] === 'number') {
+          bounds.extend(coordinates);
+          return;
+        }
+
+        coordinates.forEach(extendBounds);
+      }
+
+      extendBounds(geometry.coordinates);
+      return bounds;
+    }
+
+    // 转义弹窗里的文字，避免地址或店名里有特殊字符时破坏 HTML
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[char]));
+    }
+
+    const CAFE_INFO_FALLBACK = {
+      'Joyride 游车河': `Joyride 游车河
+Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着抵达哪里，而是慢慢开、慢慢看，把路上的风景也算进生活里。
+这家店想做的，也正是这样一杯带着季节感的咖啡。以咖啡为媒介，把应季的、自然的风味带到杯子里。今天喝到的，可能是某个产区刚刚抵达的新鲜香气；下一次再来，菜单又会随着季节和客人的选择悄悄变化。
+店里的氛围很松弛，咖啡师会耐心介绍豆子和风味，不用担心自己“不够懂咖啡”。偶尔还会举办杯测分享会，比如一起尝尝新产季的埃塞俄比亚空运批次，让大家用味蕾投票，决定下一张菜单里会出现哪一支豆子。听起来是不是很像——你不只是来喝咖啡，也参与了一点点菜单的诞生。
+店里还有书架，也有一只可爱肥美的猫猫。很适合端着咖啡路过时，顺手停一下，抽一本书，翻几页，再把这一小段时间慢慢喝完。
+
+☕ 推荐理由：季节感咖啡 / 咖啡师耐心介绍 / 偶有杯测活动
+🌿 推荐尝试：特调「草浪」、当季豆单
+📍 地址：惠州市惠城区桥东四清路菜园墩30号
+🕘 营业时间：9:00-19:00
+📷 小提醒：店内禁止人像拍摄
+
+小红书：https://www.xiaohongshu.com/user/profile/5ed3f9a2000000000101ded7?xsec_token=AB0_c9mmIjUOeFnEOBYhtggt4d2c6x7a5MQLkeabBI8Ug%3D&xsec_source=pc_note`,
+      '点味咖啡 Wei Cafe': `点味咖啡
+如果你喜欢复古、安静、带一点旧时光滤镜的咖啡店，那【点味咖啡 Wei Cafe】很值得放进收藏夹里。
+店里有不少手工古董杯子和中古餐具，推开门进入后会感觉到时间都变慢了一些。配上微微昏暗的灯光，整个空间是温暖又松弛的氛围。不是那种匆匆打卡完就走的店，更像是可以坐下来，认真喝一杯咖啡、吃一块蛋糕，然后发呆一下午的地方。
+这里的一人位也很友好，i人来会很舒服。每日推荐可以看看冷萃和蛋糕，咖啡口感顺滑细腻，香气很足，入口是那种不费力的好喝。下次再来，也会想试试别的口味。
+
+☕ 推荐理由：复古氛围 / 古董杯具 / 安静适合独处
+🍰 推荐尝试：冷萃、蛋糕
+🕐 营业时间：13:00-18:00
+☁️ 休息日：每月更新
+☕️ 13:00-18:00
+☁️ 休息日见每月更新
+📍东湖六街东湖花园三号小区底商临街商铺（东湖双语学校西1门对面）
+
+小红书：https://www.xiaohongshu.com/user/profile/5e953d5d0000000001007b21?xsec_token=ABnBgv5KdmZhHuU-8IfsC6wP0dKdb_rkEQP_PxLK6rVFM%3D&xsec_source=pc_search`,
+      '绑鞋带 shoelace': `绑鞋带 shoelace
+
+在城东的街坊小路上，藏着一家名字很可爱的社区咖啡店：shoelace cafe. 绑鞋带。
+
+这个特别的名字来自于主理人的思考，人生总是不断在迷茫中找寻又再次陷入迷茫，其实很需要停下脚步休整一会， 去正视自己心里的真正想法。于是，比起一味向前，更需要的是偶尔停下来，认真看看自己心里的声音。
+于是，把“休整一会”这件事，温柔地比喻成了“绑鞋带”。而这家店，也就成了一个可以让人安心停下来的地方——一个属于每个人的小小“绑鞋带时刻”。
+
+店里是干净简约的原木风，白墙门头、暖调木质桌椅、柔柔的光影，随手拍都有一种自带滤镜的温柔感。隔壁是非常接地气的街坊店铺，而这里像是社区里一处刚刚好的休整点。
+特调也很有小巧思。每杯会搭配定制小卡片，写下这杯特调诞生的故事；店里还有一只热情可爱的狗狗。在这里，绑鞋带不是一件小事，而是一种可爱的生活暗号：整理整理，再大步往前走吧。
+
+☕ 推荐理由：社区小店 / 特调小卡 / 有狗狗
+🍋 推荐尝试：特调咖啡、柠檬奶冻简易点心
+📍 地址：惠州市惠城区桥东城背路18号
+🕐 营业时间：08:30-18:00（周四店休）
+
+小红书：https://www.xiaohongshu.com/user/profile/56fcee964775a71954728b29?xsec_token=ABK9h_3KuFtSe7oYFI6DEvXKKj-RZOP1bbIguuTbCruJo%3D&xsec_source=pc_search`
+    };
+
+    const imageLightbox = document.getElementById('image-lightbox');
+    const lightboxImage = imageLightbox.querySelector('img');
+    const lightboxClose = imageLightbox.querySelector('button');
+    const cafeModal = document.getElementById('cafe-modal');
+    const cafeModalPanel = document.getElementById('cafe-modal-panel');
+    const cafeModalClose = document.getElementById('cafe-modal-close');
+
+    function openCafeModal(content) {
+      cafeModalPanel.replaceChildren(content);
+      cafeModal.classList.add('is-open');
+      cafeModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeCafeModal() {
+      cafeModal.classList.remove('is-open');
+      cafeModal.setAttribute('aria-hidden', 'true');
+      cafeModalPanel.replaceChildren();
+    }
+
+    cafeModalClose.addEventListener('click', closeCafeModal);
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeCafeModal();
+      }
+    });
+
+    function openLightbox(src, alt) {
+      lightboxImage.src = src;
+      lightboxImage.alt = alt || '咖啡店图片';
+      imageLightbox.classList.add('is-open');
+      imageLightbox.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeLightbox() {
+      imageLightbox.classList.remove('is-open');
+      imageLightbox.setAttribute('aria-hidden', 'true');
+      lightboxImage.src = '';
+    }
+
+    imageLightbox.addEventListener('click', (event) => {
+      if (event.target === imageLightbox) {
+        closeLightbox();
+      }
+    });
+    lightboxClose.addEventListener('click', closeLightbox);
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closeLightbox();
+      }
+    });
+
+    // 复制店铺信息，供弹窗里的地址和电话调用
+    function copyInfo(value, button) {
+      const status = button.querySelector('.coffee-popup__copy-status') || button;
+
+      navigator.clipboard.writeText(value).then(() => {
+        status.textContent = '已复制';
+      }).catch(() => {
+        status.textContent = '复制失败';
+      });
+    }
+
+    async function loadText(fileName, fallbackText = '') {
+      try {
+        const response = await fetch(fileName);
+
+        if (!response.ok) {
+          throw new Error(`无法读取 ${fileName}`);
+        }
+
+        return await response.text();
+      } catch (error) {
+        return fallbackText;
+      }
+    }
+
+    function getFirstSentence(text) {
+      const normalized = text.replace(/\s+/g, ' ').trim();
+      const match = normalized.match(/^.*?[。！？!?]/);
+      return match ? match[0] : normalized;
+    }
+
+    function parseCafeInfo(rawText, fallbackAddress = '') {
+      const lines = rawText.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+      const title = lines[0] || '咖啡店';
+      const xhsLine = lines.find((line) => line.includes('小红书'));
+      const xhsUrl = xhsLine ? xhsLine.replace(/^.*?(https?:\/\/\S+)$/u, '$1') : '';
+      const factLines = lines.filter((line) => /^[☕🌿🍰🍋📍🕘🕐☁📷]/u.test(line));
+      const bodyLines = lines.filter((line, index) => {
+        if (index === 0 || line === xhsLine) {
+          return false;
+        }
+        return !factLines.includes(line);
+      });
+
+      const facts = {};
+      factLines.forEach((line) => {
+        const cleaned = line.replace(/^[☕🌿🍰🍋📍🕘🕐☁📷️\s]+/u, '');
+        const separatorIndex = cleaned.search(/[：:]/u);
+        if (separatorIndex === -1) {
+          return;
+        }
+        const label = cleaned.slice(0, separatorIndex).trim();
+        const value = cleaned.slice(separatorIndex + 1).trim();
+        if (label && value) {
+          facts[label] = facts[label] ? `${facts[label]} / ${value}` : value;
+        }
+      });
+
+      return {
+        title,
+        intro: bodyLines.join('\n\n'),
+        facts,
+        address: facts['地址'] || fallbackAddress,
+        xhsUrl
+      };
+    }
+
+    function renderFact(label, value) {
+      if (!value) {
+        return '';
+      }
+
+      return `
+        <div class="coffee-popup__fact">
+          <div class="coffee-popup__label">${escapeHTML(label)}</div>
+          <div class="coffee-popup__value">${escapeHTML(value)}</div>
+        </div>
+      `;
+    }
+
+    function renderCopyFact(label, values) {
+      const items = Array.isArray(values) ? values.filter(Boolean) : [values].filter(Boolean);
+
+      if (!items.length) {
+        return '';
+      }
+
+      return `
+        <div class="coffee-popup__fact">
+          <div class="coffee-popup__label">${escapeHTML(label)}</div>
+          <div class="coffee-popup__value">
+            ${items.map((value) => `
+              <button class="coffee-popup__copy-row" type="button" data-copy-value="${escapeHTML(value)}">
+                <span>${escapeHTML(value)}</span>
+                <span class="coffee-popup__copy-status">复制</span>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function splitPhoneNumbers(phone) {
+      if (!phone) {
+        return [];
+      }
+
+      return String(phone)
+        .split(/[、，,/\s]+/u)
+        .map((item) => item.trim())
+        .filter(Boolean);
+    }
+
+    function createImageButton(src, alt, className) {
+      return `
+        <button class="${className}" type="button" data-full-image="${escapeHTML(src)}" aria-label="放大查看${escapeHTML(alt)}">
+          <img src="${escapeHTML(src)}" alt="${escapeHTML(alt)}" loading="lazy">
+        </button>
+      `;
+    }
+
+    function buildCafePopup(feature, cafeInfo) {
+      const {
+        name,
+        city,
+        address,
+        phone,
+        imageUrl,
+        photos = [],
+        stampUrl
+      } = feature.properties;
+      const info = cafeInfo || {
+        title: name,
+        intro: `${city}｜${address}`,
+        facts: {},
+        address,
+        xhsUrl: ''
+      };
+      const fullIntro = info.intro || `${city}｜${address}`;
+      const shortIntro = getFirstSentence(fullIntro);
+      const facts = info.facts || {};
+      const recommend = facts['推荐理由'];
+      const tryItems = facts['推荐尝试'];
+      const hours = facts['营业时间'];
+      const restDay = facts['休息日'];
+      const reminder = facts['小提醒'];
+      const phoneNumbers = splitPhoneNumbers(phone);
+      const galleryImages = photos.length ? photos : (imageUrl ? [imageUrl] : []);
+      const popupContent = document.createElement('div');
+
+      popupContent.className = 'coffee-popup';
+      popupContent.innerHTML = `
+        <div class="coffee-popup__body">
+          <div class="coffee-popup__heading">
+            <h3>${escapeHTML(info.title)}</h3>
+            ${stampUrl ? createImageButton(stampUrl, `${name} 印章`, 'coffee-popup__title-stamp') : ''}
+          </div>
+          <div class="coffee-popup__intro">
+            <p data-intro>${escapeHTML(shortIntro)}</p>
+            ${fullIntro !== shortIntro ? '<button class="coffee-popup__expand" type="button" data-expanded="false">展开全部 ↓</button>' : ''}
+          </div>
+          <div class="coffee-popup__facts">
+            ${renderFact('推荐理由', recommend)}
+            ${renderFact('推荐尝试', tryItems)}
+            ${renderCopyFact('地址', info.address)}
+            ${renderFact('营业时间', hours)}
+            ${renderFact('休息日', restDay)}
+            ${renderCopyFact('电话', phoneNumbers)}
+            ${renderFact('小提醒', reminder)}
+          </div>
+          ${info.xhsUrl ? `<a class="coffee-popup__link" href="${escapeHTML(info.xhsUrl)}" target="_blank" rel="noopener noreferrer">打开跳转小红书 ↗</a>` : ''}
+        </div>
+        ${galleryImages.length ? `
+          <div class="coffee-popup__gallery">
+            ${galleryImages.map((src, index) => createImageButton(src, `${name} 照片 ${index + 1}`, 'coffee-popup__photo')).join('')}
+          </div>
+        ` : ''}
+      `;
+
+      const expandButton = popupContent.querySelector('.coffee-popup__expand');
+      const introElement = popupContent.querySelector('[data-intro]');
+      if (expandButton && introElement) {
+        expandButton.addEventListener('click', () => {
+          const isExpanded = expandButton.dataset.expanded === 'true';
+          introElement.textContent = isExpanded ? shortIntro : fullIntro;
+          expandButton.textContent = isExpanded ? '展开全部 ↓' : '收起 ↑';
+          expandButton.dataset.expanded = String(!isExpanded);
         });
-    </script>
-</body>
+      }
 
+      popupContent.querySelectorAll('[data-copy-value]').forEach((button) => {
+        button.addEventListener('click', (event) => {
+          copyInfo(button.dataset.copyValue, event.currentTarget);
+        });
+      });
+
+      popupContent.querySelectorAll('[data-full-image]').forEach((button) => {
+        button.querySelector('img').addEventListener('error', () => {
+          button.remove();
+        });
+        button.addEventListener('click', () => {
+          openLightbox(button.dataset.fullImage, button.querySelector('img').alt);
+        });
+      });
+
+      return popupContent;
+    }
+
+    // 优先读取 GeoJSON 文件；如果是双击 HTML 导致浏览器拦截本地读取，则使用 JS 里的备用数据
+    async function loadGeoJSON(fileName, fallbackData) {
+      try {
+        const response = await fetch(fileName);
+
+        if (!response.ok) {
+          throw new Error(`无法读取 ${fileName}`);
+        }
+
+        return await response.json();
+      } catch (error) {
+        return fallbackData;
+      }
+    }
+
+    // 根据 coffee-shops.geojson 创建自定义咖啡店标注和弹窗
+    function addCoffeeShopMarkers(coffeeShopData) {
+      coffeeShopData.features.forEach(async (feature) => {
+        const { name, city, address, phone, iconUrl, imageUrl } = feature.properties;
+        const coordinates = feature.geometry.coordinates;
+
+        // 创建一个可自定义图片的 HTML 标注
+        const markerElement = document.createElement('div');
+        markerElement.className = 'coffee-marker';
+        markerElement.innerHTML = `<img src="${escapeHTML(iconUrl)}" alt="${escapeHTML(name)}">`;
+
+        let cafeInfo = null;
+        if (feature.properties.infoUrl) {
+          const rawText = await loadText(feature.properties.infoUrl, CAFE_INFO_FALLBACK[feature.properties.infoKey]);
+          cafeInfo = parseCafeInfo(rawText, address);
+        }
+
+        const modalContent = buildCafePopup(feature, cafeInfo);
+
+        const marker = new maplibregl.Marker({
+          element: markerElement,
+          anchor: 'bottom'
+        })
+          .setLngLat(coordinates)
+          .addTo(map);
+
+        // 点击咖啡店图标时，第一次只放大；已经放大后再次点击才显示店铺弹窗
+        markerElement.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+
+          const targetZoom = 15.5;
+          const currentZoom = map.getZoom();
+
+          if (currentZoom < targetZoom - 0.1) {
+            closeCafeModal();
+            map.flyTo({
+              center: coordinates,
+              zoom: targetZoom,
+              duration: 700,
+              essential: true
+            });
+            return;
+          }
+
+          map.flyTo({
+            center: coordinates,
+            zoom: currentZoom,
+            duration: 700,
+            essential: true
+          });
+          openCafeModal(modalContent);
+        });
+      });
+    }
+
+    // 地图样式加载完成后，才可以添加自定义数据源和图层
+    map.on('load', async () => {
+      const provinceOutlines = await loadGeoJSON('./province-outlines.geojson', window.PROVINCE_OUTLINES);
+      const cityOutlines = await loadGeoJSON('./city-outlines.geojson', window.CITY_OUTLINES);
+      const guangdongCities = await loadGeoJSON('./guangdong-cities.geojson', window.GUANGDONG_CITIES);
+      const coffeeShops = await loadGeoJSON('./coffee-shops.geojson', window.COFFEE_SHOPS);
+
+      // 添加省级轮廓数据源：广东、北京、上海
+      map.addSource('province-outlines', {
+        type: 'geojson',
+        data: provinceOutlines
+      });
+
+      // 添加广东城市标注点数据源：深圳、惠州、广州
+      map.addSource('guangdong-cities', {
+        type: 'geojson',
+        data: guangdongCities
+      });
+
+      // 添加深圳、惠州、广州三个市级轮廓数据源
+      map.addSource('city-outlines', {
+        type: 'geojson',
+        data: cityOutlines
+      });
+
+      // 省份半透明填充层，用来突出可点击区域
+      map.addLayer({
+        id: 'province-fill',
+        type: 'fill',
+        source: 'province-outlines',
+        paint: {
+          'fill-color': [
+            'match',
+            ['get', 'name'],
+            '广东省', '#f97316',
+            '北京市', '#2563eb',
+            '上海市', '#16a34a',
+            '#64748b'
+          ],
+          'fill-opacity': 0.22
+        }
+      });
+
+      // 省份轮廓线层，让边界更清楚
+      map.addLayer({
+        id: 'province-line',
+        type: 'line',
+        source: 'province-outlines',
+        paint: {
+          'line-color': [
+            'match',
+            ['get', 'name'],
+            '广东省', '#ea580c',
+            '北京市', '#1d4ed8',
+            '上海市', '#15803d',
+            '#334155'
+          ],
+          'line-width': 2.5
+        }
+      });
+
+      // 市级半透明填充层，广东放大后可以看到深圳、惠州、广州的范围
+      map.addLayer({
+        id: 'city-fill',
+        type: 'fill',
+        source: 'city-outlines',
+        minzoom: 5,
+        paint: {
+          'fill-color': [
+            'match',
+            ['get', 'name'],
+            '深圳市', '#0891b2',
+            '惠州市', '#9333ea',
+            '广州市', '#dc2626',
+            '#0f766e'
+          ],
+          'fill-opacity': 0.2
+        }
+      });
+
+      // 市级轮廓线层，让三个城市边界更清楚
+      map.addLayer({
+        id: 'city-line',
+        type: 'line',
+        source: 'city-outlines',
+        minzoom: 5,
+        paint: {
+          'line-color': [
+            'match',
+            ['get', 'name'],
+            '深圳市', '#0e7490',
+            '惠州市', '#7e22ce',
+            '广州市', '#b91c1c',
+            '#115e59'
+          ],
+          'line-width': 2.2,
+          'line-dasharray': [2, 1]
+        }
+      });
+
+      // 广东城市点位图层
+      map.addLayer({
+        id: 'guangdong-city-points',
+        type: 'circle',
+        source: 'guangdong-cities',
+        paint: {
+          'circle-radius': 6,
+          'circle-color': '#7c2d12',
+          'circle-stroke-width': 2,
+          'circle-stroke-color': '#ffffff'
+        }
+      });
+
+      // 广东城市文字标注图层
+      map.addLayer({
+        id: 'guangdong-city-labels',
+        type: 'symbol',
+        source: 'guangdong-cities',
+        layout: {
+          'text-field': ['get', 'name'],
+          'text-size': 14,
+          'text-offset': [0, 1.1],
+          'text-anchor': 'top'
+        },
+        paint: {
+          'text-color': '#7c2d12',
+          'text-halo-color': '#ffffff',
+          'text-halo-width': 2
+        }
+      });
+
+      // 添加咖啡店自定义标注和弹窗
+      addCoffeeShopMarkers(coffeeShops);
+
+      // 鼠标移到省份区域时，显示手型提示可以点击
+      map.on('mouseenter', 'province-fill', () => {
+        map.getCanvas().classList.add('clickable-area');
+      });
+
+      // 鼠标离开省份区域时，恢复默认鼠标样式
+      map.on('mouseleave', 'province-fill', () => {
+        map.getCanvas().classList.remove('clickable-area');
+      });
+
+      // 鼠标移到市级轮廓区域时，也显示手型提示可以点击
+      map.on('mouseenter', 'city-fill', () => {
+        map.getCanvas().classList.add('clickable-area');
+      });
+
+      // 鼠标离开市级轮廓区域时，恢复默认鼠标样式
+      map.on('mouseleave', 'city-fill', () => {
+        map.getCanvas().classList.remove('clickable-area');
+      });
+
+      // 点击省份后，地图自动放大并移动到该省份范围
+      map.on('click', 'province-fill', (event) => {
+        const province = event.features[0];
+        const provinceName = province.properties.name;
+        const bounds = getGeometryBounds(province.geometry);
+
+        map.fitBounds(bounds, {
+          padding: 60,
+          duration: 900,
+          maxZoom: provinceName === '广东省' ? 7 : 9
+        });
+      });
+
+      // 点击深圳、惠州、广州的市级轮廓后，地图自动放大到该城市
+      map.on('click', 'city-fill', (event) => {
+        const city = event.features[0];
+        const bounds = getGeometryBounds(city.geometry);
+
+        map.fitBounds(bounds, {
+          padding: 70,
+          duration: 900,
+          maxZoom: 12.5
+        });
+      });
+    });
+  </script>
+</body>
 </html>
