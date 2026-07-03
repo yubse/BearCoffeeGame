@@ -360,20 +360,8 @@
       // 指定地图要显示在哪个 HTML 元素中，对应上面的 id="map"
       container: 'map',
 
-      // 使用本地内联样式，避免线上外部底图 key、跨域或网络问题导致整张地图空白
-      style: {
-        version: 8,
-        sources: {},
-        layers: [
-          {
-            id: 'background',
-            type: 'background',
-            paint: {
-              'background-color': '#f8fbf8'
-            }
-          }
-        ]
-      },
+      // 使用 MapTiler streets-v4 在线底图样式；如果 key 失效，地图底图会无法加载
+      style: 'https://api.maptiler.com/maps/streets-v4/style.json?key=LNvapYnYvAycgHEiQP5X',
 
       // 设置地图初始中心点，经纬度格式是 [经度, 纬度]
       center: [114.16369, 22.77325],
