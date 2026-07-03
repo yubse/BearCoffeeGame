@@ -360,8 +360,20 @@
       // 指定地图要显示在哪个 HTML 元素中，对应上面的 id="map"
       container: 'map',
 
-      // 使用 MapTiler streets-v4 在线底图样式；如果 key 失效，地图底图会无法加载
-      style: 'https://api.maptiler.com/maps/streets-v4/style.json?key=LNvapYnYvAycgHEiQP5X',
+      // 使用本地内联样式，避免线上外部底图 key、跨域或网络问题导致整张地图空白
+      style: {
+        version: 8,
+        sources: {},
+        layers: [
+          {
+            id: 'background',
+            type: 'background',
+            paint: {
+              'background-color': '#f8fbf8'
+            }
+          }
+        ]
+      },
 
       // 设置地图初始中心点，经纬度格式是 [经度, 纬度]
       center: [114.16369, 22.77325],
@@ -394,6 +406,25 @@
       }
 
       extendBounds(geometry.coordinates);
+      return bounds;
+    }
+
+    function getFeatureCollectionBounds(featureCollection) {
+      const bounds = new maplibregl.LngLatBounds();
+
+      featureCollection.features.forEach((feature) => {
+        if (feature.geometry?.type === 'Point') {
+          bounds.extend(feature.geometry.coordinates);
+          return;
+        }
+
+        if (feature.geometry?.coordinates) {
+          getGeometryBounds(feature.geometry).toArray().forEach((coordinate) => {
+            bounds.extend(coordinate);
+          });
+        }
+      });
+
       return bounds;
     }
 
@@ -897,26 +928,22 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
         }
       });
 
-      // 广东城市文字标注图层
-      map.addLayer({
-        id: 'guangdong-city-labels',
-        type: 'symbol',
-        source: 'guangdong-cities',
-        layout: {
-          'text-field': ['get', 'name'],
-          'text-size': 14,
-          'text-offset': [0, 1.1],
-          'text-anchor': 'top'
-        },
-        paint: {
-          'text-color': '#7c2d12',
-          'text-halo-color': '#ffffff',
-          'text-halo-width': 2
-        }
-      });
-
       // 添加咖啡店自定义标注和弹窗
       addCoffeeShopMarkers(coffeeShops);
+
+      const coffeeBounds = getFeatureCollectionBounds(coffeeShops);
+      if (!coffeeBounds.isEmpty()) {
+        map.fitBounds(coffeeBounds, {
+          padding: {
+            top: 110,
+            right: 50,
+            bottom: 110,
+            left: 50
+          },
+          duration: 0,
+          maxZoom: 9.8
+        });
+      }
 
       // 鼠标移到省份区域时，显示手型提示可以点击
       map.on('mouseenter', 'province-fill', () => {
