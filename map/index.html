@@ -43,6 +43,19 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: opacity 180ms ease, visibility 180ms ease;
+    }
+
+    .coffee-marker.maplibregl-marker {
+      opacity: 0;
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .coffee-marker.maplibregl-marker.is-visible {
+      opacity: 1;
+      pointer-events: auto;
+      visibility: visible;
     }
 
     .coffee-marker img {
@@ -71,13 +84,13 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: min(430px, calc(100vw - 36px));
+      width: min(520px, calc(100vw - 36px));
       pointer-events: auto;
     }
 
     .cafe-modal__panel {
       width: 100%;
-      max-height: min(74vh, 700px);
+      max-height: min(82vh, 780px);
       overflow: hidden;
       border-radius: 0;
       background: #ffffff;
@@ -93,14 +106,17 @@
       background: #ffffff;
       color: #2f2118;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-size: 24px;
-      line-height: 40px;
+      line-height: 1;
       box-shadow: 0 10px 24px rgba(44, 28, 18, 0.2);
     }
 
     .coffee-popup {
       width: 100%;
-      max-height: min(74vh, 700px);
+      max-height: min(82vh, 780px);
       overflow-y: auto;
       background: #ffffff;
       color: #2f2118;
@@ -111,15 +127,19 @@
       padding: 22px 20px 18px;
     }
 
+    .coffee-popup__body--intro {
+      padding-top: 0;
+    }
+
     .coffee-popup__heading {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 12px;
-      align-items: start;
-      margin-bottom: 10px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 16px;
     }
 
     .coffee-popup h3 {
+      flex: 1 1 auto;
       margin: 0;
       font-size: 21px;
       line-height: 1.3;
@@ -127,8 +147,8 @@
     }
 
     .coffee-popup__title-stamp {
-      width: 58px;
-      height: 58px;
+      width: 78px;
+      height: 78px;
       border: 0;
       padding: 0;
       background: transparent;
@@ -150,7 +170,7 @@
     }
 
     .coffee-popup__intro {
-      margin-bottom: 12px;
+      margin-top: 18px;
     }
 
     .coffee-popup__expand {
@@ -170,7 +190,7 @@
     .coffee-popup__facts {
       display: grid;
       gap: 8px;
-      margin: 16px 0;
+      margin: 0 0 18px;
       padding: 14px;
       border: 1px solid #ead8c2;
       border-radius: 10px;
@@ -246,7 +266,7 @@
       gap: 14px;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
-      padding: 6px 20px 20px;
+      padding: 0 20px 20px;
     }
 
     .coffee-popup__gallery:has(.coffee-popup__photo:only-child) {
@@ -255,7 +275,7 @@
 
     .coffee-popup__photo {
       flex: 0 0 auto;
-      width: min(82%, 330px);
+      width: min(90%, 420px);
       height: auto;
       border: 0;
       padding: 0;
@@ -362,7 +382,7 @@
       container: 'map',
 
       // 使用 MapTiler streets-v4 在线底图样式；如果 key 失效，地图底图会无法加载
-      style: 'https://api.maptiler.com/maps/streets-v4/style.json?key=LNvapYnYvAycgHEiQP5X',
+      style: 'https://api.maptiler.com/maps/dataviz-v4/style.json?key=LNvapYnYvAycgHEiQP5X',
 
       // 设置地图初始中心点，经纬度格式是 [经度, 纬度]
       center: [114.16369, 22.77325],
@@ -415,6 +435,36 @@
       });
 
       return bounds;
+    }
+
+    const coffeeMarkers = [];
+    let hasSelectedProvince = false;
+
+    function normalizeCityName(cityName) {
+      return String(cityName || '').replace(/市$/u, '');
+    }
+
+    function setCoffeeMarkersVisible(isVisible, cityName = '') {
+      const normalizedTargetCity = normalizeCityName(cityName);
+
+      coffeeMarkers.forEach(({ markerElement, feature }) => {
+        const markerCity = normalizeCityName(feature.properties.city);
+        const shouldShow = isVisible && (!normalizedTargetCity || markerCity === normalizedTargetCity);
+        markerElement.classList.toggle('is-visible', shouldShow);
+      });
+
+      if (!isVisible) {
+        closeCafeModal();
+      }
+    }
+
+    function queryFeaturesAroundPoint(point, layerIds, radius = 8) {
+      return map.queryRenderedFeatures([
+        [point.x - radius, point.y - radius],
+        [point.x + radius, point.y + radius]
+      ], {
+        layers: layerIds
+      });
     }
 
     // 转义弹窗里的文字，避免地址或店名里有特殊字符时破坏 HTML
@@ -679,12 +729,8 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
       popupContent.innerHTML = `
         <div class="coffee-popup__body">
           <div class="coffee-popup__heading">
-            <h3>${escapeHTML(info.title)}</h3>
             ${stampUrl ? createImageButton(stampUrl, `${name} 印章`, 'coffee-popup__title-stamp') : ''}
-          </div>
-          <div class="coffee-popup__intro">
-            <p data-intro>${escapeHTML(shortIntro)}</p>
-            ${fullIntro !== shortIntro ? '<button class="coffee-popup__expand" type="button" data-expanded="false">展开全部 ↓</button>' : ''}
+            <h3>${escapeHTML(info.title)}</h3>
           </div>
           <div class="coffee-popup__facts">
             ${renderFact('推荐理由', recommend)}
@@ -702,6 +748,12 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
             ${galleryImages.map((src, index) => createImageButton(src, `${name} 照片 ${index + 1}`, 'coffee-popup__photo')).join('')}
           </div>
         ` : ''}
+        <div class="coffee-popup__body coffee-popup__body--intro">
+          <div class="coffee-popup__intro">
+            <p data-intro>${escapeHTML(shortIntro)}</p>
+            ${fullIntro !== shortIntro ? '<button class="coffee-popup__expand" type="button" data-expanded="false">展开全部 ↓</button>' : ''}
+          </div>
+        </div>
       `;
 
       const expandButton = popupContent.querySelector('.coffee-popup__expand');
@@ -773,6 +825,8 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
         })
           .setLngLat(coordinates)
           .addTo(map);
+
+        coffeeMarkers.push({ marker, markerElement, feature });
 
         // 点击咖啡店图标时，第一次只放大；已经放大后再次点击才显示店铺弹窗
         markerElement.addEventListener('click', (event) => {
@@ -870,7 +924,7 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
         id: 'city-fill',
         type: 'fill',
         source: 'city-outlines',
-        minzoom: 5,
+        minzoom: 4,
         paint: {
           'fill-color': [
             'match',
@@ -889,7 +943,7 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
         id: 'city-line',
         type: 'line',
         source: 'city-outlines',
-        minzoom: 5,
+        minzoom: 4,
         paint: {
           'line-color': [
             'match',
@@ -920,17 +974,17 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
       // 添加咖啡店自定义标注和弹窗
       addCoffeeShopMarkers(coffeeShops);
 
-      const coffeeBounds = getFeatureCollectionBounds(coffeeShops);
-      if (!coffeeBounds.isEmpty()) {
-        map.fitBounds(coffeeBounds, {
+      const provinceBounds = getFeatureCollectionBounds(provinceOutlines);
+      if (!provinceBounds.isEmpty()) {
+        map.fitBounds(provinceBounds, {
           padding: {
-            top: 110,
-            right: 50,
-            bottom: 110,
-            left: 50
+            top: 80,
+            right: 80,
+            bottom: 80,
+            left: 80
           },
           duration: 0,
-          maxZoom: 9.8
+          maxZoom: 5
         });
       }
 
@@ -954,12 +1008,36 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
         map.getCanvas().classList.remove('clickable-area');
       });
 
-      // 点击省份后，地图自动放大并移动到该省份范围
-      map.on('click', 'province-fill', (event) => {
-        const province = event.features[0];
+      // 统一处理点击，避免省级和市级重叠图层互相抢点击
+      map.on('click', (event) => {
+        const cityFeatures = hasSelectedProvince
+          ? queryFeaturesAroundPoint(event.point, ['city-fill', 'city-line'], 10)
+          : [];
+
+        if (cityFeatures.length) {
+          const city = cityFeatures[0];
+          const bounds = getGeometryBounds(city.geometry);
+
+          setCoffeeMarkersVisible(true, city.properties.name);
+          map.fitBounds(bounds, {
+            padding: 70,
+            duration: 900,
+            maxZoom: 12.5
+          });
+          return;
+        }
+
+        const provinceFeatures = queryFeaturesAroundPoint(event.point, ['province-fill'], 10);
+        if (!provinceFeatures.length) {
+          return;
+        }
+
+        const province = provinceFeatures[0];
         const provinceName = province.properties.name;
         const bounds = getGeometryBounds(province.geometry);
 
+        setCoffeeMarkersVisible(false);
+        hasSelectedProvince = true;
         map.fitBounds(bounds, {
           padding: 60,
           duration: 900,
@@ -967,17 +1045,6 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
         });
       });
 
-      // 点击深圳、惠州、广州的市级轮廓后，地图自动放大到该城市
-      map.on('click', 'city-fill', (event) => {
-        const city = event.features[0];
-        const bounds = getGeometryBounds(city.geometry);
-
-        map.fitBounds(bounds, {
-          padding: 70,
-          duration: 900,
-          maxZoom: 12.5
-        });
-      });
     });
   </script>
 </body>
