@@ -40,10 +40,16 @@
   cursor: not-allowed;
   pointer-events: none;
 }
-.site-hub__link[aria-disabled="true"]::after {
-  content: "未开放";
-  margin-left: 4px;
+.site-hub__link--disabled {
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+.site-hub__link--disabled small {
+  display: block;
   font-size: 9px;
+  line-height: 1;
   font-weight: 600;
   opacity: .75;
 }

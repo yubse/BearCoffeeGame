@@ -9,8 +9,8 @@
   };
   const labels = {
     game: ['☕', '咖啡屋'],
-    map: ['⌖', '咖啡地图'],
-    test: ['✦', '人格测试']
+    test: ['✦', '人格测试'],
+    map: ['⌖', '咖啡地图']
   };
 
   const nav = document.createElement('nav');
@@ -18,7 +18,7 @@
   nav.setAttribute('aria-label', '咖啡世界导航');
   nav.innerHTML = `<a class="site-hub__brand" href="${routes.game}" aria-label="熊熊咖啡世界">☕</a>` +
     Object.entries(labels).map(([key, [, label]]) => key === 'map'
-      ? `<span class="site-hub__link" data-route="${key}" aria-disabled="true">${label}</span>`
+      ? `<span class="site-hub__link site-hub__link--disabled" data-route="${key}" aria-disabled="true"><span>${label}</span><small>未开放</small></span>`
       : `<a class="site-hub__link" data-route="${key}" href="${routes[key]}"${key === page ? ' aria-current="page"' : ''}>${label}</a>`
     ).join('');
   document.body.prepend(nav);
