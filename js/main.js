@@ -405,15 +405,7 @@
         const npcImages = {};
         const CRITICAL_ASSET_KEYS = [
             'uiStartBase',
-            'uiStartFlash',
-            'uiCharSelect',
-            'consoleShell',
-            'controlGuide',
-            'floor1Normal',
-            'floor2Normal',
-            'kitchenNormal',
-            'cursor',
-            'nextIcon'
+            'uiStartFlash'
         ];
         const CRITICAL_DIALOGUE_SOURCES = [
             DIALOGUE_BG['系统'],
@@ -444,16 +436,27 @@
         function warmOptionalImages() {
             const optionalSources = [
                 ...Object.entries(ASSETS)
-                    .filter(([key]) => !CRITICAL_ASSET_KEYS.includes(key))
+                    .filter(([key]) => !CRITICAL_ASSET_KEYS.includes(key) &&
+                        !['summonGif', 'summonShareCard', 'purchaseQrCard'].includes(key))
                     .map(([, src]) => src),
                 ...Object.values(DIALOGUE_BG)
                     .filter(src => !CRITICAL_DIALOGUE_SOURCES.includes(src))
             ];
 
-            optionalSources.forEach(src => loadImage(src));
+            const jobs = optionalSources.map(src => () => loadImage(src));
             npcs.forEach(npc => {
-                if (npc.img) loadImage(npc.img).then(img => npcImages[npc.id] = img);
+                if (npc.img) jobs.push(() => loadImage(npc.img).then(img => npcImages[npc.id] = img));
             });
+
+            const runBatch = () => {
+                jobs.splice(0, 3).forEach(job => job());
+                if (jobs.length) window.setTimeout(scheduleBatch, 180);
+            };
+            const scheduleBatch = () => {
+                if ('requestIdleCallback' in window) requestIdleCallback(runBatch, { timeout: 800 });
+                else window.setTimeout(runBatch, 80);
+            };
+            scheduleBatch();
         }
 
         function initStaticImages() {
@@ -1590,7 +1593,9 @@
             if (state.isInventoryOpen) { closeInventory(); } else { openInventory(); }
         });
         bindDirection('up', 'up'); bindDirection('down', 'down'); bindDirection('left', 'left'); bindDirection('right', 'right');
-        const fontReady = document.fonts ? document.fonts.ready : Promise.resolve();
+        const fontReady = document.fonts
+            ? Promise.race([document.fonts.ready, new Promise(resolve => setTimeout(resolve, 900))])
+            : Promise.resolve();
         Promise.all([fontReady, preloadAllImages()]).then(() => {
             initStaticImages();
             updateStaticText();
@@ -1602,7 +1607,7 @@
             state.isLoaded = true;
             $('start-image-flash').classList.remove('hide');
             gameLoop();
-            setTimeout(warmOptionalImages, 500);
+            setTimeout(warmOptionalImages, 1200);
         }).catch(err => {
             console.warn("部分资源加载失败，强制进入游戏流程");
             initStaticImages();
@@ -1610,7 +1615,7 @@
             state.isLoaded = true;
             $('start-image-flash').classList.remove('hide');
             gameLoop();
-            setTimeout(warmOptionalImages, 500);
+            setTimeout(warmOptionalImages, 1200);
         });
 
 

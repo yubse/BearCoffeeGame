@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>欢迎光临熊熊咖啡屋</title>
     <link rel="icon" type="image/png" href="./static/images/logo.png">
+    <link rel="preload" as="image" href="./static/images/ui/start-base.png" fetchpriority="high">
+    <link rel="stylesheet" href="./css/site-nav.css" />
     <link rel="stylesheet" href="./css/style.css" />
 </head>
 
-<body>
-    <a class="top-entry-link map-entry-link" href="/map" aria-label="前往地图" data-i18n="mapLink">地图</a>
-    <a class="top-entry-link cbti-entry-link" href="./coffee-ti/" aria-label="前往 CBTI 咖啡人格测试" hidden>CBTI</a>
+<body data-site-page="game">
 
     <section class="playgame-section">
         <div id="start-screen">
@@ -163,7 +163,7 @@
             <div id="btn-a" class="touch-btn"></div>
         </div>
 
-        <audio id="bgm" loop preload="auto">
+        <audio id="bgm" loop preload="none">
             <source src="./static/audio/bgm.mp3" type="audio/mpeg">
         </audio>
     </section>
@@ -174,18 +174,7 @@
         </a>
     </footer>
 
-    <script>
-        document.querySelector('.map-entry-link')?.addEventListener('click', function (event) {
-            if (window.location.protocol !== 'file:') return;
-            event.preventDefault();
-            window.location.href = './map/index.html';
-        });
-        document.querySelector('.cbti-entry-link')?.addEventListener('click', function (event) {
-            if (window.location.protocol !== 'file:') return;
-            event.preventDefault();
-            window.location.href = './coffee-ti/index.html';
-        });
-    </script>
+    <script src="./js/site-nav.js"></script>
     <script src="./js/main.js" defer></script>
 </body>
 

@@ -3,8 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <base href="/map/">
+  <script>
+    document.write(`<base href="${window.location.protocol === 'file:' ? './' : '/map/'}">`);
+  </script>
   <title>咖啡地图</title>
+  <link rel="preconnect" href="https://api.maptiler.com" crossorigin>
+  <link rel="preconnect" href="https://api.maptiler.com">
+  <link rel="stylesheet" href="../css/site-nav.css">
 
   <!-- 引入 MapLibre GL 的样式文件，用来正确显示地图控件和图层 -->
   <link href="./vendor/maplibre-gl/maplibre-gl.css" rel="stylesheet">
@@ -12,11 +17,17 @@
   <!-- 引入 MapLibre GL 的脚本文件，用来创建和控制地图 -->
   <script src="./vendor/maplibre-gl/maplibre-gl.js"></script>
 
-  <!-- 引入本地 GeoJSON 数据对应的 JS 版本，双击 HTML 时也能读取轮廓数据 -->
-  <script src="./province-outlines-data.js"></script>
-  <script src="./city-outlines-data.js"></script>
-  <script src="./guangdong-cities-data.js"></script>
-  <script src="./coffee-shops-data.js"></script>
+  <!-- 只有双击本地 HTML 时才加载 JS 备用数据，线上不再重复下载两套地图数据。 -->
+  <script>
+    if (window.location.protocol === 'file:') {
+      document.write([
+        '<script src="./province-outlines-data.js"><\\/script>',
+        '<script src="./city-outlines-data.js"><\\/script>',
+        '<script src="./guangdong-cities-data.js"><\\/script>',
+        '<script src="./coffee-shops-data.js"><\\/script>'
+      ].join(''));
+    }
+  </script>
 
   <style>
     /* 去掉浏览器默认边距，让地图铺满整个页面 */
@@ -28,6 +39,28 @@
     #map {
       width: 100vw;
       height: 100vh;
+    }
+
+    .language-toggle {
+      position: fixed;
+      top: 14px;
+      left: 14px;
+      z-index: 12;
+      min-width: 76px;
+      height: 38px;
+      border: 1px solid rgba(47, 33, 24, 0.16);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.94);
+      color: #2f2118;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+      box-shadow: 0 10px 24px rgba(44, 28, 18, 0.16);
+    }
+
+    .language-toggle:hover {
+      background: #ffffff;
     }
 
     /* 让鼠标移到可点击区域上时显示手型 */
@@ -361,9 +394,10 @@
   </style>
 </head>
 
-<body>
+<body data-site-page="map">
   <!-- MapLibre 会把地图渲染到这个 div 里面 -->
   <div id="map"></div>
+  <button class="language-toggle" id="language-toggle" type="button" aria-label="Switch language">EN</button>
   <div class="cafe-modal" id="cafe-modal" aria-hidden="true">
     <div class="cafe-modal__shell">
       <div class="cafe-modal__panel" id="cafe-modal-panel"></div>
@@ -374,6 +408,7 @@
     <button type="button" aria-label="关闭大图">×</button>
     <img src="" alt="">
   </div>
+  <script src="../js/site-nav.js"></script>
 
   <script>
     // 创建 MapLibre 地图实例
@@ -467,6 +502,187 @@
       });
     }
 
+    const COUNTRY_VIEWPORTS = {
+      CN: { center: [104.1954, 35.8617], zoom: 3.4 },
+      US: { center: [-98.5795, 39.8283], zoom: 3.2 },
+      CA: { center: [-106.3468, 56.1304], zoom: 3 },
+      GB: { center: [-3.436, 55.3781], zoom: 4.8 },
+      JP: { center: [138.2529, 36.2048], zoom: 4.6 },
+      KR: { center: [127.7669, 35.9078], zoom: 5.4 },
+      SG: { center: [103.8198, 1.3521], zoom: 10 },
+      MY: { center: [101.9758, 4.2105], zoom: 5.2 },
+      TH: { center: [100.9925, 15.87], zoom: 5 },
+      VN: { center: [108.2772, 14.0583], zoom: 5 },
+      ID: { center: [113.9213, -0.7893], zoom: 4.2 },
+      AU: { center: [133.7751, -25.2744], zoom: 3.6 },
+      FR: { center: [2.2137, 46.2276], zoom: 5 },
+      DE: { center: [10.4515, 51.1657], zoom: 5 },
+      IT: { center: [12.5674, 41.8719], zoom: 5 },
+      ES: { center: [-3.7492, 40.4637], zoom: 5 },
+      BR: { center: [-51.9253, -14.235], zoom: 4 },
+      IN: { center: [78.9629, 20.5937], zoom: 4.2 }
+    };
+
+    const I18N = {
+      zh: {
+        htmlLang: 'zh-CN',
+        title: '咖啡地图',
+        toggle: 'EN',
+        toggleAria: '切换到英文',
+        closeModal: '关闭弹窗',
+        closeImage: '关闭大图',
+        imageAlt: '咖啡店图片',
+        stampAlt: '印章',
+        photoAlt: '照片',
+        defaultCafeTitle: '咖啡店',
+        recommend: '推荐理由',
+        tryItems: '推荐尝试',
+        address: '地址',
+        hours: '营业时间',
+        restDay: '休息日',
+        phone: '电话',
+        reminder: '小提醒',
+        copy: '复制',
+        copied: '已复制',
+        copyFailed: '复制失败',
+        xhs: '打开跳转小红书 ↗',
+        expand: '展开全部 ↓',
+        collapse: '收起 ↑',
+        zoomImagePrefix: '放大查看',
+        fallbackIntro: (city, address) => `${city}｜${address}`
+      },
+      en: {
+        htmlLang: 'en',
+        title: 'Coffee Map',
+        toggle: '中文',
+        toggleAria: 'Switch to Chinese',
+        closeModal: 'Close modal',
+        closeImage: 'Close image',
+        imageAlt: 'Cafe image',
+        stampAlt: 'stamp',
+        photoAlt: 'photo',
+        defaultCafeTitle: 'Cafe',
+        recommend: 'Why Visit',
+        tryItems: 'Try',
+        address: 'Address',
+        hours: 'Hours',
+        restDay: 'Closed',
+        phone: 'Phone',
+        reminder: 'Note',
+        copy: 'Copy',
+        copied: 'Copied',
+        copyFailed: 'Copy failed',
+        xhs: 'Open Xiaohongshu ↗',
+        expand: 'Read more ↓',
+        collapse: 'Show less ↑',
+        zoomImagePrefix: 'Open larger image of ',
+        fallbackIntro: (city, address) => `A cafe in ${city || 'Huizhou'}. Address: ${address || 'details available in Chinese'}.`
+      }
+    };
+
+    let currentLanguage = 'zh';
+    let activeCafeModalData = null;
+    let visitorLocationPromise = null;
+    let hasUserSelectedLanguage = false;
+
+    function t(key) {
+      return I18N[currentLanguage][key];
+    }
+
+    async function fetchJSONWithTimeout(url, timeout = 2400) {
+      const controller = new AbortController();
+      const timer = window.setTimeout(() => controller.abort(), timeout);
+
+      try {
+        const response = await fetch(url, {
+          signal: controller.signal,
+          cache: 'force-cache'
+        });
+
+        if (!response.ok) {
+          throw new Error(`无法读取 ${url}`);
+        }
+
+        return await response.json();
+      } finally {
+        window.clearTimeout(timer);
+      }
+    }
+
+    async function getVisitorLocationByIP() {
+      const providers = [
+        async () => {
+          const data = await fetchJSONWithTimeout('https://ipapi.co/json/');
+          return {
+            countryCode: data.country_code,
+            longitude: Number(data.longitude),
+            latitude: Number(data.latitude)
+          };
+        },
+        async () => {
+          const data = await fetchJSONWithTimeout('https://ipwho.is/');
+          return {
+            countryCode: data.country_code,
+            longitude: Number(data.longitude),
+            latitude: Number(data.latitude)
+          };
+        }
+      ];
+
+      for (const provider of providers) {
+        try {
+          const location = await provider();
+          if (location.countryCode || (Number.isFinite(location.longitude) && Number.isFinite(location.latitude))) {
+            return location;
+          }
+        } catch (error) {
+          // IP 定位失败时继续尝试下一个服务，全部失败再使用默认视角。
+        }
+      }
+
+      return null;
+    }
+
+    function getVisitorLocationOnce() {
+      if (!visitorLocationPromise) {
+        visitorLocationPromise = getVisitorLocationByIP();
+      }
+      return visitorLocationPromise;
+    }
+
+    async function focusMapByVisitorCountry() {
+      const location = await getVisitorLocationOnce();
+
+      if (!location) {
+        return false;
+      }
+
+      const countryCode = String(location.countryCode || '').toUpperCase();
+      const preset = COUNTRY_VIEWPORTS[countryCode];
+
+      if (preset) {
+        map.easeTo({
+          center: preset.center,
+          zoom: preset.zoom,
+          duration: 900,
+          essential: true
+        });
+        return true;
+      }
+
+      if (Number.isFinite(location.longitude) && Number.isFinite(location.latitude)) {
+        map.easeTo({
+          center: [location.longitude, location.latitude],
+          zoom: 4.6,
+          duration: 900,
+          essential: true
+        });
+        return true;
+      }
+
+      return false;
+    }
+
     // 转义弹窗里的文字，避免地址或店名里有特殊字符时破坏 HTML
     function escapeHTML(value) {
       return String(value).replace(/[&<>"']/g, (char) => ({
@@ -524,14 +740,96 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
 小红书：https://www.xiaohongshu.com/user/profile/56fcee964775a71954728b29?xsec_token=ABK9h_3KuFtSe7oYFI6DEvXKKj-RZOP1bbIguuTbCruJo%3D&xsec_source=pc_search`
     };
 
+    const CAFE_INFO_EN = {
+      'Joyride 游车河': `Joyride Kafe
+Joyride is a seasonal coffee stop in Huizhou, built around slower moments, fresh beans and easy conversations with the barista.
+The shop focuses on changing seasonal flavors. You may find newly arrived beans, special drinks, tasting events, books, and a relaxed space for staying a little longer. It is approachable even if you are not deeply familiar with coffee.
+
+☕ 推荐理由：Seasonal coffee / patient barista introductions / occasional cupping events
+🌿 推荐尝试：Signature drink "Grass Wave", seasonal beans
+📍 地址：惠州市惠城区桥东四清路菜园墩30号
+🕘 营业时间：9:00-19:00
+📷 小提醒：Portrait photography is not allowed inside
+
+Xiaohongshu：https://www.xiaohongshu.com/user/profile/5ed3f9a2000000000101ded7?xsec_token=AB0_c9mmIjUOeFnEOBYhtggt4d2c6x7a5MQLkeabBI8Ug%3D&xsec_source=pc_note`,
+      '点味咖啡 Wei Cafe': `Wei Cafe
+Wei Cafe is a quiet vintage-style cafe in Huizhou, good for people who like old cups, warm lighting and a slower afternoon.
+The space uses antique cups and second-hand tableware to create a soft, nostalgic mood. It is suitable for solo visits, coffee, cake and unhurried time.
+
+☕ 推荐理由：Vintage atmosphere / antique cups / quiet solo-friendly space
+🍰 推荐尝试：Cold brew, cake
+🕐 营业时间：13:00-18:00
+☁️ 休息日：Updated monthly
+📍 地址：东湖六街东湖花园三号小区底商临街商铺（东湖双语学校西1门对面）
+
+Xiaohongshu：https://www.xiaohongshu.com/user/profile/5e953d5d0000000001007b21?xsec_token=ABnBgv5KdmZhHuU-8IfsC6wP0dKdb_rkEQP_PxLK6rVFM%3D&xsec_source=pc_search`,
+      '绑鞋带 shoelace': `Shoelace Cafe
+Shoelace Cafe is a small neighborhood cafe in East Huizhou, designed as a gentle place to pause before moving on.
+The name comes from the idea of stopping to tie your shoes: taking a short rest, listening to yourself, then continuing forward. The shop has a clean wood-toned interior, custom cards for special drinks, and an easy community feeling.
+
+☕ 推荐理由：Neighborhood cafe / special drink cards / friendly local atmosphere
+🍋 推荐尝试：Specialty coffee, lemon panna cotta-style dessert
+📍 地址：惠州市惠城区桥东城背路18号
+🕐 营业时间：08:30-18:00（closed Thursdays）
+
+Xiaohongshu：https://www.xiaohongshu.com/user/profile/56fcee964775a71954728b29?xsec_token=ABK9h_3KuFtSe7oYFI6DEvXKKj-RZOP1bbIguuTbCruJo%3D&xsec_source=pc_search`
+    };
+
     const imageLightbox = document.getElementById('image-lightbox');
     const lightboxImage = imageLightbox.querySelector('img');
     const lightboxClose = imageLightbox.querySelector('button');
     const cafeModal = document.getElementById('cafe-modal');
     const cafeModalPanel = document.getElementById('cafe-modal-panel');
     const cafeModalClose = document.getElementById('cafe-modal-close');
+    const languageToggle = document.getElementById('language-toggle');
 
-    function openCafeModal(content) {
+    function applyLanguageToPage() {
+      const dictionary = I18N[currentLanguage];
+      document.documentElement.lang = dictionary.htmlLang;
+      document.title = dictionary.title;
+      languageToggle.textContent = dictionary.toggle;
+      languageToggle.setAttribute('aria-label', dictionary.toggleAria);
+      cafeModalClose.setAttribute('aria-label', dictionary.closeModal);
+      lightboxClose.setAttribute('aria-label', dictionary.closeImage);
+
+      if (!lightboxImage.alt) {
+        lightboxImage.alt = dictionary.imageAlt;
+      }
+    }
+
+    function setLanguage(language) {
+      const nextLanguage = language === 'en' ? 'en' : 'zh';
+      if (currentLanguage === nextLanguage) {
+        applyLanguageToPage();
+        return;
+      }
+
+      currentLanguage = nextLanguage;
+      applyLanguageToPage();
+
+      if (activeCafeModalData && cafeModal.classList.contains('is-open')) {
+        cafeModalPanel.replaceChildren(buildCafePopup(activeCafeModalData.feature, activeCafeModalData.cafeInfo));
+      }
+    }
+
+    async function initializeLanguageByIP() {
+      try {
+        const location = await getVisitorLocationOnce();
+        if (hasUserSelectedLanguage) {
+          return;
+        }
+        const countryCode = String(location?.countryCode || '').toUpperCase();
+        setLanguage(countryCode === 'CN' ? 'zh' : 'en');
+      } catch (error) {
+        if (hasUserSelectedLanguage) {
+          return;
+        }
+        setLanguage('en');
+      }
+    }
+
+    function openCafeModal(content, modalData = null) {
+      activeCafeModalData = modalData;
       cafeModalPanel.replaceChildren(content);
       cafeModal.classList.add('is-open');
       cafeModal.setAttribute('aria-hidden', 'false');
@@ -541,7 +839,15 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
       cafeModal.classList.remove('is-open');
       cafeModal.setAttribute('aria-hidden', 'true');
       cafeModalPanel.replaceChildren();
+      activeCafeModalData = null;
     }
+
+    languageToggle.addEventListener('click', () => {
+      hasUserSelectedLanguage = true;
+      setLanguage(currentLanguage === 'zh' ? 'en' : 'zh');
+    });
+    applyLanguageToPage();
+    initializeLanguageByIP();
 
     cafeModalClose.addEventListener('click', closeCafeModal);
     window.addEventListener('keydown', (event) => {
@@ -552,7 +858,7 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
 
     function openLightbox(src, alt) {
       lightboxImage.src = src;
-      lightboxImage.alt = alt || '咖啡店图片';
+      lightboxImage.alt = alt || t('imageAlt');
       imageLightbox.classList.add('is-open');
       imageLightbox.setAttribute('aria-hidden', 'false');
     }
@@ -580,9 +886,9 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
       const status = button.querySelector('.coffee-popup__copy-status') || button;
 
       navigator.clipboard.writeText(value).then(() => {
-        status.textContent = '已复制';
+        status.textContent = t('copied');
       }).catch(() => {
-        status.textContent = '复制失败';
+        status.textContent = t('copyFailed');
       });
     }
 
@@ -608,8 +914,8 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
 
     function parseCafeInfo(rawText, fallbackAddress = '') {
       const lines = rawText.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
-      const title = lines[0] || '咖啡店';
-      const xhsLine = lines.find((line) => line.includes('小红书'));
+      const title = lines[0] || t('defaultCafeTitle');
+      const xhsLine = lines.find((line) => /小红书|Xiaohongshu/i.test(line));
       const xhsUrl = xhsLine ? xhsLine.replace(/^.*?(https?:\/\/\S+)$/u, '$1') : '';
       const factLines = lines.filter((line) => /^[☕🌿🍰🍋📍🕘🕐☁📷]/u.test(line));
       const bodyLines = lines.filter((line, index) => {
@@ -669,7 +975,7 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
             ${items.map((value) => `
               <button class="coffee-popup__copy-row" type="button" data-copy-value="${escapeHTML(value)}">
                 <span>${escapeHTML(value)}</span>
-                <span class="coffee-popup__copy-status">复制</span>
+                <span class="coffee-popup__copy-status">${escapeHTML(t('copy'))}</span>
               </button>
             `).join('')}
           </div>
@@ -690,10 +996,31 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
 
     function createImageButton(src, alt, className) {
       return `
-        <button class="${className}" type="button" data-full-image="${escapeHTML(src)}" aria-label="放大查看${escapeHTML(alt)}">
+        <button class="${className}" type="button" data-full-image="${escapeHTML(src)}" aria-label="${escapeHTML(t('zoomImagePrefix'))}${escapeHTML(alt)}">
           <img src="${escapeHTML(src)}" alt="${escapeHTML(alt)}" loading="lazy">
         </button>
       `;
+    }
+
+    function getLocalizedCafeInfo(feature, cafeInfo) {
+      if (currentLanguage === 'zh') {
+        return cafeInfo || null;
+      }
+
+      const infoKey = feature.properties.infoKey || feature.properties.name;
+      const englishText = CAFE_INFO_EN[infoKey];
+
+      if (englishText) {
+        return parseCafeInfo(englishText, feature.properties.address);
+      }
+
+      return {
+        title: feature.properties.name,
+        intro: t('fallbackIntro')(feature.properties.city, feature.properties.address),
+        facts: {},
+        address: feature.properties.address,
+        xhsUrl: cafeInfo?.xhsUrl || ''
+      };
     }
 
     function buildCafePopup(feature, cafeInfo) {
@@ -706,14 +1033,15 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
         photos = [],
         stampUrl
       } = feature.properties;
-      const info = cafeInfo || {
+      const localizedInfo = getLocalizedCafeInfo(feature, cafeInfo);
+      const info = localizedInfo || {
         title: name,
-        intro: `${city}｜${address}`,
+        intro: t('fallbackIntro')(city, address),
         facts: {},
         address,
         xhsUrl: ''
       };
-      const fullIntro = info.intro || `${city}｜${address}`;
+      const fullIntro = info.intro || t('fallbackIntro')(city, address);
       const shortIntro = getFirstSentence(fullIntro);
       const facts = info.facts || {};
       const recommend = facts['推荐理由'];
@@ -729,29 +1057,29 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
       popupContent.innerHTML = `
         <div class="coffee-popup__body">
           <div class="coffee-popup__heading">
-            ${stampUrl ? createImageButton(stampUrl, `${name} 印章`, 'coffee-popup__title-stamp') : ''}
+            ${stampUrl ? createImageButton(stampUrl, `${name} ${t('stampAlt')}`, 'coffee-popup__title-stamp') : ''}
             <h3>${escapeHTML(info.title)}</h3>
           </div>
           <div class="coffee-popup__facts">
-            ${renderFact('推荐理由', recommend)}
-            ${renderFact('推荐尝试', tryItems)}
-            ${renderCopyFact('地址', info.address)}
-            ${renderFact('营业时间', hours)}
-            ${renderFact('休息日', restDay)}
-            ${renderCopyFact('电话', phoneNumbers)}
-            ${renderFact('小提醒', reminder)}
+            ${renderFact(t('recommend'), recommend)}
+            ${renderFact(t('tryItems'), tryItems)}
+            ${renderCopyFact(t('address'), info.address)}
+            ${renderFact(t('hours'), hours)}
+            ${renderFact(t('restDay'), restDay)}
+            ${renderCopyFact(t('phone'), phoneNumbers)}
+            ${renderFact(t('reminder'), reminder)}
           </div>
-          ${info.xhsUrl ? `<a class="coffee-popup__link" href="${escapeHTML(info.xhsUrl)}" target="_blank" rel="noopener noreferrer">打开跳转小红书 ↗</a>` : ''}
+          ${info.xhsUrl ? `<a class="coffee-popup__link" href="${escapeHTML(info.xhsUrl)}" target="_blank" rel="noopener noreferrer">${escapeHTML(t('xhs'))}</a>` : ''}
         </div>
         ${galleryImages.length ? `
           <div class="coffee-popup__gallery">
-            ${galleryImages.map((src, index) => createImageButton(src, `${name} 照片 ${index + 1}`, 'coffee-popup__photo')).join('')}
+            ${galleryImages.map((src, index) => createImageButton(src, `${name} ${t('photoAlt')} ${index + 1}`, 'coffee-popup__photo')).join('')}
           </div>
         ` : ''}
         <div class="coffee-popup__body coffee-popup__body--intro">
           <div class="coffee-popup__intro">
             <p data-intro>${escapeHTML(shortIntro)}</p>
-            ${fullIntro !== shortIntro ? '<button class="coffee-popup__expand" type="button" data-expanded="false">展开全部 ↓</button>' : ''}
+            ${fullIntro !== shortIntro ? `<button class="coffee-popup__expand" type="button" data-expanded="false">${escapeHTML(t('expand'))}</button>` : ''}
           </div>
         </div>
       `;
@@ -762,7 +1090,7 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
         expandButton.addEventListener('click', () => {
           const isExpanded = expandButton.dataset.expanded === 'true';
           introElement.textContent = isExpanded ? shortIntro : fullIntro;
-          expandButton.textContent = isExpanded ? '展开全部 ↓' : '收起 ↑';
+          expandButton.textContent = isExpanded ? t('expand') : t('collapse');
           expandButton.dataset.expanded = String(!isExpanded);
         });
       }
@@ -787,8 +1115,9 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
 
     // 优先读取 GeoJSON 文件；如果是双击 HTML 导致浏览器拦截本地读取，则使用 JS 里的备用数据
     async function loadGeoJSON(fileName, fallbackData) {
+      if (window.location.protocol === 'file:' && fallbackData) return fallbackData;
       try {
-        const response = await fetch(fileName);
+        const response = await fetch(fileName, { cache: 'force-cache' });
 
         if (!response.ok) {
           throw new Error(`无法读取 ${fileName}`);
@@ -816,8 +1145,6 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
           const rawText = await loadText(feature.properties.infoUrl, CAFE_INFO_FALLBACK[feature.properties.infoKey]);
           cafeInfo = parseCafeInfo(rawText, address);
         }
-
-        const modalContent = buildCafePopup(feature, cafeInfo);
 
         const marker = new maplibregl.Marker({
           element: markerElement,
@@ -853,17 +1180,19 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
             duration: 700,
             essential: true
           });
-          openCafeModal(modalContent);
+          openCafeModal(buildCafePopup(feature, cafeInfo), { feature, cafeInfo });
         });
       });
     }
 
     // 地图样式加载完成后，才可以添加自定义数据源和图层
     map.on('load', async () => {
-      const provinceOutlines = await loadGeoJSON('./province-outlines.geojson', window.PROVINCE_OUTLINES);
-      const cityOutlines = await loadGeoJSON('./city-outlines.geojson', window.CITY_OUTLINES);
-      const guangdongCities = await loadGeoJSON('./guangdong-cities.geojson', window.GUANGDONG_CITIES);
-      const coffeeShops = await loadGeoJSON('./coffee-shops.geojson', window.COFFEE_SHOPS);
+      const [provinceOutlines, cityOutlines, guangdongCities, coffeeShops] = await Promise.all([
+        loadGeoJSON('./province-outlines.geojson', window.PROVINCE_OUTLINES),
+        loadGeoJSON('./city-outlines.geojson', window.CITY_OUTLINES),
+        loadGeoJSON('./guangdong-cities.geojson', window.GUANGDONG_CITIES),
+        loadGeoJSON('./coffee-shops.geojson', window.COFFEE_SHOPS)
+      ]);
 
       // 添加省级轮廓数据源：广东、北京、上海
       map.addSource('province-outlines', {
@@ -974,8 +1303,9 @@ Joyride，在粤语里叫“游车河”。光是名字就很会：不是急着�
       // 添加咖啡店自定义标注和弹窗
       addCoffeeShopMarkers(coffeeShops);
 
+      const didFocusVisitorCountry = await focusMapByVisitorCountry();
       const provinceBounds = getFeatureCollectionBounds(provinceOutlines);
-      if (!provinceBounds.isEmpty()) {
+      if (!didFocusVisitorCountry && !provinceBounds.isEmpty()) {
         map.fitBounds(provinceBounds, {
           padding: {
             top: 80,
