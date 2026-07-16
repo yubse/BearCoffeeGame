@@ -8,16 +8,15 @@
     test: isFile ? `${depth}/coffee-ti/index.html` : '/coffee-ti/'
   };
   const labels = {
-    game: ['☕', '咖啡屋'],
-    test: ['✦', '熊格测试'],
-    map: ['⌖', '咖啡地图']
+    game: '咖啡屋',
+    test: '熊格测试',
+    map: '咖啡地图'
   };
 
   const nav = document.createElement('nav');
   nav.className = 'site-hub';
   nav.setAttribute('aria-label', '咖啡世界导航');
-  nav.innerHTML = `<a class="site-hub__brand" href="${routes.game}" aria-label="熊熊咖啡世界">☕</a>` +
-    Object.entries(labels).map(([key, [, label]]) => key === 'map'
+  nav.innerHTML = Object.entries(labels).map(([key, label]) => key === 'map'
       ? `<span class="site-hub__link site-hub__link--disabled" data-route="${key}" aria-disabled="true"><span>${label}</span><small>未开放</small></span>`
       : `<a class="site-hub__link" data-route="${key}" href="${routes[key]}"${key === page ? ' aria-current="page"' : ''}>${label}</a>`
     ).join('');
@@ -44,6 +43,13 @@
       if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey ||
           link.target === '_blank' || link.getAttribute('aria-current') === 'page') return;
       event.preventDefault();
+      // The game landing screen calculates its responsive size on first paint.
+      // Navigate to it directly so an outgoing full-page cover cannot create a
+      // false zoom frame while the new viewport is being established.
+      if (link.dataset.route === 'game') {
+        window.location.href = link.href;
+        return;
+      }
       document.documentElement.classList.add('site-is-leaving');
       window.setTimeout(() => { window.location.href = link.href; }, 140);
     });
