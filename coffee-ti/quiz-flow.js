@@ -22,6 +22,10 @@
     if (!questions.length) return;
 
     currentIndex = Math.max(0, Math.min(index, questions.length - 1));
+    const isLastQuestion = currentIndex === questions.length - 1;
+    const isComplete = questions.every((question) =>
+      question.querySelector('input[type="radio"]:checked')
+    );
     questions.forEach((question, questionIndex) => {
       const isCurrent = questionIndex === currentIndex;
       question.classList.toggle('is-current', isCurrent);
@@ -30,16 +34,14 @@
 
     const previousButton = document.querySelector('[data-quiz-action="previous"]');
     const nextButton = document.querySelector('[data-quiz-action="next"]');
-    const position = document.querySelector('.quiz-step-position');
     if (previousButton) previousButton.disabled = currentIndex === 0;
     if (nextButton) {
-      nextButton.disabled = currentIndex === questions.length - 1;
-      const nextLabel = currentIndex === questions.length - 1 ? '已经是最后一题' : '下一题';
+      nextButton.disabled = isLastQuestion && !isComplete;
+      nextButton.dataset.quizComplete = String(isLastQuestion && isComplete);
+      const nextLabel = isLastQuestion
+        ? (isComplete ? '查看结果' : '请完成全部题目')
+        : '下一题';
       if (nextButton.textContent !== nextLabel) nextButton.textContent = nextLabel;
-    }
-    if (position) {
-      const positionLabel = `${currentIndex + 1} / ${questions.length}`;
-      if (position.textContent !== positionLabel) position.textContent = positionLabel;
     }
 
     if (shouldScroll) scrollToQuestion();
@@ -50,7 +52,6 @@
     navigation.className = 'quiz-step-navigation';
     navigation.innerHTML = [
       '<button type="button" class="btn-secondary quiz-step-button" data-quiz-action="previous">上一题</button>',
-      '<span class="quiz-step-position" aria-live="polite"></span>',
       '<button type="button" class="btn-primary quiz-step-button" data-quiz-action="next">下一题</button>'
     ].join('');
     activeList.insertAdjacentElement('afterend', navigation);
@@ -68,6 +69,7 @@
       activeList = questionList;
       currentIndex = 0;
       activeList.classList.add('quiz-step-mode');
+      activeList.closest('.test-wrap')?.classList.add('quiz-step-active');
       createNavigation();
     }
 
@@ -79,6 +81,10 @@
   root.addEventListener('click', (event) => {
     const button = event.target.closest('[data-quiz-action]');
     if (!button || button.disabled) return;
+    if (button.dataset.quizComplete === 'true') {
+      document.querySelector('.test-wrap .actions-bottom .btn-primary')?.click();
+      return;
+    }
     const offset = button.dataset.quizAction === 'previous' ? -1 : 1;
     showQuestion(currentIndex + offset, true);
   });
@@ -89,6 +95,7 @@
     autoAdvanceTimer = window.setTimeout(() => {
       const questions = getQuestions();
       if (currentIndex < questions.length - 1) showQuestion(currentIndex + 1, true);
+      else showQuestion(currentIndex, false);
     }, 260);
   });
 
