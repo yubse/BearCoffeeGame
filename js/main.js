@@ -6,11 +6,6 @@
         if (!canvas) return;
 
         const ctx = canvas.getContext('2d');
-        canvas.width = 320;
-        canvas.height = 360;
-
-        // 你的游戏 JS 逻辑从这里开始
-
         canvas.width = 320; canvas.height = 360;
         function updateResponsiveScale() {
             const consoleEl = $('console');
@@ -407,29 +402,24 @@
             'uiStartBase',
             'uiStartFlash'
         ];
-        const CRITICAL_DIALOGUE_SOURCES = [
-            DIALOGUE_BG['系统'],
-            DIALOGUE_BG.panpan
-        ];
+        const imageLoadCache = new Map();
 
         function loadImage(src) {
-            return new Promise((resolve) => {
+            if (imageLoadCache.has(src)) return imageLoadCache.get(src);
+            const request = new Promise((resolve) => {
                 const img = new Image();
                 img.onload = () => resolve(img);
                 img.onerror = () => resolve(img);
+                img.decoding = 'async';
                 img.src = src;
             });
+            imageLoadCache.set(src, request);
+            return request;
         }
 
         function preloadAllImages() {
             const tasks = [];
             CRITICAL_ASSET_KEYS.forEach(key => tasks.push(loadImage(ASSETS[key])));
-            CRITICAL_DIALOGUE_SOURCES.forEach(src => tasks.push(loadImage(src)));
-            Object.entries(playerImageSets).forEach(([charKey, urls]) => {
-                Object.entries(urls).forEach(([dir, src]) => {
-                    tasks.push(loadImage(src).then(img => playerImages[charKey][dir] = img));
-                });
-            });
             return Promise.all(tasks);
         }
 
@@ -440,10 +430,15 @@
                         !['summonGif', 'summonShareCard', 'purchaseQrCard'].includes(key))
                     .map(([, src]) => src),
                 ...Object.values(DIALOGUE_BG)
-                    .filter(src => !CRITICAL_DIALOGUE_SOURCES.includes(src))
             ];
 
-            const jobs = optionalSources.map(src => () => loadImage(src));
+            const jobs = [];
+            Object.entries(playerImageSets).forEach(([charKey, urls]) => {
+                Object.entries(urls).forEach(([dir, src]) => {
+                    jobs.push(() => loadImage(src).then(img => playerImages[charKey][dir] = img));
+                });
+            });
+            optionalSources.forEach(src => jobs.push(() => loadImage(src)));
             npcs.forEach(npc => {
                 if (npc.img) jobs.push(() => loadImage(npc.img).then(img => npcImages[npc.id] = img));
             });
@@ -1601,13 +1596,21 @@
             updateStaticText();
             updateResponsiveScale();
 
-            window.addEventListener('resize', updateResponsiveScale);
-            window.addEventListener('orientationchange', updateResponsiveScale);
+            let resizeFrame = 0;
+            const scheduleResponsiveScale = () => {
+                if (resizeFrame) return;
+                resizeFrame = requestAnimationFrame(() => {
+                    resizeFrame = 0;
+                    updateResponsiveScale();
+                });
+            };
+            window.addEventListener('resize', scheduleResponsiveScale, { passive: true });
+            window.addEventListener('orientationchange', scheduleResponsiveScale, { passive: true });
 
             state.isLoaded = true;
             $('start-image-flash').classList.remove('hide');
             gameLoop();
-            setTimeout(warmOptionalImages, 1200);
+            setTimeout(warmOptionalImages, 100);
         }).catch(err => {
             console.warn("部分资源加载失败，强制进入游戏流程");
             initStaticImages();
@@ -1615,7 +1618,7 @@
             state.isLoaded = true;
             $('start-image-flash').classList.remove('hide');
             gameLoop();
-            setTimeout(warmOptionalImages, 1200);
+            setTimeout(warmOptionalImages, 100);
         });
 
 
