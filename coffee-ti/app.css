@@ -135,7 +135,7 @@
 .test-wrap.quiz-step-active{
   display:flex;
   flex-direction:column;
-  height:clamp(660px,74vh,780px);
+  height:clamp(590px,66vh,690px);
 }
 .question-list.quiz-step-mode .question{
   display:none;
@@ -167,7 +167,7 @@
 }
 @media (max-width:480px){
   .test-wrap.quiz-step-active{
-    height:clamp(610px,76dvh,720px);
+    height:clamp(560px,68dvh,640px);
   }
   .quiz-step-navigation{
     grid-template-columns:repeat(2,minmax(0,1fr));
