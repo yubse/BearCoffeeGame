@@ -34,9 +34,13 @@
     if (previousButton) previousButton.disabled = currentIndex === 0;
     if (nextButton) {
       nextButton.disabled = currentIndex === questions.length - 1;
-      nextButton.textContent = currentIndex === questions.length - 1 ? '已经是最后一题' : '下一题';
+      const nextLabel = currentIndex === questions.length - 1 ? '已经是最后一题' : '下一题';
+      if (nextButton.textContent !== nextLabel) nextButton.textContent = nextLabel;
     }
-    if (position) position.textContent = `${currentIndex + 1} / ${questions.length}`;
+    if (position) {
+      const positionLabel = `${currentIndex + 1} / ${questions.length}`;
+      if (position.textContent !== positionLabel) position.textContent = positionLabel;
+    }
 
     if (shouldScroll) scrollToQuestion();
   }
