@@ -132,6 +132,11 @@
 }
 
 /* One-question-at-a-time test flow. */
+.test-wrap.quiz-step-active{
+  display:flex;
+  flex-direction:column;
+  height:clamp(660px,74vh,780px);
+}
 .question-list.quiz-step-mode .question{
   display:none;
   content-visibility:visible;
@@ -140,23 +145,30 @@
   display:block;
 }
 .test-wrap.quiz-step-active .topbar{
-  margin-bottom:clamp(28px,5vw,44px);
+  flex:0 0 auto;
+  margin-bottom:clamp(22px,3vw,30px);
 }
 .test-wrap.quiz-step-active .actions-bottom{
   display:none;
+}
+.test-wrap.quiz-step-active .question-list{
+  flex:0 0 auto;
 }
 .quiz-step-navigation{
   display:grid;
   grid-template-columns:repeat(2,minmax(112px,1fr));
   align-items:center;
   gap:clamp(18px,4vw,36px);
-  margin-top:clamp(32px,6vw,52px);
-  padding-top:clamp(8px,2vw,18px);
+  margin-top:auto;
+  padding-top:clamp(36px,6vw,58px);
 }
 .quiz-step-button:last-child{
   justify-self:end;
 }
 @media (max-width:480px){
+  .test-wrap.quiz-step-active{
+    height:clamp(610px,76dvh,720px);
+  }
   .quiz-step-navigation{
     grid-template-columns:repeat(2,minmax(0,1fr));
     gap:16px;
