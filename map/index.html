@@ -4,6 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
+    // 地图功能暂时保留；线上访问 /map/ 时先跳转到品牌官网。
+    if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+      window.location.replace('https://planetbear.cn/');
+    }
+  </script>
+  <script>
     document.write(`<base href="${window.location.protocol === 'file:' ? './' : '/map/'}">`);
   </script>
   <title>咖啡地图</title>
