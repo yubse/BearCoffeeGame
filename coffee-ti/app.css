@@ -228,7 +228,7 @@
   flex-direction:column;
   align-items:center;
   color:var(--accent-strong);
-  font-size:clamp(34px,7vw,54px);
+  font-size:clamp(40px,8vw,64px);
   font-weight:800;
   line-height:1.08;
 }
@@ -243,9 +243,9 @@
 }
 .poster-image{
   order:2;
-  width:min(76%,340px);
-  height:clamp(220px,34vw,330px);
-  margin:22px auto 0;
+  width:min(86%,390px);
+  height:clamp(270px,42vw,380px);
+  margin:18px auto 0;
   padding:0;
   object-fit:contain;
   background:transparent;
@@ -345,19 +345,19 @@
   }
   .type-kicker{
     margin-bottom:10px;
-    font-size:12px;
+    font-size:13px;
   }
   .type-name{
-    font-size:34px;
+    font-size:clamp(38px,10vw,42px);
   }
   .type-cn{
-    margin:0 0 7px;
-    font-size:24px;
+    margin:0 0 8px;
+    font-size:30px;
   }
   .poster-image{
-    width:min(78%,270px);
-    height:230px;
-    margin-top:16px;
+    width:min(96%,340px);
+    height:clamp(280px,72vw,320px);
+    margin-top:14px;
   }
   .poster-caption{
     padding:14px 2px 0;
