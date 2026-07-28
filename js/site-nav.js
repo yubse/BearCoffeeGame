@@ -4,21 +4,20 @@
   const depth = page === 'game' ? '.' : '..';
   const routes = {
     game: isFile ? `${depth}/index.html` : '/',
-    map: isFile ? `${depth}/map/index.html` : '/map/',
-    test: isFile ? `${depth}/coffee-ti/index.html` : '/coffee-ti/'
+    test: isFile ? `${depth}/coffee-ti/index.html` : '/coffee-ti/',
+    external: 'https://planetbear.online'
   };
   const labels = {
     game: '咖啡屋',
     test: '熊格测试',
-    map: '咖啡地图'
+    external: '独立站'
   };
 
   const nav = document.createElement('nav');
   nav.className = 'site-hub';
   nav.setAttribute('aria-label', '咖啡世界导航');
-  nav.innerHTML = Object.entries(labels).map(([key, label]) => key === 'map'
-      ? `<span class="site-hub__link site-hub__link--disabled" data-route="${key}" aria-disabled="true"><span>${label}</span><small>未开放</small></span>`
-      : `<a class="site-hub__link" data-route="${key}" href="${routes[key]}"${key === page ? ' aria-current="page"' : ''}>${label}</a>`
+  nav.innerHTML = Object.entries(labels).map(([key, label]) =>
+      `<a class="site-hub__link" data-route="${key}" href="${routes[key]}"${key === page ? ' aria-current="page"' : ''}>${label}</a>`
     ).join('');
   document.body.prepend(nav);
 
