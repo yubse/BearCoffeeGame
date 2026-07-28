@@ -61,11 +61,11 @@
                                             "address":  "惠州市惠城区桥东街道东湖花园3号小区朝南江边商铺近双语学校西1门斜对面",
                                             "phone":  "13652778350",
                                             "iconUrl":  "./cafe-info/location.png",
-                                            "imageUrl":  "./cafe-info/点味咖啡 Wei Cafe/1.jpg",
+                                            "imageUrl":  "./cafe-info/点味咖啡 Wei Cafe/1.png",
                                             "infoKey":  "点味咖啡 Wei Cafe",
                                             "infoUrl":  "./cafe-info/点味咖啡 Wei Cafe/点味咖啡 Wei Cafe.txt",
                                             "photos":  [
-                                                           "./cafe-info/点味咖啡 Wei Cafe/1.jpg",
+                                                           "./cafe-info/点味咖啡 Wei Cafe/1.png",
                                                            "./cafe-info/点味咖啡 Wei Cafe/2.png",
                                                            "./cafe-info/点味咖啡 Wei Cafe/3.png",
                                                            "./cafe-info/点味咖啡 Wei Cafe/4.png"
@@ -88,11 +88,11 @@
                                             "address":  "惠州市惠城区桥东城背路18号",
                                             "phone":  "13018418000",
                                             "iconUrl":  "./cafe-info/location.png",
-                                            "imageUrl":  "./cafe-info/绑鞋带 shoelace/1.jpg",
+                                            "imageUrl":  "./cafe-info/绑鞋带 shoelace/1.png",
                                             "infoKey":  "绑鞋带 shoelace",
                                             "infoUrl":  "./cafe-info/绑鞋带 shoelace/绑鞋带 shoelace.txt",
                                             "photos":  [
-                                                           "./cafe-info/绑鞋带 shoelace/1.jpg",
+                                                           "./cafe-info/绑鞋带 shoelace/1.png",
                                                            "./cafe-info/绑鞋带 shoelace/2.png",
                                                            "./cafe-info/绑鞋带 shoelace/3.png",
                                                            "./cafe-info/绑鞋带 shoelace/4.png"
@@ -115,11 +115,11 @@
                                             "address":  "惠州市惠城区桥东四清路菜园墩30号",
                                             "phone":  "13531655378",
                                             "iconUrl":  "./cafe-info/location.png",
-                                            "imageUrl":  "./cafe-info/Joyride 游车河/1.jpg",
+                                            "imageUrl":  "./cafe-info/Joyride 游车河/1.png",
                                             "infoKey":  "Joyride 游车河",
                                             "infoUrl":  "./cafe-info/Joyride 游车河/Joyride 游车河.txt",
                                             "photos":  [
-                                                           "./cafe-info/Joyride 游车河/1.jpg",
+                                                           "./cafe-info/Joyride 游车河/1.png",
                                                            "./cafe-info/Joyride 游车河/2.png",
                                                            "./cafe-info/Joyride 游车河/3.png",
                                                            "./cafe-info/Joyride 游车河/4.png"
