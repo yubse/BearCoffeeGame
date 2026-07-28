@@ -27,7 +27,8 @@
   document.body.append(cover);
 
   function prefetch(link) {
-    if (link.dataset.prefetched || isFile || link.getAttribute('aria-current') === 'page') return;
+    if (link.dataset.prefetched || isFile || link.dataset.route === 'external' ||
+        link.getAttribute('aria-current') === 'page') return;
     link.dataset.prefetched = 'true';
     const hint = document.createElement('link');
     hint.rel = 'prefetch';
@@ -41,6 +42,9 @@
     link.addEventListener('click', (event) => {
       if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.shiftKey ||
           link.target === '_blank' || link.getAttribute('aria-current') === 'page') return;
+      // External destinations should use the browser's native navigation so
+      // going back restores this page without a persisted transition cover.
+      if (link.dataset.route === 'external') return;
       event.preventDefault();
       // The game landing screen calculates its responsive size on first paint.
       // Navigate to it directly so an outgoing full-page cover cannot create a
@@ -52,5 +56,9 @@
       document.documentElement.classList.add('site-is-leaving');
       window.setTimeout(() => { window.location.href = link.href; }, 140);
     });
+  });
+
+  window.addEventListener('pageshow', () => {
+    document.documentElement.classList.remove('site-is-leaving');
   });
 })();
