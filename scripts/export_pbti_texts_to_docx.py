@@ -15,7 +15,7 @@ from docx.shared import Inches, Pt, RGBColor
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "coffee-ti" / "index.html"
+SOURCE = ROOT / "PBTI" / "index.html"
 OUTPUT = ROOT / "output" / "PBTI熊格测试文案全集.docx"
 
 COFFEE = "8A5A36"
@@ -193,7 +193,7 @@ def add_cover(doc: Document) -> None:
         doc.add_paragraph()
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    r = p.add_run(f"依据 coffee-ti 当前网页代码整理\n生成日期：{date.today().isoformat()}")
+    r = p.add_run(f"依据 PBTI 当前网页代码整理\n生成日期：{date.today().isoformat()}")
     set_run_font(r, 9, color=MUTED)
     doc.add_page_break()
 

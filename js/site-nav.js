@@ -4,7 +4,7 @@
   const depth = page === 'game' ? '.' : '..';
   const routes = {
     game: isFile ? `${depth}/index.html` : '/',
-    test: isFile ? `${depth}/coffee-ti/index.html` : '/coffee-ti/',
+    test: isFile ? `${depth}/PBTI/index.html` : '/PBTI/',
     external: 'https://planetbear.online'
   };
   const labels = {
