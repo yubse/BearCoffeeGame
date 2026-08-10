@@ -8,7 +8,7 @@
     test: isFile ? `${depth}/PBTI/index.html` : '/PBTI/'
   };
   const labels = {
-    contact: '运营联系',
+    contact: '找到我们',
     game: '熊熊咖啡屋',
     test: 'PBTI'
   };
