@@ -22,7 +22,12 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--bg);
+      background-color: #fff;
+      background-image: url("./qr/bg.png");
+      background-repeat: no-repeat;
+      background-position: center bottom;
+      background-size: auto 100vh;
+      background-attachment: fixed;
       color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
     }
@@ -43,7 +48,6 @@
       font-weight: 700;
       letter-spacing: .18em;
     }
-    header p { margin: 10px 0 0; color: var(--muted); font-size: 14px; }
     section + section { margin-top: 40px; }
     h2 { margin: 0 0 16px; font-size: 18px; }
     h2 span {
@@ -73,10 +77,10 @@
       width: 100%;
       height: auto;
       min-height: 0;
-      padding: 14px;
-      border: 1px solid var(--line);
+      padding: 16px 8px;
+      border: 0;
       border-radius: 18px;
-      background: var(--card);
+      background: transparent;
       color: inherit;
       text-align: center;
       text-decoration: none;
@@ -85,7 +89,8 @@
     a.card { transition: transform .16s ease, box-shadow .16s ease; }
     a.card:hover, a.card:focus-visible {
       outline: none;
-      box-shadow: 0 14px 32px rgba(90, 55, 31, .12);
+      background: rgba(255, 253, 248, .72);
+      box-shadow: 0 12px 28px rgba(90, 55, 31, .1);
       transform: translateY(-2px);
     }
 
@@ -113,17 +118,12 @@
 
     .channel-visual--icon img { width: 92px; }
 
-    .card h3 { margin: 10px 0 0; font-size: 15px; }
-    .card h3 small {
-      display: block;
-      margin-top: 3px;
-      color: var(--muted);
-      font-size: 10px;
+    .card p {
+      margin: 10px 0 0;
+      color: var(--accent);
+      font-size: 12px;
       font-weight: 600;
-      letter-spacing: .08em;
     }
-    .card p { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
-    a.card p { color: var(--accent); font-weight: 700; }
 
     @media (max-width: 680px) {
       main { width: min(520px, calc(100% - 16px)); padding-top: 76px; }
@@ -132,13 +132,11 @@
         gap: 8px;
       }
       .grid--shop { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .card { min-width: 0; padding: 8px; border-radius: 12px; }
+      .card { min-width: 0; padding: 8px 2px; border-radius: 12px; }
       .channel-visual { width: 88px; height: 88px; }
       .channel-visual--qr img { width: 88px; }
       .channel-visual--icon img { width: 62px; }
-      .card h3 { margin-top: 8px; font-size: 12px; overflow-wrap: anywhere; }
-      .card h3 small { font-size: 8px; }
-      .card p { font-size: 9px; line-height: 1.35; }
+      .card p { font-size: 10px; line-height: 1.35; }
     }
   </style>
   <script src="../js/site-nav.js?v=20260810-3" defer></script>
@@ -147,31 +145,27 @@
   <main>
     <header>
       <h1>找到我们 <span>FIND US</span></h1>
-      <p>微信扫码，其他渠道点击访问 · Scan WeChat or click to visit</p>
     </header>
 
     <section aria-labelledby="social-title">
       <h2 id="social-title">关注我们 <span>FOLLOW US</span></h2>
       <div class="grid">
-        <article class="card">
+        <article class="card" aria-label="微信扫码添加客服">
           <div class="channel-visual channel-visual--qr">
             <img src="./qr/二维码_wechat.png" alt="微信 WeChat 二维码">
           </div>
-          <h3>微信 <small>WECHAT</small></h3>
-          <p>微信扫码 · SCAN</p>
+          <p>扫码添加客服 · SCAN</p>
         </article>
-        <a class="card" href="https://www.xiaohongshu.com/user/profile/6080d624000000000101ee46" target="_blank" rel="noreferrer">
+        <a class="card" href="https://www.xiaohongshu.com/user/profile/6080d624000000000101ee46" target="_blank" rel="noreferrer" aria-label="访问小红书">
           <div class="channel-visual channel-visual--icon">
             <img src="./qr/小红书.svg" alt="小红书 RED 图标">
           </div>
-          <h3>小红书 <small>RED</small></h3>
           <p>点击访问 · VISIT ↗</p>
         </a>
-        <a class="card" href="https://www.instagram.com/planetbear_cn?igsh=MTUxcGRqYTVxOGFjag%3D%3D" target="_blank" rel="noreferrer">
+        <a class="card" href="https://www.instagram.com/planetbear_cn?igsh=MTUxcGRqYTVxOGFjag%3D%3D" target="_blank" rel="noreferrer" aria-label="访问 Instagram">
           <div class="channel-visual channel-visual--icon">
             <img src="./qr/instagram.svg" alt="Instagram 图标">
           </div>
-          <h3>Instagram <small>INSTAGRAM</small></h3>
           <p>点击访问 · VISIT ↗</p>
         </a>
       </div>
@@ -180,18 +174,16 @@
     <section aria-labelledby="shop-title">
       <h2 id="shop-title">在线购买 <span>SHOP ONLINE</span></h2>
       <div class="grid grid--shop">
-        <a class="card" href="https://planetbear.online" target="_blank" rel="noreferrer">
+        <a class="card" href="https://planetbear.online" target="_blank" rel="noreferrer" aria-label="访问品牌独立站">
           <div class="channel-visual channel-visual--icon">
             <img src="./qr/logo.png" alt="品牌独立站 Official Website 标志">
           </div>
-          <h3>品牌独立站 <small>OFFICIAL WEBSITE</small></h3>
           <p>点击访问 · VISIT ↗</p>
         </a>
-        <a class="card" href="https://shop101613755.world.taobao.com/category.htm" target="_blank" rel="noreferrer">
+        <a class="card" href="https://shop101613755.world.taobao.com/category.htm" target="_blank" rel="noreferrer" aria-label="访问淘宝店铺">
           <div class="channel-visual channel-visual--icon">
             <img src="./qr/淘宝.svg" alt="淘宝店铺 Taobao Store 图标">
           </div>
-          <h3>淘宝店铺 <small>TAOBAO STORE</small></h3>
           <p>点击访问 · VISIT ↗</p>
         </a>
       </div>
