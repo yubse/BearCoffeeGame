@@ -9,7 +9,7 @@
   };
   const labels = {
     contact: { zh: '找到我们', en: 'Find Us' },
-    game: { zh: '熊熊咖啡屋', en: 'Bear Coffee House' },
+    game: { zh: '熊熊咖啡屋', en: 'Bear Coffee Club' },
     test: { zh: 'PBTI', en: 'PBTI' }
   };
 

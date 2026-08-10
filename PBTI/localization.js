@@ -180,7 +180,7 @@
 
   const EXACT_TEXT = new Map([
     ['找到我们', 'Find Us'],
-    ['熊熊咖啡屋', 'Bear Coffee House'],
+    ['熊熊咖啡屋', 'Bear Coffee Club'],
     ['咖啡熊格测试', 'Coffee Bearsonality Quiz'],
     ['开始测试', 'Start the Quiz'],
     ['切换风格', 'Switch Style'],
