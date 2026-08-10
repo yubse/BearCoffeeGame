@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="熊熊咖啡屋官方社交账号与购买渠道二维码。">
+  <title>运营联系</title>
+  <link rel="stylesheet" href="../css/site-nav.css?v=20260720-1">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #fbf4ea;
+      --card: #fffdf8;
+      --ink: #34261e;
+      --muted: #8a7565;
+      --line: #ead9c5;
+      --accent: #8a5b36;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    main {
+      width: min(960px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 92px 0 64px;
+    }
+
+    header { margin-bottom: 34px; text-align: center; }
+    h1 { margin: 0; font-size: clamp(28px, 5vw, 42px); }
+    header p { margin: 10px 0 0; color: var(--muted); font-size: 14px; }
+    section + section { margin-top: 40px; }
+    h2 { margin: 0 0 16px; font-size: 18px; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .grid--shop { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .card {
+      display: block;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: var(--card);
+      color: inherit;
+      text-align: center;
+      text-decoration: none;
+    }
+
+    a.card { transition: transform .16s ease, box-shadow .16s ease; }
+    a.card:hover, a.card:focus-visible {
+      outline: none;
+      box-shadow: 0 14px 32px rgba(90, 55, 31, .12);
+      transform: translateY(-2px);
+    }
+
+    .card img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: contain;
+      border-radius: 12px;
+    }
+
+    .card h3 { margin: 14px 0 0; font-size: 16px; }
+    .card p { margin: 6px 0 0; color: var(--muted); font-size: 12px; }
+    a.card p { color: var(--accent); font-weight: 700; }
+
+    @media (max-width: 680px) {
+      main { width: min(520px, calc(100% - 24px)); padding-top: 76px; }
+      .grid, .grid--shop { grid-template-columns: 1fr; }
+    }
+  </style>
+  <script src="../js/site-nav.js?v=20260810-2" defer></script>
+</head>
+<body data-site-page="contact">
+  <main>
+    <header>
+      <h1>运营联系</h1>
+      <p>扫码关注，或点击卡片直接访问</p>
+    </header>
+
+    <section aria-labelledby="social-title">
+      <h2 id="social-title">关注与联系</h2>
+      <div class="grid">
+        <article class="card">
+          <img src="./qr/二维码_wechat.png" alt="微信二维码" width="591" height="591">
+          <h3>微信</h3>
+          <p>微信扫码</p>
+        </article>
+        <a class="card" href="https://www.xiaohongshu.com/user/profile/6080d624000000000101ee46" target="_blank" rel="noreferrer">
+          <img src="./qr/二维码_小红书.png" alt="小红书二维码" width="591" height="591">
+          <h3>小红书</h3>
+          <p>点击访问 ↗</p>
+        </a>
+        <a class="card" href="https://www.instagram.com/planetbear_cn?igsh=MTUxcGRqYTVxOGFjag%3D%3D" target="_blank" rel="noreferrer">
+          <img src="./qr/二维码_ig.png" alt="Instagram 二维码" width="591" height="591">
+          <h3>Instagram</h3>
+          <p>点击访问 ↗</p>
+        </a>
+      </div>
+    </section>
+
+    <section aria-labelledby="shop-title">
+      <h2 id="shop-title">访问与购买</h2>
+      <div class="grid grid--shop">
+        <a class="card" href="https://planetbear.online" target="_blank" rel="noreferrer">
+          <img src="./qr/二维码_独立站.png" alt="品牌独立站二维码" width="591" height="591">
+          <h3>品牌独立站</h3>
+          <p>点击访问 ↗</p>
+        </a>
+        <a class="card" href="https://shop101613755.world.taobao.com/category.htm" target="_blank" rel="noreferrer">
+          <img src="./qr/二维码_淘宝.png" alt="淘宝店铺二维码" width="591" height="591">
+          <h3>淘宝店铺</h3>
+          <p>点击访问 ↗</p>
+        </a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

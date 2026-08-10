@@ -3,7 +3,7 @@
   const isFile = window.location.protocol === 'file:';
   const depth = page === 'game' ? '.' : '..';
   const routes = {
-    contact: 'https://channel-qr-hub-lt.liut1574813469.chatgpt.site',
+    contact: isFile ? `${depth}/contact/index.html` : '/contact/',
     game: isFile ? `${depth}/index.html` : '/',
     test: isFile ? `${depth}/PBTI/index.html` : '/PBTI/'
   };
