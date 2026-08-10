@@ -3,14 +3,14 @@
   const isFile = window.location.protocol === 'file:';
   const depth = page === 'game' ? '.' : '..';
   const routes = {
+    contact: 'https://channel-qr-hub-lt.liut1574813469.chatgpt.site',
     game: isFile ? `${depth}/index.html` : '/',
-    test: isFile ? `${depth}/PBTI/index.html` : '/PBTI/',
-    external: 'https://planetbear.online'
+    test: isFile ? `${depth}/PBTI/index.html` : '/PBTI/'
   };
   const labels = {
-    game: '咖啡屋',
-    test: '熊格测试',
-    external: '独立站'
+    contact: '运营联系',
+    game: '熊熊咖啡屋',
+    test: 'PBTI'
   };
 
   const nav = document.createElement('nav');
@@ -27,7 +27,7 @@
   document.body.append(cover);
 
   function prefetch(link) {
-    if (link.dataset.prefetched || isFile || link.dataset.route === 'external' ||
+    if (link.dataset.prefetched || isFile || link.origin !== window.location.origin ||
         link.getAttribute('aria-current') === 'page') return;
     link.dataset.prefetched = 'true';
     const hint = document.createElement('link');
@@ -44,7 +44,7 @@
           link.target === '_blank' || link.getAttribute('aria-current') === 'page') return;
       // External destinations should use the browser's native navigation so
       // going back restores this page without a persisted transition cover.
-      if (link.dataset.route === 'external') return;
+      if (link.origin !== window.location.origin) return;
       event.preventDefault();
       // The game landing screen calculates its responsive size on first paint.
       // Navigate to it directly so an outgoing full-page cover cannot create a
