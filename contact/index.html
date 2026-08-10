@@ -41,11 +41,11 @@
     main {
       width: min(820px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 92px 0 64px;
+      padding: 76px 0 52px;
     }
 
-    section + section { margin-top: 40px; }
-    h2 { margin: 0 0 16px; font-size: 18px; text-align: center; }
+    section + section { margin-top: 30px; }
+    h2 { margin: 0 0 12px; font-size: 17px; text-align: center; }
     h2 span {
       display: block;
       margin-top: 5px;
@@ -62,7 +62,7 @@
       align-items: start;
       align-content: start;
       justify-content: center;
-      gap: 16px;
+      gap: 12px;
     }
 
     .grid--shop { grid-template-columns: repeat(2, minmax(0, 230px)); }
@@ -74,7 +74,7 @@
       width: 100%;
       height: auto;
       min-height: 0;
-      padding: 16px 8px;
+      padding: 12px 6px;
       border: 0;
       border-radius: 18px;
       background: transparent;
@@ -93,8 +93,8 @@
 
     .channel-visual {
       display: grid;
-      width: 150px;
-      height: 150px;
+      width: 130px;
+      height: 130px;
       margin: 0 auto;
       place-items: center;
       flex: none;
@@ -109,41 +109,41 @@
     }
 
     .channel-visual--qr img {
-      width: 150px;
+      width: 130px;
       border-radius: 12px;
     }
 
-    .channel-visual--icon img { width: 92px; }
-    .channel-visual--website img { width: 120px; }
+    .channel-visual--icon img { width: 78px; }
+    .channel-visual--website img { width: 102px; }
 
     .channel-account {
-      margin: 10px 0 0;
+      margin: 7px 0 0;
       color: var(--muted);
       font-size: 13px;
       line-height: 1.3;
     }
 
     .channel-action {
-      margin: 5px 0 0;
+      margin: 3px 0 0;
       color: var(--accent);
       font-size: 11px;
       font-weight: 600;
     }
 
     @media (max-width: 680px) {
-      main { width: min(520px, calc(100% - 16px)); padding-top: 76px; }
+      main { width: min(520px, calc(100% - 16px)); padding: 60px 0 44px; }
       .grid {
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 8px;
+        gap: 6px;
       }
       .grid--shop { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .card { min-width: 0; padding: 8px 2px; border-radius: 12px; }
-      .channel-visual { width: 88px; height: 88px; }
-      .channel-visual--qr img { width: 88px; }
-      .channel-visual--icon img { width: 62px; }
-      .channel-visual--website img { width: 82px; }
-      .channel-account { font-size: 10px; overflow-wrap: anywhere; }
-      .channel-action { font-size: 9px; line-height: 1.35; }
+      .card { min-width: 0; padding: 6px 2px; border-radius: 12px; }
+      .channel-visual { width: 76px; height: 76px; }
+      .channel-visual--qr img { width: 76px; }
+      .channel-visual--icon img { width: 52px; }
+      .channel-visual--website img { width: 68px; }
+      .channel-account { font-size: 9px; overflow-wrap: anywhere; }
+      .channel-action { font-size: 8px; line-height: 1.3; }
     }
   </style>
   <script src="../js/site-nav.js?v=20260810-3" defer></script>
