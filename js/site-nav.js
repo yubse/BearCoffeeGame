@@ -8,18 +8,27 @@
     test: isFile ? `${depth}/PBTI/index.html` : '/PBTI/'
   };
   const labels = {
-    contact: '找到我们',
-    game: '熊熊咖啡屋',
-    test: 'PBTI'
+    contact: { zh: '找到我们', en: 'Find Us' },
+    game: { zh: '熊熊咖啡屋', en: 'Bear Coffee House' },
+    test: { zh: 'PBTI', en: 'PBTI' }
   };
 
   const nav = document.createElement('nav');
   nav.className = 'site-hub';
-  nav.setAttribute('aria-label', '咖啡世界导航');
+  nav.setAttribute('aria-label', document.documentElement.lang === 'en' ? 'Coffee world navigation' : '咖啡世界导航');
   nav.innerHTML = Object.entries(labels).map(([key, label]) =>
-      `<a class="site-hub__link" data-route="${key}" href="${routes[key]}"${key === page ? ' aria-current="page"' : ''}>${label}</a>`
+      `<a class="site-hub__link" data-route="${key}" href="${routes[key]}"${key === page ? ' aria-current="page"' : ''}><span class="site-hub__label site-hub__label--zh">${label.zh}</span><span class="site-hub__label site-hub__label--en">${label.en}</span></a>`
     ).join('');
   document.body.prepend(nav);
+
+  function syncLanguage() {
+    nav.setAttribute('aria-label', document.documentElement.lang === 'en' ? 'Coffee world navigation' : '咖啡世界导航');
+  }
+
+  new MutationObserver(syncLanguage).observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['lang']
+  });
 
   const cover = document.createElement('div');
   cover.className = 'site-route-cover';

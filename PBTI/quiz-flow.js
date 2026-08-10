@@ -6,6 +6,10 @@
   let currentIndex = 0;
   let autoAdvanceTimer = 0;
 
+  function copy(zh, en) {
+    return document.documentElement.lang === 'en' ? en : zh;
+  }
+
   function getQuestions() {
     return activeList ? Array.from(activeList.querySelectorAll(':scope > .question')) : [];
   }
@@ -39,8 +43,8 @@
       nextButton.disabled = isLastQuestion && !isComplete;
       nextButton.dataset.quizComplete = String(isLastQuestion && isComplete);
       const nextLabel = isLastQuestion
-        ? (isComplete ? '查看结果' : '请完成全部题目')
-        : '下一题';
+        ? (isComplete ? copy('查看结果', 'See My Result') : copy('请完成全部题目', 'Answer All Questions'))
+        : copy('下一题', 'Next');
       if (nextButton.textContent !== nextLabel) nextButton.textContent = nextLabel;
     }
 
@@ -51,8 +55,8 @@
     const navigation = document.createElement('div');
     navigation.className = 'quiz-step-navigation';
     navigation.innerHTML = [
-      '<button type="button" class="btn-secondary quiz-step-button" data-quiz-action="previous">上一题</button>',
-      '<button type="button" class="btn-primary quiz-step-button" data-quiz-action="next">下一题</button>'
+      `<button type="button" class="btn-secondary quiz-step-button" data-quiz-action="previous">${copy('上一题', 'Previous')}</button>`,
+      `<button type="button" class="btn-primary quiz-step-button" data-quiz-action="next">${copy('下一题', 'Next')}</button>`
     ].join('');
     activeList.insertAdjacentElement('afterend', navigation);
   }

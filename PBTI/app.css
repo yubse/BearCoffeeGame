@@ -179,6 +179,57 @@
   }
 }
 
+/* Language selector: intentionally shown only on the quiz landing screen. */
+.language-switch{
+  position:absolute;
+  top:18px;
+  right:18px;
+  z-index:2;
+  display:inline-flex;
+  gap:3px;
+  padding:4px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(255,253,248,.92);
+  box-shadow:0 8px 20px rgba(96,58,27,.08);
+}
+.language-switch__button{
+  min-width:48px;
+  padding:7px 12px;
+  border-radius:999px;
+  background:transparent;
+  color:var(--muted);
+  font-size:12px;
+  font-weight:750;
+  line-height:1;
+  box-shadow:none;
+}
+.language-switch__button:hover{
+  transform:none;
+  color:var(--accent-strong);
+}
+.language-switch__button[aria-pressed="true"]{
+  background:var(--accent-strong);
+  color:#fff;
+}
+html[lang="en"] .result-wrap:before{content:"Your PBTI profile is ready"}
+html[lang="en"] .dim-box>h3:after{content:"Profile Data"}
+html[lang="en"] .profile-analysis h3:after{content:"Your Bearsonality"}
+html[lang="en"] .radar-chart-wrap:before{content:"Your Bearsonality Radar"}
+html[lang="en"] .author-box summary:after{content:"Open"}
+html[lang="en"] .author-box[open] summary:after{content:"Close"}
+
+@media (max-width:480px){
+  .language-switch{
+    top:12px;
+    right:12px;
+  }
+  .language-switch__button{
+    min-width:43px;
+    padding:7px 10px;
+  }
+}
+
 /* Result-page card prototype: identity → interpretation → radar. */
 .result-wrap{
   background:

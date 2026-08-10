@@ -21,15 +21,21 @@
 .site-hub__link {
   min-height: 34px;
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 2px;
   border-radius: 999px;
   color: var(--hub-ink);
   text-decoration: none;
   white-space: nowrap;
   line-height: 1;
 }
-.site-hub__link { padding: 0 12px; font-size: 13px; font-weight: 700; }
+.site-hub__link { padding: 4px 12px; font-size: 13px; font-weight: 700; }
+.site-hub__label { display: block; line-height: 1; }
+.site-hub__label--en { font-size: 9px; font-weight: 600; letter-spacing: .03em; opacity: .72; }
+html[lang="en"] .site-hub__label--zh { order: 2; font-size: 9px; font-weight: 600; letter-spacing: 0; opacity: .72; }
+html[lang="en"] .site-hub__label--en { order: 1; font-size: 13px; font-weight: 700; letter-spacing: 0; opacity: 1; }
 .site-hub__link:hover { background: rgba(138, 91, 54, .09); }
 .site-hub__link[aria-current="page"] { color: #fff; background: var(--hub-accent); }
 .site-hub__link[aria-disabled="true"] {
@@ -59,7 +65,10 @@ html.site-is-leaving .site-route-cover { opacity: 1; }
 body[data-site-page="test"] .shell { padding-top: 76px; }
 @media (max-width: 560px) {
   .site-hub { top: max(8px, env(safe-area-inset-top)); }
-  .site-hub__link { min-height: 32px; padding: 0 10px; font-size: 12px; }
+  .site-hub__link { min-height: 32px; padding: 4px 10px; font-size: 12px; }
+  .site-hub__label--en,
+  html[lang="en"] .site-hub__label--zh { font-size: 8px; }
+  html[lang="en"] .site-hub__label--en { font-size: 12px; }
   body[data-site-page="test"] .shell { padding-top: 64px; }
 }
 @media (prefers-reduced-motion: reduce) {
