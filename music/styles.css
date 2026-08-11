@@ -52,7 +52,7 @@ button {
 .ambient-cover {
   position: absolute;
   inset: -12%;
-  background-image: linear-gradient(rgba(21, 19, 17, 0.55), rgba(21, 19, 17, 0.86)), url("./封面.jpg");
+  background-image: linear-gradient(rgba(21, 19, 17, 0.55), rgba(21, 19, 17, 0.86)), url("/music/封面.jpg");
   background-size: cover;
   background-position: center;
   filter: blur(34px) saturate(1.08);
