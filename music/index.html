@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#151311">
+  <title>Burnt My Hat</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="player-shell" id="playerShell">
+    <div class="ambient-cover" aria-hidden="true"></div>
+
+    <section class="home-view" aria-label="音乐播放器">
+      <div class="cover-wrap">
+        <img class="cover-art" src="./封面.jpg" alt="Burnt My Hat 封面">
+      </div>
+
+      <div class="track-info">
+        <h1>Burnt My Hat</h1>
+        <p>dongzeli3</p>
+      </div>
+
+      <button class="lyrics-preview" id="lyricsPreview" type="button" aria-label="打开歌词">
+        <span class="lyric-line prev" id="homePrev"></span>
+        <span class="lyric-line active" id="homeActive"></span>
+        <span class="lyric-line next" id="homeNext"></span>
+      </button>
+    </section>
+
+    <section class="lyrics-view" aria-label="歌词页">
+      <div class="mini-track">
+        <img src="./封面.jpg" alt="">
+        <div>
+          <h2>Burnt My Hat</h2>
+          <p>dongzeli3</p>
+        </div>
+      </div>
+
+      <button class="lyrics-stage" id="lyricsStage" type="button" aria-label="返回播放器">
+        <div class="lyrics-list" id="lyricsList"></div>
+      </button>
+    </section>
+
+    <div class="control-bar">
+      <div class="progress">
+        <span id="currentTime">0:00</span>
+        <input id="seekBar" type="range" min="0" max="1000" value="0" aria-label="播放进度">
+        <span id="duration">0:00</span>
+      </div>
+      <button class="play-toggle" id="playToggle" type="button" aria-label="播放">
+        <span class="play-icon" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <audio id="audio" src="./music.mp3" preload="auto" autoplay playsinline></audio>
+  </main>
+
+  <script src="./player.js"></script>
+</body>
+</html>
