@@ -509,7 +509,7 @@
 
         function updateStaticText() {
             document.documentElement.lang = currentLanguage === 'en' ? 'en' : 'zh-CN';
-            document.title = currentLanguage === 'en' ? 'Welcome to Bear Coffee Club' : '欢迎光临熊熊咖啡屋';
+            document.title = currentLanguage === 'en' ? 'Welcome to Game' : '欢迎光临熊熊咖啡屋';
 
             document.querySelectorAll('[data-i18n]').forEach((el) => {
                 const key = el.dataset.i18n;

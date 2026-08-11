@@ -11,11 +11,11 @@
       ]
     },
     q2: {
-      text: 'The menu lists “citrus, nuts, and fermented notes.” What is your first reaction?',
+      text: 'The menu lists “citrus, nutty, and fermented notes.” What is your first reaction?',
       options: [
         'I do not really get it—I will just ask which one tastes good.',
-        'I get the general idea, but price and mood still decide.',
-        'I read every word and want to know exactly how it will taste.'
+        'I get the general idea, but price and mood still make the final call.',
+        'I read every word, curious to see how those notes actually taste.'
       ]
     },
     q3: {
@@ -51,17 +51,17 @@
       ]
     },
     q7: {
-      text: 'Someone posts in the group chat: “This café has a new flavor.” What do you do?',
+      text: 'Someone posts in the group chat: “This café just launched a new flavor.” What do you do?',
       options: [
         'Glance at it and move on. I am not that interested.',
         'Save it for a day when I have time.',
-        'Open the details and start working out when I can visit.'
+        'Open the details and immediately start planning a visit.'
       ]
     },
     q8: {
-      text: 'Your regular café launches a seasonal special. What do you order?',
+      text: 'Your go-to café launches a seasonal special. What do you order?',
       options: [
-        'My usual. Reliability is comforting.',
+        'My usual. Nothing beats a sure thing.',
         'If it does not sound too strange, I will give it a try.',
         'It is seasonal—skipping it would feel like missing the holiday.'
       ]
@@ -86,7 +86,7 @@
       text: 'A friend mentions a new café nearby. How do you respond?',
       options: [
         'Completely surprised: “Wait, when did that open?”',
-        'Vaguely familiar: “I think I have seen it online, but I have not been.”',
+        'Vaguely familiar: “I think I saw it online, but I have not been yet.”',
         'Fully briefed: “I know—I have already checked the menu and opening hours.”'
       ]
     },
@@ -95,11 +95,11 @@
       options: [
         'Nothing comes to mind, so I open the map.',
         'I can probably think of a few.',
-        'Confidently name the best spots from my carefully curated shortlist.'
+        'Confidently rattle off the best spots from my carefully curated shortlist.'
       ]
     },
     q13: {
-      text: 'If you could pair your coffee with food, how would you feel?',
+      text: 'How do you feel about pairing food with your coffee?',
       options: [
         'No pairing needed. Coffee is enough on its own.',
         'Depends. If I am hungry, I might add something.',
@@ -111,7 +111,7 @@
       options: [
         'Enjoy it and leave the research to someone else.',
         'Remember the name so I can order it again.',
-        'Study the recipe and try to recreate it at home.'
+        'Look up the recipe and try recreating it at home.'
       ]
     },
     q15: {
@@ -119,7 +119,7 @@
       options: [
         'Open a delivery app and see who can get here fastest.',
         'Look for drip bags or ready-to-drink coffee at home—anything will do.',
-        'Head to my home coffee corner and make myself a proper cup.'
+        'Head to my home coffee station and make myself a proper cup.'
       ]
     }
   };
@@ -127,43 +127,43 @@
   const TYPES = {
     MASTER: {
       name: '煮理人',
-      intro: 'Buried in a mountain of research, you managed to find a little coffee.',
-      desc: 'Other people finish a cup and say, “That was bitter.” You are already tracing the beans back to their origin. Acidity should make sense, aromas should have layers, and if a coffee tastes difficult, it had better have a good reason.'
+      intro: 'Somewhere in that mountain of research, you managed to find a little coffee.',
+      desc: 'Other people finish a cup and say, “That was bitter.” You are already tracing the beans back to their origin. Acidity should have a point, aromas should unfold in layers, and if a coffee tastes challenging, it had better have a good reason.'
     },
     NEED: {
       name: '咖啡续命者',
-      intro: 'Patient barely responsive. Begin caffeine infusion immediately.',
-      desc: 'Your eyes are open, but your mind is still buffering. One dose of caffeine gets the system to boot—just about. Your body may be at the desk, but your soul has not clocked in. Your coworkers recommend increasing the dosage.'
+      intro: 'Patient barely responsive. Start the caffeine drip immediately.',
+      desc: 'Your eyes are open, but your brain is still buffering. One shot of caffeine and the system finally boots—more or less. Your body may be at your desk, but your soul has yet to clock in. Your coworkers recommend upping the dose.'
     },
     YUMMY: {
       name: '不想吃苦者',
-      intro: 'Life is bitter enough. Coffee does not need to join in.',
-      desc: 'A little acidity is fine, just do not let it take over. A little bitterness is fine, just do not make it a personality. While others chase layers of flavor, you simply want to know whether the next sip will improve your mood.'
+      intro: 'Life is bitter enough; your coffee does not have to be.',
+      desc: 'A little acidity is fine, as long as it does not take over. A little bitterness is fine, as long as it does not become the whole personality. While others chase layers of flavor, you just want to know whether the next sip will make your day a little better.'
     },
     NEW: {
       name: '咖界金舌头',
-      intro: 'Ding! A new flavor has dropped. Please taste responsibly.',
-      desc: 'The moment a new drink launches, your hand opens the details page on its own. Whether it tastes good is almost beside the point—if you have not tried it, the day feels incomplete. Add the words “limited edition” and reason promptly logs off.'
+      intro: 'Ding! A new flavor just dropped. Tap to taste.',
+      desc: 'The moment a new drink drops, your hand opens the details page on autopilot. Whether it actually tastes good is almost beside the point—if you have not tried it, the day feels incomplete. The words “limited edition” appear, and reason promptly clocks out.'
     },
     PHOTO: {
       name: '咖啡记录仪',
       intro: 'Before your mouth gets a taste, your phone does.',
-      desc: 'The second coffee hits the table, you start hunting for the best light. When someone asks how it tastes, you say, “Wait—the photo is not done yet!” The coffee can wait; the composition cannot.'
+      desc: 'The moment the coffee hits the table, you are already hunting for the best light. Someone asks how it tastes and you say, “Wait—I have not got the shot yet!” The coffee can wait; the composition cannot.'
     },
     REPORT: {
       name: '人形咖啡雷达',
-      intro: 'New target spotted on the corner. Over and out.',
+      intro: 'New café spotted around the corner. Target acquired. Over.',
       desc: 'A new café has barely opened and you have already walked past it three times. You have studied the storefront, menu, queue, and seating while pretending you were just in the neighborhood. You even know which table is best.'
     },
     DESSERT: {
       name: '碳水守护者',
       intro: 'You did not come for coffee. You came for the bread.',
-      desc: 'You check the pastry case before ordering and keep looking back after you sit down. Coffee is there to make the scene respectable; the real reason you cannot leave is that freshly baked croissant.'
+      desc: 'You check the pastry case before ordering and keep looking back after you sit down. Coffee is mostly there to keep up appearances; the real reason you cannot leave is that freshly baked croissant in the display case.'
     },
     BREW: {
       name: '宅家主理人',
       intro: 'You make your own path—and your own coffee.',
-      desc: 'Other people make coffee at home. You run a production. Water temperature, cups, and workflow all need a plan. The results may vary, but today’s resident barista must report for duty.'
+      desc: 'Other people make coffee at home. You run a production. Water temperature, cups, and workflow all need a plan. The results may vary, but today’s home barista is reporting for duty either way.'
     }
   };
 
@@ -180,7 +180,7 @@
 
   const EXACT_TEXT = new Map([
     ['找到我们', 'Find Us'],
-    ['熊熊咖啡屋', 'Bear Coffee Club'],
+    ['熊熊咖啡屋', 'Game'],
     ['咖啡熊格测试', 'Coffee Bearsonality Quiz'],
     ['开始测试', 'Start the Quiz'],
     ['切换风格', 'Switch Style'],
