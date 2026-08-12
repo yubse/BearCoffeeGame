@@ -165,8 +165,10 @@ button {
 }
 
 .lyric-line {
-  display: block;
+  display: grid;
   align-self: center;
+  justify-items: center;
+  gap: 4px;
   width: 100%;
   min-width: 0;
   line-height: 1.25;
@@ -188,6 +190,24 @@ button {
   font-size: clamp(1.42rem, 6.5vw, 2.35rem);
   font-weight: 760;
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.32);
+}
+
+.line-text,
+.line-translation {
+  display: block;
+  max-width: 100%;
+}
+
+.lyric-line .line-translation {
+  color: rgba(247, 241, 232, 0.48);
+  font-size: 0.62em;
+  font-weight: 520;
+  line-height: 1.25;
+  text-shadow: none;
+}
+
+.lyric-line.active .line-translation {
+  color: rgba(247, 241, 232, 0.7);
 }
 
 .lyrics-view {
@@ -270,12 +290,14 @@ button {
 }
 
 .lyrics-list p {
-  min-height: 52px;
+  min-height: 64px;
   margin: 0;
   padding: 9px min(7vw, 34px);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 5px;
   color: rgba(247, 241, 232, 0.36);
   font-size: clamp(1.08rem, 4.7vw, 1.64rem);
   line-height: 1.28;
@@ -290,6 +312,17 @@ button {
   font-weight: 780;
   opacity: 1;
   transform: scale(1.02);
+}
+
+.lyrics-list .line-translation {
+  color: rgba(247, 241, 232, 0.34);
+  font-size: 0.56em;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.lyrics-list p.is-active .line-translation {
+  color: rgba(247, 241, 232, 0.68);
 }
 
 .control-bar {
