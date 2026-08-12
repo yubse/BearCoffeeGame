@@ -160,7 +160,7 @@ button {
   display: grid;
   align-self: start;
   width: min(92vw, 560px);
-  min-height: 168px;
+  min-height: 118px;
   padding: 18px 10px;
 }
 
@@ -175,14 +175,6 @@ button {
   text-align: center;
   overflow-wrap: anywhere;
   transition: color 220ms ease, opacity 220ms ease, transform 220ms ease;
-}
-
-.lyric-line.prev,
-.lyric-line.next {
-  color: var(--muted);
-  font-size: clamp(1rem, 4.4vw, 1.3rem);
-  opacity: 0.62;
-  transform: scale(0.96);
 }
 
 .lyric-line.active {
@@ -449,7 +441,7 @@ button {
   }
 
   .lyrics-preview {
-    min-height: 132px;
+    min-height: 104px;
   }
 
   .play-toggle {

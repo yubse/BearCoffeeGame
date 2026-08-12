@@ -1,44 +1,43 @@
 const lyrics = [
-  { start: 0, end: 2, text: "Coco in the shop" },
-  { start: 2, end: 4, text: "Taiyaki hot" },
-  { start: 4, end: 6, text: "Don't touch that..." },
-  { start: 6, end: 7, text: "Too late." },
-  { start: 7, end: 11, text: "Burnt my hat, but I'm still alright", translation: "帽子烧焦了，但我照样没事" },
-  { start: 11, end: 15, text: "Gold chain swingin' under kitchen lights", translation: "金链子在厨房灯下面晃" },
-  { start: 15, end: 19, text: "Smell like toast everywhere I go", translation: "走到哪儿都有一股烤面包味" },
-  { start: 19, end: 24, text: 'Boss said, "Coco..." I said, "Yeah, I know."', translation: "老板说：“Coco……” 我说：“我知道。”" },
-  { start: 24, end: 28, text: "Burnt my hat, now I wear it proud", translation: "帽子烧焦了，我反而越戴越骄傲" },
-  { start: 28, end: 32, text: "Little bit brown from the smoke around", translation: "烟熏一圈，连毛都变棕了" },
-  { start: 32, end: 36, text: "Made one mistake, ain't the end of the show", translation: "小问题，演出还没结束" },
-  { start: 36, end: 40, text: "Give me two taiyaki, then I'm good to go", translation: "再给我两个鲷鱼烧，我就满血复活" },
-  { start: 40, end: 42, text: "（音乐间奏）" },
-  { start: 42, end: 46, text: "First time I came, just wanted a snack", translation: "第一次来，我只是想吃点东西" },
-  { start: 46, end: 50, text: "Took one bite, had to double right back", translation: "咬了一口，立刻又折回来了" },
-  { start: 50, end: 54, text: 'Looked at Panpan, "Yo, you hiring or not?"', translation: "我问潘潘：“哥，你这还招人不？”" },
-  { start: 54, end: 58, text: "Next thing I know, I'm working the shop", translation: "回过神来，我已经在店里上班了" },
-  { start: 58, end: 62, text: "Apron on, fish hat on my head", translation: "围裙一系，鲷鱼烧头套一戴" },
-  { start: 62, end: 66, text: "Ten minutes later, smelled something bad", translation: "十分钟后，我闻到哪里不太对" },
-  { start: 66, end: 70, text: 'Everybody yelling, "Coco! Coco!"', translation: "大家都在喊：“Coco！Coco！”" },
-  { start: 70, end: 74, text: "Turned around...", translation: "我回头一看……" },
-  { start: 74, end: 77, text: "Man, that hat look good though.", translation: "诶，这帽子焦了以后还挺帅。" },
-  { start: 77, end: 81, text: "Burnt my hat, but I'm still alright" },
-  { start: 81, end: 85, text: "Gold chain swingin' under kitchen lights" },
-  { start: 85, end: 89, text: "Smell like toast everywhere I go" },
-  { start: 89, end: 92, text: 'Boss said, "Coco..."' },
-  { start: 92, end: 94, text: 'I said, "Yeah, I know."' },
-  { start: 94, end: 98, text: "Everybody got a clean fish hat", translation: "大家的鲷鱼烧头套都干干净净" },
-  { start: 98, end: 102, text: "Mine got flavor, you can't buy that", translation: "我的有味道，这可是买不到的" },
-  { start: 102, end: 106, text: "Call it burnt, I call it custom made", translation: "你说烧焦，我说私人定制" },
-  { start: 106, end: 110, text: "One of one, baby, special grade", translation: "全球一件，特别版本" },
-  { start: 110, end: 114, text: "Put the tongs in the fridge last night", translation: "昨晚我把夹子塞进冰箱" },
-  { start: 114, end: 118, text: "Milk by the register, thought that's right", translation: "牛奶放收银台，我当时还觉得挺合理" },
-  { start: 118, end: 122, text: 'Panpan asked, "Where the red beans at?"', translation: "潘潘问：“红豆馅去哪了？”" },
-  { start: 122, end: 126, text: "I froze... We don't talk about that.", translation: "我愣住了……这件事就别提了。" },
-  { start: 126, end: 130, text: "Clock out late, gold on my neck", translation: "晚上下班，脖子上还挂着金链" },
-  { start: 130, end: 134, text: "Still got smoke on my silhouette", translation: "身上还带着一点烟熏味" },
-  { start: 134, end: 138, text: 'Boss said, "Coco, watch the stove."', translation: "老板说：“Coco，看着点炉子。”" },
-  { start: 138, end: 141, text: 'I said, "Got it."', translation: "我说：“知道了。”" },
-  { start: 141, end: 143, text: "...Probably.", translation: "……应该吧。" },
+  { start: 0, end: 1.37, text: "Coco in the shop" },
+  { start: 1.37, end: 2.74, text: "Taiyaki hot" },
+  { start: 2.74, end: 4.11, text: "Don't touch that..." },
+  { start: 4.11, end: 4.79, text: "Too late." },
+  { start: 4.79, end: 7.53, text: "Burnt my hat, but I'm still alright", translation: "帽子烧焦了，但我照样没事" },
+  { start: 7.53, end: 10.27, text: "Gold chain swingin' under kitchen lights", translation: "金链子在厨房灯下面晃" },
+  { start: 10.27, end: 13, text: "Smell like toast everywhere I go", translation: "走到哪儿都有一股烤面包味" },
+  { start: 13, end: 16.43, text: 'Boss said, "Coco..." I said, "Yeah, I know."', translation: "老板说：“Coco……” 我说：“我知道。”" },
+  { start: 16.43, end: 19.16, text: "Burnt my hat, now I wear it proud", translation: "帽子烧焦了，我反而越戴越骄傲" },
+  { start: 19.16, end: 21.9, text: "Little bit brown from the smoke around", translation: "烟熏一圈，连毛都变棕了" },
+  { start: 21.9, end: 24.64, text: "Made one mistake, ain't the end of the show", translation: "小问题，演出还没结束" },
+  { start: 24.64, end: 27.38, text: "Give me two taiyaki, then I'm good to go", translation: "再给我两个鲷鱼烧，我就满血复活" },
+  { start: 27.38, end: 28.75, text: "（音乐间奏）" },
+  { start: 28.75, end: 31.48, text: "First time I came, just wanted a snack", translation: "第一次来，我只是想吃点东西" },
+  { start: 31.48, end: 34.22, text: "Took one bite, had to double right back", translation: "咬了一口，立刻又折回来了" },
+  { start: 34.22, end: 36.96, text: 'Looked at Panpan, "Yo, you hiring or not?"', translation: "我问潘潘：“哥，你这还招人不？”" },
+  { start: 36.96, end: 39.7, text: "Next thing I know, I'm working the shop", translation: "回过神来，我已经在店里上班了" },
+  { start: 39.7, end: 42.43, text: "Apron on, fish hat on my head", translation: "围裙一系，鲷鱼烧头套一戴" },
+  { start: 42.43, end: 45.17, text: "Ten minutes later, smelled something bad", translation: "十分钟后，我闻到哪里不太对" },
+  { start: 45.17, end: 47.91, text: 'Everybody yelling, "Coco! Coco!"', translation: "大家都在喊：“Coco！Coco！”" },
+  { start: 47.91, end: 50.65, text: "Turned around...", translation: "我回头一看……" },
+  { start: 50.65, end: 52.7, text: "Man, that hat look good though.", translation: "诶，这帽子焦了以后还挺帅。" },
+  { start: 52.7, end: 55.44, text: "Burnt my hat, but I'm still alright", translation: "帽子烧焦了，但我照样没事" },
+  { start: 55.44, end: 58.18, text: "Gold chain swingin' under kitchen lights", translation: "金链子在厨房灯下面晃" },
+  { start: 58.18, end: 60.91, text: "Smell like toast everywhere I go", translation: "走到哪儿都有一股烤面包味" },
+  { start: 60.91, end: 64.34, text: 'Boss said, "Coco..." I said, "Yeah, I know."', translation: "老板说：“Coco……” 我说：“我知道。”" },
+  { start: 64.34, end: 67.07, text: "Everybody got a clean fish hat", translation: "大家的鲷鱼烧头套都干干净净" },
+  { start: 67.07, end: 69.81, text: "Mine got flavor, you can't buy that", translation: "我的有味道，这可是买不到的" },
+  { start: 69.81, end: 72.55, text: "Call it burnt, I call it custom made", translation: "你说烧焦，我说私人定制" },
+  { start: 72.55, end: 75.29, text: "One of one, baby, special grade", translation: "全球一件，特别版本" },
+  { start: 75.29, end: 78.02, text: "Put the tongs in the fridge last night", translation: "昨晚我把夹子塞进冰箱" },
+  { start: 78.02, end: 80.76, text: "Milk by the register, thought that's right", translation: "牛奶放收银台，我当时还觉得挺合理" },
+  { start: 80.76, end: 83.5, text: 'Panpan asked, "Where the red beans at?"', translation: "潘潘问：“红豆馅去哪了？”" },
+  { start: 83.5, end: 86.24, text: "I froze... We don't talk about that.", translation: "我愣住了……这件事就别提了。" },
+  { start: 86.24, end: 88.97, text: "Clock out late, gold on my neck", translation: "晚上下班，脖子上还挂着金链" },
+  { start: 88.97, end: 91.71, text: "Still got smoke on my silhouette", translation: "身上还带着一点烟熏味" },
+  { start: 91.71, end: 94.45, text: 'Boss said, "Coco, watch the stove."', translation: "老板说：“Coco，看着点炉子。”" },
+  { start: 94.45, end: 96.5, text: 'I said, "Got it."', translation: "我说：“知道了。”" },
+  { start: 96.5, end: 97.87, text: "...Probably.", translation: "……应该吧。" },
 ];
 
 const shell = document.getElementById("playerShell");
@@ -50,9 +49,7 @@ const durationLabel = document.getElementById("duration");
 const homeTrigger = document.getElementById("homeTrigger");
 const lyricsStage = document.getElementById("lyricsStage");
 const lyricsList = document.getElementById("lyricsList");
-const homePrev = document.getElementById("homePrev");
 const homeActive = document.getElementById("homeActive");
-const homeNext = document.getElementById("homeNext");
 
 let activeIndex = 0;
 let userSeeking = false;
@@ -151,12 +148,8 @@ function closeLyricsView() {
 function updateLyrics(index) {
   activeIndex = Math.max(0, Math.min(index, lyrics.length - 1));
   const activeLine = lyrics[activeIndex];
-  const prevLine = lyrics[activeIndex - 1];
-  const nextLine = lyrics[activeIndex + 1];
 
-  renderPreviewLine(homePrev, prevLine);
   renderPreviewLine(homeActive, activeLine);
-  renderPreviewLine(homeNext, nextLine);
 
   lyricNodes.forEach((node, nodeIndex) => {
     node.classList.toggle("is-active", nodeIndex === activeIndex);
