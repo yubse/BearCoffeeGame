@@ -86,7 +86,6 @@ button {
   align-items: center;
   justify-items: center;
   gap: 18px;
-  cursor: pointer;
 }
 
 .cover-wrap {
@@ -144,6 +143,10 @@ button {
   background: transparent;
   color: inherit;
   cursor: pointer;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 .lyric-line {
@@ -347,12 +350,14 @@ button {
   clip-path: none;
 }
 
-.play-toggle:focus-visible,
-.lyrics-preview:focus-visible {
+.play-toggle:focus-visible {
   outline: 3px solid var(--mint);
   outline-offset: 4px;
 }
 
+.lyrics-preview:focus,
+.lyrics-preview:focus-visible,
+.lyrics-preview:active,
 .lyrics-stage:focus,
 .lyrics-stage:focus-visible,
 .lyrics-stage:active {

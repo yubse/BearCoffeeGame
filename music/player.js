@@ -49,7 +49,6 @@ const seekBar = document.getElementById("seekBar");
 const currentTimeLabel = document.getElementById("currentTime");
 const durationLabel = document.getElementById("duration");
 const lyricsPreview = document.getElementById("lyricsPreview");
-const homeView = document.querySelector(".home-view");
 const lyricsStage = document.getElementById("lyricsStage");
 const lyricsList = document.getElementById("lyricsList");
 const homePrev = document.getElementById("homePrev");
@@ -185,6 +184,7 @@ function setPlayState() {
 async function startPlayback() {
   try {
     await audio.play();
+    setPlayState();
   } catch {
     setPlayState();
   }
@@ -198,7 +198,7 @@ playToggle.addEventListener("click", () => {
   }
 });
 
-homeView.addEventListener("click", openLyricsView);
+lyricsPreview.addEventListener("click", openLyricsView);
 
 lyricsStage.addEventListener("click", () => {
   if (lyricsPointerStart?.moved) {
@@ -271,4 +271,5 @@ document.addEventListener("pointerdown", startPlayback, { once: true });
 window.addEventListener("resize", () => centerActiveLyric({ force: true, smooth: false }));
 
 updateLyrics(0);
+setPlayState();
 startPlayback();
