@@ -12,19 +12,21 @@
     <div class="ambient-cover" aria-hidden="true"></div>
 
     <section class="home-view" aria-label="音乐播放器">
-      <div class="cover-wrap">
-        <img class="cover-art" src="/music/封面.jpg" alt="Burnt My Hat 封面">
-      </div>
+      <button class="home-trigger" id="homeTrigger" type="button" aria-label="打开歌词">
+        <span class="cover-wrap">
+          <img class="cover-art" src="/music/封面.jpg" alt="Burnt My Hat 封面">
+        </span>
 
-      <div class="track-info">
-        <h1>Burnt My Hat</h1>
-        <p>Coco</p>
-      </div>
+        <span class="track-info">
+          <span class="track-title">Burnt My Hat</span>
+          <span class="track-artist">Coco</span>
+        </span>
 
-      <button class="lyrics-preview" id="lyricsPreview" type="button" aria-label="打开歌词">
-        <span class="lyric-line prev" id="homePrev"></span>
-        <span class="lyric-line active" id="homeActive"></span>
-        <span class="lyric-line next" id="homeNext"></span>
+        <span class="lyrics-preview">
+          <span class="lyric-line prev" id="homePrev"></span>
+          <span class="lyric-line active" id="homeActive"></span>
+          <span class="lyric-line next" id="homeNext"></span>
+        </span>
       </button>
     </section>
 

@@ -82,13 +82,33 @@ button {
 
 .home-view {
   display: grid;
+  grid-template-rows: 1fr;
+  align-items: center;
+  justify-items: center;
+}
+
+.home-trigger {
+  display: grid;
   grid-template-rows: minmax(280px, 51vh) auto minmax(190px, 1fr);
   align-items: center;
   justify-items: center;
   gap: 18px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
 }
 
 .cover-wrap {
+  display: block;
   align-self: end;
   width: min(78vw, 420px);
   aspect-ratio: 1;
@@ -107,46 +127,41 @@ button {
 }
 
 .track-info {
+  display: block;
   width: min(84vw, 520px);
   text-align: center;
 }
 
-.track-info h1,
+.track-title,
 .mini-track h2 {
   margin: 0;
   font-weight: 780;
   letter-spacing: 0;
 }
 
-.track-info h1 {
+.track-title {
+  display: block;
   font-size: clamp(2.15rem, 9vw, 4.6rem);
   line-height: 0.95;
 }
 
-.track-info p,
+.track-artist,
 .mini-track p {
   margin: 8px 0 0;
   color: var(--muted);
 }
 
-.track-info p {
+.track-artist {
+  display: block;
   font-size: 1rem;
 }
 
 .lyrics-preview {
-  align-self: start;
   display: grid;
+  align-self: start;
   width: min(92vw, 560px);
   min-height: 168px;
   padding: 18px 10px;
-  border: 0;
-  background: transparent;
-  color: inherit;
-  cursor: pointer;
-  outline: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
 }
 
 .lyric-line {
@@ -355,9 +370,9 @@ button {
   outline-offset: 4px;
 }
 
-.lyrics-preview:focus,
-.lyrics-preview:focus-visible,
-.lyrics-preview:active,
+.home-trigger:focus,
+.home-trigger:focus-visible,
+.home-trigger:active,
 .lyrics-stage:focus,
 .lyrics-stage:focus-visible,
 .lyrics-stage:active {
@@ -389,8 +404,11 @@ button {
   }
 
   .home-view {
-    grid-template-rows: minmax(230px, 44vh) auto minmax(150px, 1fr);
     gap: 12px;
+  }
+
+  .home-trigger {
+    grid-template-rows: minmax(230px, 44vh) auto minmax(150px, 1fr);
   }
 
   .cover-wrap {

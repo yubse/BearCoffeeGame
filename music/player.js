@@ -48,7 +48,7 @@ const playToggle = document.getElementById("playToggle");
 const seekBar = document.getElementById("seekBar");
 const currentTimeLabel = document.getElementById("currentTime");
 const durationLabel = document.getElementById("duration");
-const lyricsPreview = document.getElementById("lyricsPreview");
+const homeTrigger = document.getElementById("homeTrigger");
 const lyricsStage = document.getElementById("lyricsStage");
 const lyricsList = document.getElementById("lyricsList");
 const homePrev = document.getElementById("homePrev");
@@ -198,7 +198,7 @@ playToggle.addEventListener("click", () => {
   }
 });
 
-lyricsPreview.addEventListener("click", openLyricsView);
+homeTrigger.addEventListener("click", openLyricsView);
 
 lyricsStage.addEventListener("click", () => {
   if (lyricsPointerStart?.moved) {
