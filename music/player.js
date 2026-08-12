@@ -49,6 +49,7 @@ const seekBar = document.getElementById("seekBar");
 const currentTimeLabel = document.getElementById("currentTime");
 const durationLabel = document.getElementById("duration");
 const lyricsPreview = document.getElementById("lyricsPreview");
+const homeView = document.querySelector(".home-view");
 const lyricsStage = document.getElementById("lyricsStage");
 const lyricsList = document.getElementById("lyricsList");
 const homePrev = document.getElementById("homePrev");
@@ -57,6 +58,12 @@ const homeNext = document.getElementById("homeNext");
 
 let activeIndex = 0;
 let userSeeking = false;
+let lyricsAutoResumeAt = 0;
+let lyricsAutoResumeTimer;
+let isProgrammaticLyricsScroll = false;
+let lyricsPointerStart;
+
+const LYRICS_AUTO_RESUME_DELAY = 3200;
 
 lyricsList.innerHTML = lyrics
   .map((line, index) => `<p data-index="${index}">${escapeHtml(line.text)}</p>`)
@@ -100,6 +107,44 @@ function getActiveIndex(time) {
   return 0;
 }
 
+function centerActiveLyric({ force = false, smooth = true } = {}) {
+  const activeNode = lyricNodes[activeIndex];
+  if (!activeNode || (!force && Date.now() < lyricsAutoResumeAt)) {
+    return;
+  }
+
+  isProgrammaticLyricsScroll = true;
+  activeNode.scrollIntoView({
+    block: "center",
+    behavior: smooth ? "smooth" : "auto",
+  });
+  window.setTimeout(() => {
+    isProgrammaticLyricsScroll = false;
+  }, 600);
+}
+
+function scheduleLyricsAutoResume() {
+  lyricsAutoResumeAt = Date.now() + LYRICS_AUTO_RESUME_DELAY;
+  window.clearTimeout(lyricsAutoResumeTimer);
+  lyricsAutoResumeTimer = window.setTimeout(() => {
+    centerActiveLyric({ force: true });
+  }, LYRICS_AUTO_RESUME_DELAY);
+}
+
+function openLyricsView() {
+  shell.classList.add("is-expanded");
+  lyricsAutoResumeAt = 0;
+  window.requestAnimationFrame(() => {
+    centerActiveLyric({ force: true, smooth: false });
+  });
+  startPlayback();
+}
+
+function closeLyricsView() {
+  shell.classList.remove("is-expanded");
+  startPlayback();
+}
+
 function updateLyrics(index) {
   activeIndex = Math.max(0, Math.min(index, lyrics.length - 1));
   const activeLine = lyrics[activeIndex];
@@ -114,11 +159,7 @@ function updateLyrics(index) {
     node.classList.toggle("is-active", nodeIndex === activeIndex);
   });
 
-  const activeNode = lyricNodes[activeIndex];
-  if (activeNode) {
-    const offset = activeNode.offsetTop + activeNode.offsetHeight / 2;
-    lyricsList.style.setProperty("--lyrics-offset", `${offset}px`);
-  }
+  centerActiveLyric();
 }
 
 function updateProgress() {
@@ -157,14 +198,45 @@ playToggle.addEventListener("click", () => {
   }
 });
 
-lyricsPreview.addEventListener("click", () => {
-  shell.classList.add("is-expanded");
-  startPlayback();
-});
+homeView.addEventListener("click", openLyricsView);
 
 lyricsStage.addEventListener("click", () => {
-  shell.classList.remove("is-expanded");
-  startPlayback();
+  if (lyricsPointerStart?.moved) {
+    return;
+  }
+  closeLyricsView();
+});
+
+lyricsStage.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    closeLyricsView();
+  }
+});
+
+lyricsStage.addEventListener("pointerdown", (event) => {
+  lyricsPointerStart = {
+    x: event.clientX,
+    y: event.clientY,
+    moved: false,
+  };
+});
+
+lyricsStage.addEventListener("pointermove", (event) => {
+  if (!lyricsPointerStart) {
+    return;
+  }
+
+  const distance = Math.hypot(event.clientX - lyricsPointerStart.x, event.clientY - lyricsPointerStart.y);
+  if (distance > 8) {
+    lyricsPointerStart.moved = true;
+  }
+});
+
+lyricsStage.addEventListener("scroll", () => {
+  if (!isProgrammaticLyricsScroll) {
+    scheduleLyricsAutoResume();
+  }
 });
 
 seekBar.addEventListener("input", () => {
@@ -196,7 +268,7 @@ audio.addEventListener("ended", () => {
 
 document.addEventListener("visibilitychange", setPlayState);
 document.addEventListener("pointerdown", startPlayback, { once: true });
-window.addEventListener("resize", () => updateLyrics(activeIndex));
+window.addEventListener("resize", () => centerActiveLyric({ force: true, smooth: false }));
 
 updateLyrics(0);
 startPlayback();
