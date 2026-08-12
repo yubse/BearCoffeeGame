@@ -11,11 +11,11 @@
       ]
     },
     q2: {
-      text: 'The menu lists “citrus, nutty, and fermented notes.” What is your first reaction?',
+      text: 'The menu lists “citrus, nutty, and fermentation notes.” What is your first reaction?',
       options: [
         'I do not really get it—I will just ask which one tastes good.',
-        'I get the general idea, but price and mood still make the final call.',
-        'I read every word, curious to see how those notes actually taste.'
+        'I get the gist, but I’ll still go by price and mood.',
+        'I read the whole thing and want to know what it actually tastes like.'
       ]
     },
     q3: {
@@ -51,17 +51,17 @@
       ]
     },
     q7: {
-      text: 'Someone posts in the group chat: “This café just launched a new flavor.” What do you do?',
+      text: 'Someone posts in the group chat: “This café just dropped a new flavor.” What do you do?',
       options: [
         'Glance at it and move on. I am not that interested.',
         'Save it for a day when I have time.',
-        'Open the details and immediately start planning a visit.'
+        'Open the details and start figuring out when I can go check it out.'
       ]
     },
     q8: {
-      text: 'Your go-to café launches a seasonal special. What do you order?',
+      text: 'Your regular café just launched a seasonal special. What do you do?',
       options: [
-        'My usual. Nothing beats a sure thing.',
+        'My usual—there’s comfort in consistency.',
         'If it does not sound too strange, I will give it a try.',
         'It is seasonal—skipping it would feel like missing the holiday.'
       ]
@@ -86,7 +86,7 @@
       text: 'A friend mentions a new café nearby. How do you respond?',
       options: [
         'Completely surprised: “Wait, when did that open?”',
-        'Vaguely familiar: “I think I saw it online, but I have not been yet.”',
+        'Vaguely familiar: “I think it popped up on my feed, but I haven’t been yet.”',
         'Fully briefed: “I know—I have already checked the menu and opening hours.”'
       ]
     },
@@ -95,11 +95,11 @@
       options: [
         'Nothing comes to mind, so I open the map.',
         'I can probably think of a few.',
-        'Confidently rattle off the best spots from my carefully curated shortlist.'
+        'Confidently rattle off a few great spots from my personally vetted shortlist.'
       ]
     },
     q13: {
-      text: 'How do you feel about pairing food with your coffee?',
+      text: 'What’s your take on pairing coffee with something to eat?',
       options: [
         'No pairing needed. Coffee is enough on its own.',
         'Depends. If I am hungry, I might add something.',
@@ -111,7 +111,7 @@
       options: [
         'Enjoy it and leave the research to someone else.',
         'Remember the name so I can order it again.',
-        'Look up the recipe and try recreating it at home.'
+        'Start reverse-engineering the recipe and try to recreate it at home.'
       ]
     },
     q15: {
@@ -127,43 +127,43 @@
   const TYPES = {
     MASTER: {
       name: '煮理人',
-      intro: 'Somewhere in that mountain of research, you managed to find a little coffee.',
-      desc: 'Other people finish a cup and say, “That was bitter.” You are already tracing the beans back to their origin. Acidity should have a point, aromas should unfold in layers, and if a coffee tastes challenging, it had better have a good reason.'
+      intro: 'Somewhere in a mountain of research reports, you found a trace amount of coffee.',
+      desc: 'Other people finish a cup and say, “That was bitter.” You are already tracing the beans back to their origin. The acidity has to make sense, the aroma needs layers, and if a cup is going to taste bad, it had better at least be interesting.'
     },
     NEED: {
       name: '咖啡续命者',
-      intro: 'Patient barely responsive. Start the caffeine drip immediately.',
-      desc: 'Your eyes are open, but your brain is still buffering. One shot of caffeine and the system finally boots—more or less. Your body may be at your desk, but your soul has yet to clock in. Your coworkers recommend upping the dose.'
+      intro: 'Patient barely responsive. Initiate caffeine IV immediately.',
+      desc: 'Your eyes are open, but your brain is still buffering. One shot of caffeine and you’re barely online. Your body may be at the desk, but your soul hasn’t clocked in yet. Coworkers’ recommendation: up the dose.'
     },
     YUMMY: {
       name: '不想吃苦者',
-      intro: 'Life is bitter enough; your coffee does not have to be.',
-      desc: 'A little acidity is fine, as long as it does not take over. A little bitterness is fine, as long as it does not become the whole personality. While others chase layers of flavor, you just want to know whether the next sip will make your day a little better.'
+      intro: 'Life is bitter enough. Coffee doesn’t have to be.',
+      desc: 'A little acidity? Sure—just don’t let it get too loud. A little bitterness? Fine—just don’t make a whole thing of it. While others chase flavor complexity, you’re asking the only question that matters: does this sip make me happy?'
     },
     NEW: {
       name: '咖界金舌头',
-      intro: 'Ding! A new flavor just dropped. Tap to taste.',
-      desc: 'The moment a new drink drops, your hand opens the details page on autopilot. Whether it actually tastes good is almost beside the point—if you have not tried it, the day feels incomplete. The words “limited edition” appear, and reason promptly clocks out.'
+      intro: 'Ding! New flavor drop incoming. Please check your taste buds.',
+      desc: 'The second a new drink drops, you’re already tapping into the details. Whether it’s good is another question—if you haven’t tried it, the day somehow feels incomplete. And the second you see “limited edition,” logic logs off.'
     },
     PHOTO: {
       name: '咖啡记录仪',
       intro: 'Before your mouth gets a taste, your phone does.',
-      desc: 'The moment the coffee hits the table, you are already hunting for the best light. Someone asks how it tastes and you say, “Wait—I have not got the shot yet!” The coffee can wait; the composition cannot.'
+      desc: 'The second the coffee hits the table, you’re already hunting for the best light. Someone asks how it tastes and you’re like, “Wait—I haven’t got the shot yet!” The coffee can wait; the composition can’t.'
     },
     REPORT: {
       name: '人形咖啡雷达',
-      intro: 'New café spotted around the corner. Target acquired. Over.',
+      intro: 'New target spotted on the corner. Over!',
       desc: 'A new café has barely opened and you have already walked past it three times. You have studied the storefront, menu, queue, and seating while pretending you were just in the neighborhood. You even know which table is best.'
     },
     DESSERT: {
       name: '碳水守护者',
       intro: 'You did not come for coffee. You came for the bread.',
-      desc: 'You check the pastry case before ordering and keep looking back after you sit down. Coffee is mostly there to keep up appearances; the real reason you cannot leave is that freshly baked croissant in the display case.'
+      desc: 'You check the pastry case before ordering and keep looking back after you sit down. Coffee is basically the cover story. The real reason you can’t leave is that fresh-from-the-oven croissant.'
     },
     BREW: {
       name: '宅家主理人',
       intro: 'You make your own path—and your own coffee.',
-      desc: 'Other people make coffee at home. You run a production. Water temperature, cups, and workflow all need a plan. The results may vary, but today’s home barista is reporting for duty either way.'
+      desc: 'Other people make coffee at home. You run a production. Water temperature, cups, and workflow all need a plan. The results may vary, but today’s home barista is officially on duty.'
     }
   };
 
@@ -246,12 +246,17 @@
   }
 
   function addLanguageSwitch() {
-    const hero = document.querySelector('#root .hero-minimal');
-    const isLandingScreen = hero && !document.querySelector('.test-wrap, .result-wrap');
-    if (!isLandingScreen || hero.querySelector('.language-switch')) return;
+    let control = document.querySelector('.language-switch');
 
-    const control = document.createElement('div');
-    control.className = 'language-switch';
+    if (!control) {
+      control = document.createElement('div');
+      control.className = 'language-switch';
+      document.body.append(control);
+    } else if (control.parentElement !== document.body) {
+      document.body.append(control);
+    }
+
+    control.replaceChildren();
     control.setAttribute('role', 'group');
     control.setAttribute('aria-label', language === 'en' ? 'Choose language' : '选择语言');
 
@@ -266,8 +271,6 @@
       });
       control.append(button);
     });
-
-    hero.prepend(control);
   }
 
   function translateQuestions() {
@@ -360,8 +363,12 @@
     }
   }
 
+  let localizationQueued = false;
   function queueLocalization() {
+    if (localizationQueued) return;
+    localizationQueued = true;
     window.requestAnimationFrame(() => {
+      localizationQueued = false;
       applyLocalization();
       window.setTimeout(applyLocalization, 0);
     });
@@ -369,6 +376,10 @@
 
   window.addEventListener('hashchange', queueLocalization);
   window.addEventListener('pageshow', queueLocalization);
+  const root = document.getElementById('root');
+  if (root) {
+    new MutationObserver(queueLocalization).observe(root, { childList: true, subtree: true });
+  }
   applyLocalization();
   queueLocalization();
 })();

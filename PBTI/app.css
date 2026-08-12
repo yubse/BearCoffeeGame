@@ -45,7 +45,7 @@
 .result-layout{gap:0}
 @keyframes marquee{
   0%{transform:translateX(0)}
-  100%{transform:translateX(calc(-50% - 7px))}
+  100%{transform:translateX(-50%)}
 }
 .marquee-track{will-change:transform}
 .marquee:hover .marquee-track{animation-play-state:running}
@@ -179,12 +179,12 @@
   }
 }
 
-/* Language selector: intentionally shown only on the quiz landing screen. */
+/* Language selector. */
 .language-switch{
-  position:absolute;
-  top:18px;
-  right:18px;
-  z-index:2;
+  position:fixed;
+  top:max(14px, env(safe-area-inset-top));
+  right:max(16px, env(safe-area-inset-right));
+  z-index:10001;
   display:inline-flex;
   gap:3px;
   padding:4px;
@@ -221,8 +221,8 @@ html[lang="en"] .author-box[open] summary:after{content:"Close"}
 
 @media (max-width:480px){
   .language-switch{
-    top:12px;
-    right:12px;
+    top:max(54px, calc(env(safe-area-inset-top) + 54px));
+    right:10px;
   }
   .language-switch__button{
     min-width:43px;
