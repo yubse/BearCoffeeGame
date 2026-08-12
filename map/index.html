@@ -4,9 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script>
-    // 地图功能暂时保留；线上访问 /map/ 时先跳转到品牌官网。
+    // 地图功能暂时保留；线上访问 /map/ 时先跳转到首页（contact）。
     if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
-      window.location.replace('https://planetbear.cn/');
+      window.location.replace('/contact/');
     }
   </script>
   <script>
@@ -414,7 +414,7 @@
     <button type="button" aria-label="关闭大图">×</button>
     <img src="" alt="">
   </div>
-  <script src="../js/site-nav.js?v=20260811-2"></script>
+  <script src="../js/site-nav.js?v=20260812-2"></script>
 
   <script>
     // 创建 MapLibre 地图实例

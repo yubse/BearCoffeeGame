@@ -1,10 +1,10 @@
 (function () {
   const page = document.body.dataset.sitePage || 'game';
   const isFile = window.location.protocol === 'file:';
-  const depth = page === 'game' ? '.' : '..';
+  const depth = '..';
   const routes = {
     contact: isFile ? `${depth}/contact/index.html` : '/contact/',
-    game: isFile ? `${depth}/index.html` : '/',
+    game: isFile ? `${depth}/game/index.html` : '/game/',
     test: isFile ? `${depth}/PBTI/index.html` : '/PBTI/'
   };
   const labels = {
