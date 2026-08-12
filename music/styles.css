@@ -230,10 +230,14 @@ button {
   background: transparent;
   color: inherit;
   cursor: pointer;
+  outline: none;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
   -webkit-overflow-scrolling: touch;
   mask-image: linear-gradient(transparent 0%, #000 18%, #000 82%, transparent 100%);
 }
@@ -344,10 +348,16 @@ button {
 }
 
 .play-toggle:focus-visible,
-.lyrics-preview:focus-visible,
-.lyrics-stage:focus-visible {
+.lyrics-preview:focus-visible {
   outline: 3px solid var(--mint);
   outline-offset: 4px;
+}
+
+.lyrics-stage:focus,
+.lyrics-stage:focus-visible,
+.lyrics-stage:active {
+  outline: none;
+  background: transparent;
 }
 
 @media (min-width: 760px) {
