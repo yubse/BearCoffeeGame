@@ -3,14 +3,17 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="refresh" content="0; url=/contact/">
   <link rel="canonical" href="/contact/">
   <title>找到我们 | FIND US</title>
   <script>
-    window.location.replace('/contact/');
+    const contactUrl = window.location.protocol === 'file:' ? 'contact/index.html' : '/contact/';
+    window.location.replace(contactUrl);
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('a').href = contactUrl;
+    });
   </script>
 </head>
 <body>
-  <p><a href="/contact/">进入找到我们页面</a></p>
+  <p><a href="contact/index.html">进入找到我们页面</a></p>
 </body>
 </html>

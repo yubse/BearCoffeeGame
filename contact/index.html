@@ -22,6 +22,8 @@
     body {
       position: relative;
       isolation: isolate;
+      display: flex;
+      flex-direction: column;
       margin: 0;
       min-height: 100vh;
       background-color: #fff;
@@ -39,6 +41,7 @@
     }
 
     main {
+      flex: 1;
       width: min(760px, calc(100% - 56px));
       margin: 0 auto;
       padding: 76px 0 52px;
@@ -133,6 +136,23 @@
       font-weight: 600;
     }
 
+    .site-record {
+      padding: 12px 16px max(18px, env(safe-area-inset-bottom));
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .site-record a {
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .site-record a:hover,
+    .site-record a:focus-visible {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
     @media (max-width: 680px) {
       main { width: min(520px, calc(100% - 32px)); padding: 72px 0 44px; }
       .grid {
@@ -156,7 +176,7 @@
       .channel-action { font-size: 8px; line-height: 1.3; }
     }
   </style>
-  <script src="../js/site-nav.js?v=20260812-2" defer></script>
+  <script src="../js/site-nav.js?v=20260812-3" defer></script>
 </head>
 <body data-site-page="contact">
   <main>
@@ -207,5 +227,11 @@
       </div>
     </section>
   </main>
+
+  <footer class="site-record">
+    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">
+      粤ICP备2021111496号-3
+    </a>
+  </footer>
 </body>
 </html>

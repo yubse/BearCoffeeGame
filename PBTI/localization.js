@@ -252,24 +252,25 @@
       control = document.createElement('div');
       control.className = 'language-switch';
       document.body.append(control);
+      [['zh', '中文'], ['en', 'EN']].forEach(([value, label]) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'language-switch__button';
+        button.dataset.language = value;
+        button.textContent = label;
+        button.addEventListener('click', () => {
+          if (value !== getLanguage()) setLanguage(value);
+        });
+        control.append(button);
+      });
     } else if (control.parentElement !== document.body) {
       document.body.append(control);
     }
 
-    control.replaceChildren();
     control.setAttribute('role', 'group');
     control.setAttribute('aria-label', language === 'en' ? 'Choose language' : '选择语言');
-
-    [['zh', '中文'], ['en', 'EN']].forEach(([value, label]) => {
-      const button = document.createElement('button');
-      button.type = 'button';
-      button.className = 'language-switch__button';
-      button.textContent = label;
-      button.setAttribute('aria-pressed', String(language === value));
-      button.addEventListener('click', () => {
-        if (value !== language) setLanguage(value);
-      });
-      control.append(button);
+    control.querySelectorAll('.language-switch__button').forEach((button) => {
+      button.setAttribute('aria-pressed', String(language === button.dataset.language));
     });
   }
 

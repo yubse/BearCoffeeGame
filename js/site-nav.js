@@ -1,11 +1,15 @@
 (function () {
   const page = document.body.dataset.sitePage || 'game';
   const isFile = window.location.protocol === 'file:';
-  const depth = '..';
-  const routes = {
-    contact: isFile ? `${depth}/contact/index.html` : '/contact/',
-    game: isFile ? `${depth}/game/index.html` : '/game/',
-    test: isFile ? `${depth}/PBTI/index.html` : '/PBTI/'
+  const fileRoot = isFile ? new URL('../', window.location.href) : null;
+  const routes = isFile ? {
+    contact: new URL('contact/index.html', fileRoot).href,
+    game: new URL('game/index.html', fileRoot).href,
+    test: new URL('PBTI/index.html', fileRoot).href
+  } : {
+    contact: '/contact/',
+    game: '/game/',
+    test: '/PBTI/'
   };
   const labels = {
     contact: { zh: '找到我们', en: 'Find Us' },
